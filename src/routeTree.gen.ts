@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
+import { Route as SubmitHearingRequestRouteImport } from './routes/submit.hearing-request'
 import { Route as AuthenticatedCasesCaseIdRouteImport } from './routes/_authenticated/cases.$caseId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -46,6 +47,11 @@ const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const SubmitHearingRequestRoute = SubmitHearingRequestRouteImport.update({
+  id: '/submit/hearing-request',
+  path: '/submit/hearing-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedCasesCaseIdRoute =
   AuthenticatedCasesCaseIdRouteImport.update({
     id: '/cases/$caseId',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
 }
 export interface FileRoutesByTo {
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
 }
 export interface FileRoutesById {
@@ -77,14 +85,28 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/resources': typeof AuthenticatedResourcesRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
+  '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/_authenticated/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/dashboard' | '/resources' | '/team' | '/cases/$caseId'
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/resources'
+    | '/team'
+    | '/submit/hearing-request'
+    | '/cases/$caseId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/resources' | '/team' | '/cases/$caseId'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/resources'
+    | '/team'
+    | '/submit/hearing-request'
+    | '/cases/$caseId'
   id:
     | '__root__'
     | '/'
@@ -93,6 +115,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/resources'
     | '/_authenticated/team'
+    | '/submit/hearing-request'
     | '/_authenticated/cases/$caseId'
   fileRoutesById: FileRoutesById
 }
@@ -100,6 +123,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  SubmitHearingRequestRoute: typeof SubmitHearingRequestRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -146,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/submit/hearing-request': {
+      id: '/submit/hearing-request'
+      path: '/submit/hearing-request'
+      fullPath: '/submit/hearing-request'
+      preLoaderRoute: typeof SubmitHearingRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/cases/$caseId': {
       id: '/_authenticated/cases/$caseId'
       path: '/cases/$caseId'
@@ -177,6 +208,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  SubmitHearingRequestRoute: SubmitHearingRequestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

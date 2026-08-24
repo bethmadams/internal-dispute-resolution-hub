@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminResourcesRouteImport } from './routes/_authenticated/admin-resources'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
@@ -34,6 +35,12 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminResourcesRoute =
+  AuthenticatedAdminResourcesRouteImport.update({
+    id: '/admin-resources',
+    path: '/admin-resources',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -74,6 +81,7 @@ const AuthenticatedCasesCaseIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin-resources': typeof AuthenticatedAdminResourcesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
@@ -85,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin-resources': typeof AuthenticatedAdminResourcesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
@@ -98,6 +107,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/admin-resources': typeof AuthenticatedAdminResourcesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/resources': typeof AuthenticatedResourcesRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/admin-resources'
     | '/dashboard'
     | '/resources'
     | '/team'
@@ -122,6 +133,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/admin-resources'
     | '/dashboard'
     | '/resources'
     | '/team'
@@ -134,6 +146,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/admin-resources'
     | '/_authenticated/dashboard'
     | '/_authenticated/resources'
     | '/_authenticated/team'
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin-resources': {
+      id: '/_authenticated/admin-resources'
+      path: '/admin-resources'
+      fullPath: '/admin-resources'
+      preLoaderRoute: typeof AuthenticatedAdminResourcesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -228,6 +248,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminResourcesRoute: typeof AuthenticatedAdminResourcesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedResourcesRoute: typeof AuthenticatedResourcesRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
@@ -235,6 +256,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminResourcesRoute: AuthenticatedAdminResourcesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedResourcesRoute: AuthenticatedResourcesRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,

@@ -433,7 +433,76 @@ function Dashboard() {
           )}
         </div>
       </section>
+
+      <section className="space-y-4">
+        <div>
+          <p className="rule-label">Appeal submissions</p>
+          <h2 className="mt-1 text-xl font-semibold">Appeal requests</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Appeals arrive unmatched — link each one to the case it appeals, then move that case to
+            Appeal Filed.
+          </p>
+        </div>
+        <div className="panel overflow-hidden">
+          {appeals.length === 0 ? (
+            <p className="p-8 text-sm text-muted-foreground">No appeal requests submitted yet.</p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {appeals.map((a) => (
+                <li key={a.id} className="space-y-3 p-4">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                    <span className="text-sm font-medium">{a.appellant_name}</span>
+                    <span className="text-xs text-muted-foreground">{a.appellant_role}</span>
+                    {a.state && <span className="text-xs text-muted-foreground">{a.state}</span>}
+                    {a.hearing_date && (
+                      <span className="text-xs text-muted-foreground">
+                        hearing {formatDate(a.hearing_date)}
+                      </span>
+                    )}
+                    <span className="ml-auto text-xs text-muted-foreground">
+                      {formatDate(a.submitted_on)}
+                    </span>
+                  </div>
+                  <p className="line-clamp-3 text-sm whitespace-pre-wrap text-muted-foreground">
+                    {a.new_evidence}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Select
+                      value={a.dispute_id ?? "unlinked"}
+                      onValueChange={(v) =>
+                        linkAppeal.mutate({ id: a.id, disputeId: v === "unlinked" ? null : v })
+                      }
+                    >
+                      <SelectTrigger className="w-72">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="unlinked">Not linked to a case</SelectItem>
+                        {disputes.map((d) => (
+                          <SelectItem key={d.id} value={d.id}>
+                            {d.case_number} — {d.filed_by ?? d.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {a.dispute_id && (
+                      <Link
+                        to="/cases/$caseId"
+                        params={{ caseId: a.dispute_id }}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        Open case
+                      </Link>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
+
 

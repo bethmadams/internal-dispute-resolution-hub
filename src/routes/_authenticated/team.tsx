@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/use-session";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,7 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formatDate, profilesQuery, rolesQuery } from "@/lib/hub";
+import { formatDate, invitesQuery, profilesQuery, rolesQuery } from "@/lib/hub";
+
 
 const ROLES = ["admin", "investigator", "viewer"] as const;
 
@@ -58,6 +62,50 @@ function Team() {
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const { data: invites = [] } = useQuery(invitesQuery);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteName, setInviteName] = useState("");
+  const [inviteRole, setInviteRole] = useState<string>("investigator");
+
+  const addInvite = useMutation({
+    mutationFn: async () => {
+      const email = inviteEmail.trim().toLowerCase();
+      if (!email || !email.includes("@")) throw new Error("Enter a valid email address");
+      const { error } = await supabase.from("team_invites").insert({
+        email,
+        full_name: inviteName.trim() || null,
+        role: inviteRole as "admin",
+        invited_by: user?.id ?? null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Invite added — share the sign-up link with them");
+      setInviteEmail("");
+      setInviteName("");
+      queryClient.invalidateQueries({ queryKey: ["team_invites"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const removeInvite = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("team_invites").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Invite removed");
+      queryClient.invalidateQueries({ queryKey: ["team_invites"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const signupLink =
+    typeof window !== "undefined" ? `${window.location.origin}/auth` : "/auth";
+
+  const pendingInvites = invites.filter((i) => !i.accepted_at);
+
 
   return (
     <div className="space-y-8">
@@ -107,6 +155,91 @@ function Team() {
           <p className="p-6 text-sm text-muted-foreground">No staff accounts yet.</p>
         )}
       </div>
+
+      {isAdmin && (
+        <div className="panel p-5">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div>
+              <p className="rule-label">Invitations</p>
+              <h2 className="mt-1 text-xl font-semibold">Add a team member</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Pre-assign a role by email. When they register at the sign-up link, they get that
+                role automatically.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                void navigator.clipboard.writeText(signupLink);
+                toast.success("Sign-up link copied");
+              }}
+            >
+              Copy sign-up link
+            </Button>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-end gap-3">
+            <div className="min-w-56 flex-1">
+              <label className="text-xs text-muted-foreground">Email</label>
+              <Input
+                type="email"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                placeholder="name@exprealty.net"
+              />
+            </div>
+            <div className="min-w-40 flex-1">
+              <label className="text-xs text-muted-foreground">Name (optional)</label>
+              <Input value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground">Role</label>
+              <Select value={inviteRole} onValueChange={setInviteRole}>
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ROLES.map((r) => (
+                    <SelectItem key={r} value={r}>
+                      {r}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={() => addInvite.mutate()} disabled={addInvite.isPending}>
+              {addInvite.isPending ? "Adding…" : "Add invite"}
+            </Button>
+          </div>
+
+          <div className="mt-5 divide-y divide-border border-t border-border">
+            {pendingInvites.map((invite) => (
+              <div key={invite.id} className="flex flex-wrap items-center gap-3 py-3">
+                <div className="min-w-48 flex-1">
+                  <p className="text-sm font-medium">{invite.full_name || invite.email}</p>
+                  <p className="text-xs text-muted-foreground">{invite.email}</p>
+                </div>
+                <Badge variant="outline">{invite.role}</Badge>
+                <span className="text-xs text-muted-foreground">
+                  Invited {formatDate(invite.created_at)}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeInvite.mutate(invite.id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            {pendingInvites.length === 0 && (
+              <p className="py-4 text-sm text-muted-foreground">No pending invites.</p>
+            )}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -30,6 +30,7 @@ import {
   type Priority,
   type Stage,
 } from "@/lib/hub";
+import { attachmentsQuery, downloadAttachment } from "@/lib/intake";
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
   head: () => ({

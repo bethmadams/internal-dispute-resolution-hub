@@ -16,6 +16,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as SubmitHearingRequestRouteImport } from './routes/submit.hearing-request'
+import { Route as SubmitResponseRouteImport } from './routes/submit.response'
 import { Route as AuthenticatedCasesCaseIdRouteImport } from './routes/_authenticated/cases.$caseId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -52,6 +53,11 @@ const SubmitHearingRequestRoute = SubmitHearingRequestRouteImport.update({
   path: '/submit/hearing-request',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubmitResponseRoute = SubmitResponseRouteImport.update({
+  id: '/submit/response',
+  path: '/submit/response',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedCasesCaseIdRoute =
   AuthenticatedCasesCaseIdRouteImport.update({
     id: '/cases/$caseId',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
+  '/submit/response': typeof SubmitResponseRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
 }
 export interface FileRoutesByTo {
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
+  '/submit/response': typeof SubmitResponseRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
 }
 export interface FileRoutesById {
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/_authenticated/resources': typeof AuthenticatedResourcesRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
+  '/submit/response': typeof SubmitResponseRoute
   '/_authenticated/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
 }
 export interface FileRouteTypes {
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/resources'
     | '/team'
     | '/submit/hearing-request'
+    | '/submit/response'
     | '/cases/$caseId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/resources'
     | '/team'
     | '/submit/hearing-request'
+    | '/submit/response'
     | '/cases/$caseId'
   id:
     | '__root__'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/_authenticated/resources'
     | '/_authenticated/team'
     | '/submit/hearing-request'
+    | '/submit/response'
     | '/_authenticated/cases/$caseId'
   fileRoutesById: FileRoutesById
 }
@@ -124,6 +136,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   SubmitHearingRequestRoute: typeof SubmitHearingRequestRoute
+  SubmitResponseRoute: typeof SubmitResponseRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -177,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmitHearingRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/submit/response': {
+      id: '/submit/response'
+      path: '/submit/response'
+      fullPath: '/submit/response'
+      preLoaderRoute: typeof SubmitResponseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/cases/$caseId': {
       id: '/_authenticated/cases/$caseId'
       path: '/cases/$caseId'
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   SubmitHearingRequestRoute: SubmitHearingRequestRoute,
+  SubmitResponseRoute: SubmitResponseRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

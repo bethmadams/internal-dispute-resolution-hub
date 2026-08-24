@@ -193,6 +193,34 @@ function AdminResources() {
           </article>
         ))}
       </div>
+
+      <section className="space-y-6">
+        <div>
+          <p className="rule-label">Drive library</p>
+          <h2 className="mt-1 text-2xl font-semibold">Checklists, policy and training</h2>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {LIBRARY.map((group) => (
+            <div key={group.group} className="panel p-6">
+              <p className="rule-label">{group.group}</p>
+              <ul className="mt-3 space-y-2.5">
+                {group.items.map((item) => (
+                  <li key={item.url}>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-start gap-1.5 text-sm font-medium text-primary hover:underline"
+                    >
+                      {item.title} <ExternalLink className="mt-0.5 size-3.5 shrink-0" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

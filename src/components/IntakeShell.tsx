@@ -52,9 +52,9 @@ export function Field({
   children,
 }: {
   label: string;
-  required?: boolean;
-  hint?: string;
-  error?: string;
+  required?: boolean | undefined;
+  hint?: string | undefined;
+  error?: string | undefined;
   children: ReactNode;
 }) {
   return (

@@ -42,7 +42,7 @@ export const Route = createFileRoute("/submit/hearing-request")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: HearingRequest;
+  component: HearingRequest,
 });
 
 type Errors = Record<string, string>;

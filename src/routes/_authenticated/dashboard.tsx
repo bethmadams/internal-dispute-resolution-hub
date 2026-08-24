@@ -66,6 +66,7 @@ function Dashboard() {
   const { data: disputes = [], isLoading } = useQuery(disputesQuery);
   const { data: profiles = [] } = useQuery(profilesQuery);
   const { data: responses = [] } = useQuery(responsesQuery);
+  const { data: appeals = [] } = useQuery(appealsQuery);
   const linkResponse = useMutation({
     mutationFn: async ({ id, disputeId }: { id: string; disputeId: string | null }) => {
       const { error } = await supabase
@@ -80,6 +81,21 @@ function Dashboard() {
     },
     onError: (e: Error) => toast.error(e.message),
   });
+  const linkAppeal = useMutation({
+    mutationFn: async ({ id, disputeId }: { id: string; disputeId: string | null }) => {
+      const { error } = await supabase
+        .from("dispute_appeals")
+        .update({ dispute_id: disputeId })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Appeal linked");
+      queryClient.invalidateQueries({ queryKey: ["dispute_appeals"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const [search, setSearch] = useState("");
   const [stageFilter, setStageFilter] = useState<string>("all");
   const [open, setOpen] = useState(false);

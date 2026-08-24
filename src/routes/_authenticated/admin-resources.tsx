@@ -64,6 +64,68 @@ const PAGES = [
   },
 ];
 
+const LIBRARY: { group: string; items: { title: string; url: string; note?: string }[] }[] = [
+  {
+    group: "Process checklists",
+    items: [
+      {
+        title: "Pre-Hearing Checklist",
+        url: "https://drive.google.com/drive/folders/1dAHZmJDnNgUx2mWQ3KDtlZF25f81SOX5",
+      },
+      {
+        title: "Hearing Panel Checklist",
+        url: "https://drive.google.com/drive/folders/1y9BYrsQ17CzayvsuTsVkJ6xGuguDekPm",
+      },
+      {
+        title: "Post Hearing Checklist",
+        url: "https://drive.google.com/drive/folders/1WpyRdJJ3uVoPZWsRgNW6WwwUuRackxz4",
+      },
+      {
+        title: "Appeal Checklist",
+        url: "https://drive.google.com/drive/folders/15db7M25p7WYQ0t3bTVYQh5tqztMvqEGi",
+      },
+    ],
+  },
+  {
+    group: "Policy & panelists",
+    items: [
+      {
+        title: "eXp Citation Policy Folder",
+        url: "https://drive.google.com/drive/u/0/folders/1VhAC9tkZAe8WLqTtdqWOFH8MAr93QTov",
+      },
+      {
+        title: "Internal Dispute Panelists Jon App",
+        url: "https://drive.google.com/drive/u/0/folders/1D_xXUUCT3nlJqCawBhEI9Y-FL2ya-mC4",
+      },
+      {
+        title: "Internal Dispute Panelists",
+        url: "https://drive.google.com/drive/u/0/folders/1qFMkIrM02vx6U4sKdZJruT9QwHGWrLQk",
+      },
+      {
+        title: "In-State Mediation",
+        url: "https://docs.google.com/document/d/1Iei_eEglCWtgGyKf904Ky2KU2wlth_X1oim4m7ZGfJE/edit?tab=t.0",
+      },
+    ],
+  },
+  {
+    group: "Training",
+    items: [
+      {
+        title: "Training",
+        url: "https://drive.google.com/drive/u/0/folders/19l3-YuUro0T8DC40qGaDckGZ4Vcq2s5b",
+      },
+      {
+        title: "Training: set up and lock the room (part 1)",
+        url: "https://drive.google.com/file/d/1zhkP_8bdVL0g0KNV-DvN9HJpbrzMLSu6/view",
+      },
+      {
+        title: "Training: set up and lock the room (part 2)",
+        url: "https://drive.google.com/file/d/1fRYdDSY3kwocyj_WXq4F-jHNrogDTEEe/view",
+      },
+    ],
+  },
+];
+
 function AdminResources() {
   const { user } = useCurrentUser();
   const { data: roles } = useQuery(rolesQuery);

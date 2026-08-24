@@ -10,6 +10,7 @@ import type { ReactNode } from "react";
 const nav = [
   { to: "/dashboard", label: "Case Board" },
   { to: "/resources", label: "Resources" },
+  { to: "/admin-resources", label: "Admin Resources" },
   { to: "/team", label: "Team" },
 ];
 

@@ -63,6 +63,50 @@ function Team() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const { data: invites = [] } = useQuery(invitesQuery);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteName, setInviteName] = useState("");
+  const [inviteRole, setInviteRole] = useState<string>("investigator");
+
+  const addInvite = useMutation({
+    mutationFn: async () => {
+      const email = inviteEmail.trim().toLowerCase();
+      if (!email || !email.includes("@")) throw new Error("Enter a valid email address");
+      const { error } = await supabase.from("team_invites").insert({
+        email,
+        full_name: inviteName.trim() || null,
+        role: inviteRole as "admin",
+        invited_by: user?.id ?? null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Invite added — share the sign-up link with them");
+      setInviteEmail("");
+      setInviteName("");
+      queryClient.invalidateQueries({ queryKey: ["team_invites"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const removeInvite = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("team_invites").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Invite removed");
+      queryClient.invalidateQueries({ queryKey: ["team_invites"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const signupLink =
+    typeof window !== "undefined" ? `${window.location.origin}/auth` : "/auth";
+
+  const pendingInvites = invites.filter((i) => !i.accepted_at);
+
+
   return (
     <div className="space-y-8">
       <div>

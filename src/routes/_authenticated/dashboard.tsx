@@ -64,6 +64,21 @@ function Dashboard() {
   const { user } = useCurrentUser();
   const { data: disputes = [], isLoading } = useQuery(disputesQuery);
   const { data: profiles = [] } = useQuery(profilesQuery);
+  const { data: responses = [] } = useQuery(responsesQuery);
+  const linkResponse = useMutation({
+    mutationFn: async ({ id, disputeId }: { id: string; disputeId: string | null }) => {
+      const { error } = await supabase
+        .from("dispute_responses")
+        .update({ dispute_id: disputeId })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Response linked");
+      queryClient.invalidateQueries({ queryKey: ["dispute_responses"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
   const [search, setSearch] = useState("");
   const [stageFilter, setStageFilter] = useState<string>("all");
   const [open, setOpen] = useState(false);

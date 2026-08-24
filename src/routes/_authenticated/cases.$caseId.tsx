@@ -87,6 +87,7 @@ function CaseDetail() {
   });
 
   const { data: profiles = [] } = useQuery(profilesQuery);
+  const { data: attachments = [] } = useQuery(attachmentsQuery(caseId));
 
   useEffect(() => {
     if (dispute) setResolution(dispute.resolution ?? "");

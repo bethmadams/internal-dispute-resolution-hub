@@ -14,8 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
+      dispute_appeals: {
+        Row: {
+          appellant_email: string
+          appellant_name: string
+          appellant_role: string
+          created_at: string
+          dispute_id: string | null
+          hearing_date: string | null
+          id: string
+          new_evidence: string
+          state: string | null
+          submitted_on: string
+          updated_at: string
+        }
+        Insert: {
+          appellant_email: string
+          appellant_name: string
+          appellant_role: string
+          created_at?: string
+          dispute_id?: string | null
+          hearing_date?: string | null
+          id?: string
+          new_evidence: string
+          state?: string | null
+          submitted_on?: string
+          updated_at?: string
+        }
+        Update: {
+          appellant_email?: string
+          appellant_name?: string
+          appellant_role?: string
+          created_at?: string
+          dispute_id?: string | null
+          hearing_date?: string | null
+          id?: string
+          new_evidence?: string
+          state?: string | null
+          submitted_on?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispute_appeals_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dispute_attachments: {
         Row: {
+          appeal_id: string | null
           created_at: string
           dispute_id: string | null
           file_name: string
@@ -25,6 +76,7 @@ export type Database = {
           response_id: string | null
         }
         Insert: {
+          appeal_id?: string | null
           created_at?: string
           dispute_id?: string | null
           file_name: string
@@ -34,6 +86,7 @@ export type Database = {
           response_id?: string | null
         }
         Update: {
+          appeal_id?: string | null
           created_at?: string
           dispute_id?: string | null
           file_name?: string
@@ -43,6 +96,13 @@ export type Database = {
           response_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "dispute_attachments_appeal_id_fkey"
+            columns: ["appeal_id"]
+            isOneToOne: false
+            referencedRelation: "dispute_appeals"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "dispute_attachments_dispute_id_fkey"
             columns: ["dispute_id"]

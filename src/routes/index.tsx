@@ -84,6 +84,12 @@ function Landing() {
             Submit a response
           </Link>
           <Link
+            to="/submit/appeal"
+            className="rounded-md border border-input bg-card px-5 py-2.5 text-sm font-medium transition-colors hover:bg-secondary"
+          >
+            Request an appeal
+          </Link>
+          <Link
             to="/auth"
             className="rounded-md border border-input bg-card px-5 py-2.5 text-sm font-medium transition-colors hover:bg-secondary"
           >
@@ -91,9 +97,11 @@ function Landing() {
           </Link>
         </div>
         <p className="mt-4 max-w-2xl text-xs text-muted-foreground">
-          Complaining agents use the hearing request form. Respondents use the response form. Both
-          land in the New Submission queue for Regulatory Relations review.
+          Complaining agents use the hearing request form. Respondents use the response form. Appeals
+          of a hearing outcome use the appeal request form. All land in the review queue for
+          Regulatory Relations.
         </p>
+
 
 
         <div className="mt-20 grid gap-5 sm:grid-cols-3">

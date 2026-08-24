@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
+import { Route as SubmitAppealRouteImport } from './routes/submit.appeal'
 import { Route as SubmitHearingRequestRouteImport } from './routes/submit.hearing-request'
 import { Route as SubmitResponseRouteImport } from './routes/submit.response'
 import { Route as AuthenticatedCasesCaseIdRouteImport } from './routes/_authenticated/cases.$caseId'
@@ -48,6 +49,11 @@ const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const SubmitAppealRoute = SubmitAppealRouteImport.update({
+  id: '/submit/appeal',
+  path: '/submit/appeal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SubmitHearingRequestRoute = SubmitHearingRequestRouteImport.update({
   id: '/submit/hearing-request',
   path: '/submit/hearing-request',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/submit/appeal': typeof SubmitAppealRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/submit/response': typeof SubmitResponseRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/submit/appeal': typeof SubmitAppealRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/submit/response': typeof SubmitResponseRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/resources': typeof AuthenticatedResourcesRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
+  '/submit/appeal': typeof SubmitAppealRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/submit/response': typeof SubmitResponseRoute
   '/_authenticated/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/resources'
     | '/team'
+    | '/submit/appeal'
     | '/submit/hearing-request'
     | '/submit/response'
     | '/cases/$caseId'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/resources'
     | '/team'
+    | '/submit/appeal'
     | '/submit/hearing-request'
     | '/submit/response'
     | '/cases/$caseId'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/resources'
     | '/_authenticated/team'
+    | '/submit/appeal'
     | '/submit/hearing-request'
     | '/submit/response'
     | '/_authenticated/cases/$caseId'
@@ -135,6 +147,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  SubmitAppealRoute: typeof SubmitAppealRoute
   SubmitHearingRequestRoute: typeof SubmitHearingRequestRoute
   SubmitResponseRoute: typeof SubmitResponseRoute
 }
@@ -183,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/submit/appeal': {
+      id: '/submit/appeal'
+      path: '/submit/appeal'
+      fullPath: '/submit/appeal'
+      preLoaderRoute: typeof SubmitAppealRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/submit/hearing-request': {
       id: '/submit/hearing-request'
       path: '/submit/hearing-request'
@@ -228,6 +248,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  SubmitAppealRoute: SubmitAppealRoute,
   SubmitHearingRequestRoute: SubmitHearingRequestRoute,
   SubmitResponseRoute: SubmitResponseRoute,
 }

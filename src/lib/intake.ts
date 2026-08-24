@@ -125,3 +125,43 @@ export const responseFormSchema = z.object({
   summary: z.string().trim().min(20, "Please summarise your response").max(6000),
   additional_comments: z.string().trim().max(2000).optional().or(z.literal("")),
 });
+
+export const APPELLANT_ROLES = [
+  "The complaining agent",
+  "The respondent",
+] as const;
+
+export type AppealRow = {
+  id: string;
+  dispute_id: string | null;
+  appellant_name: string;
+  appellant_role: string;
+  appellant_email: string;
+  state: string | null;
+  hearing_date: string | null;
+  new_evidence: string;
+  submitted_on: string;
+  created_at: string;
+};
+
+export const appealsQuery = {
+  queryKey: ["dispute_appeals"],
+  queryFn: async (): Promise<AppealRow[]> => {
+    const { data, error } = await supabase
+      .from("dispute_appeals")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as AppealRow[];
+  },
+};
+
+export const appealRequestSchema = z.object({
+  submitted_by: z.string().trim().min(2, "Enter your full name").max(120),
+  submission_date: z.string().min(1, "Submission date is required"),
+  appellant_role: z.string().min(1, "Tell us which party you are"),
+  state: z.string().trim().max(60).optional().or(z.literal("")),
+  email: z.string().trim().email("Enter a valid email address").max(255),
+  hearing_date: z.string().min(1, "The internal dispute hearing date is required"),
+  new_evidence: z.string().trim().min(20, "Describe the new evidence being submitted").max(6000),
+});

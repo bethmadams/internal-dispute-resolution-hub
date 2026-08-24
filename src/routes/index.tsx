@@ -72,18 +72,29 @@ function Landing() {
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            to="/auth"
+            to="/submit/hearing-request"
             className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Open the case board
+            File a hearing request
           </Link>
           <Link
-            to="/resources"
+            to="/submit/response"
             className="rounded-md border border-input bg-card px-5 py-2.5 text-sm font-medium transition-colors hover:bg-secondary"
           >
-            Browse resources
+            Submit a response
+          </Link>
+          <Link
+            to="/auth"
+            className="rounded-md border border-input bg-card px-5 py-2.5 text-sm font-medium transition-colors hover:bg-secondary"
+          >
+            Staff: open the case board
           </Link>
         </div>
+        <p className="mt-4 max-w-2xl text-xs text-muted-foreground">
+          Complaining agents use the hearing request form. Respondents use the response form. Both
+          land in the New Submission queue for Regulatory Relations review.
+        </p>
+
 
         <div className="mt-20 grid gap-5 sm:grid-cols-3">
           {pillars.map((p) => (

@@ -37,6 +37,7 @@ import {
   type Priority,
   type Stage,
 } from "@/lib/hub";
+import { responsesQuery } from "@/lib/intake";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -64,6 +65,21 @@ function Dashboard() {
   const { user } = useCurrentUser();
   const { data: disputes = [], isLoading } = useQuery(disputesQuery);
   const { data: profiles = [] } = useQuery(profilesQuery);
+  const { data: responses = [] } = useQuery(responsesQuery);
+  const linkResponse = useMutation({
+    mutationFn: async ({ id, disputeId }: { id: string; disputeId: string | null }) => {
+      const { error } = await supabase
+        .from("dispute_responses")
+        .update({ dispute_id: disputeId })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Response linked");
+      queryClient.invalidateQueries({ queryKey: ["dispute_responses"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
   const [search, setSearch] = useState("");
   const [stageFilter, setStageFilter] = useState<string>("all");
   const [open, setOpen] = useState(false);
@@ -333,6 +349,75 @@ function Dashboard() {
           </ul>
         )}
       </div>
+
+      <section className="space-y-4">
+        <div>
+          <p className="rule-label">Respondent submissions</p>
+          <h2 className="mt-1 text-xl font-semibold">Hearing response forms</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Responses arrive unmatched — link each one to the case it answers.
+          </p>
+        </div>
+        <div className="panel overflow-hidden">
+          {responses.length === 0 ? (
+            <p className="p-8 text-sm text-muted-foreground">No responses submitted yet.</p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {responses.map((r) => (
+                <li key={r.id} className="space-y-3 p-4">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                    <span className="text-sm font-medium">{r.responder_name}</span>
+                    {r.state && (
+                      <span className="text-xs text-muted-foreground">{r.state}</span>
+                    )}
+                    {r.responding_to_name && (
+                      <span className="text-xs text-muted-foreground">
+                        responding to {r.responding_to_name}
+                      </span>
+                    )}
+                    <span className="ml-auto text-xs text-muted-foreground">
+                      {formatDate(r.submitted_on)}
+                    </span>
+                  </div>
+                  <p className="line-clamp-3 text-sm text-muted-foreground whitespace-pre-wrap">
+                    {r.summary}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Select
+                      value={r.dispute_id ?? "unlinked"}
+                      onValueChange={(v) =>
+                        linkResponse.mutate({ id: r.id, disputeId: v === "unlinked" ? null : v })
+                      }
+                    >
+                      <SelectTrigger className="w-72">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="unlinked">Not linked to a case</SelectItem>
+                        {disputes.map((d) => (
+                          <SelectItem key={d.id} value={d.id}>
+                            {d.case_number} — {d.filed_by ?? d.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {r.dispute_id && (
+                      <Link
+                        to="/cases/$caseId"
+                        params={{ caseId: r.dispute_id }}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        Open case
+                      </Link>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
+

@@ -29,6 +29,21 @@ export type Dispute = {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  complainant_email: string | null;
+  state: string | null;
+  respondent_email: string | null;
+  respondent_phone: string | null;
+  respondent_active: boolean | null;
+  reasons: string[];
+  ethics_articles: string | null;
+  seeking: string | null;
+  steps_taken: string | null;
+  property_address: string | null;
+  closing_date: string | null;
+  involves_money: boolean | null;
+  monetary_amount: number | null;
+  additional_comments: string | null;
+  source: string;
 };
 
 export type DisputeNote = {

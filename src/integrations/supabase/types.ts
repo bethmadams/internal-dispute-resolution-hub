@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      dispute_attachments: {
+        Row: {
+          created_at: string
+          dispute_id: string | null
+          file_name: string
+          file_path: string
+          id: string
+          kind: string
+          response_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          dispute_id?: string | null
+          file_name: string
+          file_path: string
+          id?: string
+          kind?: string
+          response_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          dispute_id?: string | null
+          file_name?: string
+          file_path?: string
+          id?: string
+          kind?: string
+          response_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispute_attachments_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dispute_attachments_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "dispute_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dispute_notes: {
         Row: {
           author_id: string | null
@@ -46,58 +91,153 @@ export type Database = {
           },
         ]
       }
+      dispute_responses: {
+        Row: {
+          additional_comments: string | null
+          created_at: string
+          dispute_id: string | null
+          id: string
+          responder_email: string | null
+          responder_name: string
+          responding_to_name: string | null
+          state: string | null
+          submitted_on: string
+          summary: string
+          updated_at: string
+        }
+        Insert: {
+          additional_comments?: string | null
+          created_at?: string
+          dispute_id?: string | null
+          id?: string
+          responder_email?: string | null
+          responder_name: string
+          responding_to_name?: string | null
+          state?: string | null
+          submitted_on?: string
+          summary: string
+          updated_at?: string
+        }
+        Update: {
+          additional_comments?: string | null
+          created_at?: string
+          dispute_id?: string | null
+          id?: string
+          responder_email?: string | null
+          responder_name?: string
+          responding_to_name?: string | null
+          state?: string | null
+          submitted_on?: string
+          summary?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispute_responses_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       disputes: {
         Row: {
+          additional_comments: string | null
           assigned_to: string | null
           case_number: string
+          closing_date: string | null
+          complainant_email: string | null
           created_at: string
           created_by: string | null
           department: string | null
           description: string | null
+          ethics_articles: string | null
           filed_at: string
           filed_by: string | null
           hearing_date: string | null
           id: string
+          involves_money: boolean | null
+          monetary_amount: number | null
           priority: Database["public"]["Enums"]["dispute_priority"]
+          property_address: string | null
+          reasons: string[]
           resolution: string | null
           respondent: string | null
+          respondent_active: boolean | null
+          respondent_email: string | null
+          respondent_phone: string | null
+          seeking: string | null
+          source: string
           stage: Database["public"]["Enums"]["dispute_stage"]
+          state: string | null
+          steps_taken: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          additional_comments?: string | null
           assigned_to?: string | null
           case_number: string
+          closing_date?: string | null
+          complainant_email?: string | null
           created_at?: string
           created_by?: string | null
           department?: string | null
           description?: string | null
+          ethics_articles?: string | null
           filed_at?: string
           filed_by?: string | null
           hearing_date?: string | null
           id?: string
+          involves_money?: boolean | null
+          monetary_amount?: number | null
           priority?: Database["public"]["Enums"]["dispute_priority"]
+          property_address?: string | null
+          reasons?: string[]
           resolution?: string | null
           respondent?: string | null
+          respondent_active?: boolean | null
+          respondent_email?: string | null
+          respondent_phone?: string | null
+          seeking?: string | null
+          source?: string
           stage?: Database["public"]["Enums"]["dispute_stage"]
+          state?: string | null
+          steps_taken?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          additional_comments?: string | null
           assigned_to?: string | null
           case_number?: string
+          closing_date?: string | null
+          complainant_email?: string | null
           created_at?: string
           created_by?: string | null
           department?: string | null
           description?: string | null
+          ethics_articles?: string | null
           filed_at?: string
           filed_by?: string | null
           hearing_date?: string | null
           id?: string
+          involves_money?: boolean | null
+          monetary_amount?: number | null
           priority?: Database["public"]["Enums"]["dispute_priority"]
+          property_address?: string | null
+          reasons?: string[]
           resolution?: string | null
           respondent?: string | null
+          respondent_active?: boolean | null
+          respondent_email?: string | null
+          respondent_phone?: string | null
+          seeking?: string | null
+          source?: string
           stage?: Database["public"]["Enums"]["dispute_stage"]
+          state?: string | null
+          steps_taken?: string | null
           title?: string
           updated_at?: string
         }

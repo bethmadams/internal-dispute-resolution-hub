@@ -37,7 +37,7 @@ import {
   type Priority,
   type Stage,
 } from "@/lib/hub";
-import { responsesQuery } from "@/lib/intake";
+import { appealsQuery, responsesQuery } from "@/lib/intake";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({

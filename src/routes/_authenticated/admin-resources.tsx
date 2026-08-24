@@ -195,25 +195,25 @@ function AdminResources() {
           <p className="rule-label">Drive library</p>
           <h2 className="mt-1 text-2xl font-semibold">Checklists, policy and training</h2>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {LIBRARY.map((group) => (
-            <div key={group.group} className="panel p-6">
-              <p className="rule-label">{group.group}</p>
-              <ul className="mt-3 space-y-2.5">
-                {group.items.map((item) => (
-                  <li key={item.url}>
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-start gap-1.5 text-sm font-medium text-primary hover:underline"
-                    >
-                      {item.title} <ExternalLink className="mt-0.5 size-3.5 shrink-0" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div className="space-y-4">
+          {LIBRARY.map((item) => (
+            <article
+              key={item.url}
+              className="panel flex flex-wrap items-center justify-between gap-3 p-6"
+            >
+              <div>
+                <p className="rule-label">{item.kind}</p>
+                <h3 className="mt-1 text-lg font-semibold">{item.title}</h3>
+              </div>
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+              >
+                Open <ExternalLink className="size-3.5" />
+              </a>
+            </article>
           ))}
         </div>
       </section>

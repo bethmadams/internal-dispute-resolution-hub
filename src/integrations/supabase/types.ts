@@ -14,16 +14,189 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      dispute_notes: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          dispute_id: string
+          id: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          dispute_id: string
+          id?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          dispute_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispute_notes_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      disputes: {
+        Row: {
+          assigned_to: string | null
+          case_number: string
+          created_at: string
+          created_by: string | null
+          department: string | null
+          description: string | null
+          filed_at: string
+          filed_by: string | null
+          hearing_date: string | null
+          id: string
+          priority: Database["public"]["Enums"]["dispute_priority"]
+          resolution: string | null
+          respondent: string | null
+          stage: Database["public"]["Enums"]["dispute_stage"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          case_number: string
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          description?: string | null
+          filed_at?: string
+          filed_by?: string | null
+          hearing_date?: string | null
+          id?: string
+          priority?: Database["public"]["Enums"]["dispute_priority"]
+          resolution?: string | null
+          respondent?: string | null
+          stage?: Database["public"]["Enums"]["dispute_stage"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          case_number?: string
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          description?: string | null
+          filed_at?: string
+          filed_by?: string | null
+          hearing_date?: string | null
+          id?: string
+          priority?: Database["public"]["Enums"]["dispute_priority"]
+          resolution?: string | null
+          respondent?: string | null
+          stage?: Database["public"]["Enums"]["dispute_stage"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      resources: {
+        Row: {
+          category: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          title: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "investigator" | "viewer"
+      dispute_priority: "Low" | "Medium" | "High" | "Urgent"
+      dispute_stage:
+        | "New Submission"
+        | "In Progress"
+        | "Hearing Scheduled"
+        | "Appeal Filed"
+        | "Closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +323,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "investigator", "viewer"],
+      dispute_priority: ["Low", "Medium", "High", "Urgent"],
+      dispute_stage: [
+        "New Submission",
+        "In Progress",
+        "Hearing Scheduled",
+        "Appeal Filed",
+        "Closed",
+      ],
+    },
   },
 } as const

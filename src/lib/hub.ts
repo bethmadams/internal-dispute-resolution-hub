@@ -138,6 +138,28 @@ export const rolesQuery = {
   },
 };
 
+export type TeamInvite = {
+  id: string;
+  email: string;
+  role: "admin" | "investigator" | "viewer";
+  full_name: string | null;
+  invited_by: string | null;
+  accepted_at: string | null;
+  created_at: string;
+};
+
+export const invitesQuery = {
+  queryKey: ["team_invites"],
+  queryFn: async (): Promise<TeamInvite[]> => {
+    const { data, error } = await supabase
+      .from("team_invites")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as TeamInvite[];
+  },
+};
+
 export const resourcesQuery = {
   queryKey: ["resources"],
   queryFn: async (): Promise<Resource[]> => {

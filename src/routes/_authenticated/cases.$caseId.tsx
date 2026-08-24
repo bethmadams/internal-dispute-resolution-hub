@@ -155,14 +155,27 @@ function CaseDetail() {
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
         <div className="space-y-6">
           <section className="panel p-6">
-            <h2 className="text-lg font-semibold">Summary</h2>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold">Summary</h2>
+              {dispute.source === "public_form" && (
+                <Badge variant="outline">Submitted via hearing request form</Badge>
+              )}
+            </div>
             <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">
               {dispute.description || "No summary recorded."}
             </p>
             <dl className="mt-6 grid gap-4 sm:grid-cols-2">
               {[
-                ["Filed by", dispute.filed_by || "—"],
+                ["Complainant", dispute.filed_by || "—"],
+                ["Complainant email", dispute.complainant_email || "—"],
                 ["Respondent", dispute.respondent || "—"],
+                ["Respondent email", dispute.respondent_email || "—"],
+                ["Respondent phone", dispute.respondent_phone || "—"],
+                [
+                  "Respondent active with eXp",
+                  dispute.respondent_active === null ? "—" : dispute.respondent_active ? "Yes" : "No",
+                ],
+                ["State", dispute.state || "—"],
                 ["Department", dispute.department || "—"],
                 ["Date filed", formatDate(dispute.filed_at)],
                 ["Hearing", formatDateTime(dispute.hearing_date)],
@@ -170,11 +183,81 @@ function CaseDetail() {
               ].map(([label, value]) => (
                 <div key={label}>
                   <dt className="rule-label">{label}</dt>
-                  <dd className="mt-1 text-sm">{value}</dd>
+                  <dd className="mt-1 text-sm break-words">{value}</dd>
                 </div>
               ))}
             </dl>
           </section>
+
+          <section className="panel p-6">
+            <h2 className="text-lg font-semibold">Submission details</h2>
+            {dispute.reasons?.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {dispute.reasons.map((r) => (
+                  <Badge key={r} variant="outline">
+                    {r}
+                  </Badge>
+                ))}
+              </div>
+            )}
+            <dl className="mt-5 space-y-5">
+              {[
+                ["Code of Ethics articles cited", dispute.ethics_articles],
+                ["What the complainant is seeking", dispute.seeking],
+                ["Steps taken to remedy", dispute.steps_taken],
+                ["Property address", dispute.property_address],
+                [
+                  "Closing date",
+                  dispute.closing_date ? formatDate(dispute.closing_date) : null,
+                ],
+                [
+                  "Monetary amount involved",
+                  dispute.involves_money
+                    ? dispute.monetary_amount
+                      ? `$${dispute.monetary_amount.toLocaleString()}`
+                      : "Yes — amount not stated"
+                    : dispute.involves_money === false
+                      ? "No"
+                      : null,
+                ],
+                ["Additional comments", dispute.additional_comments],
+              ]
+                .filter(([, value]) => Boolean(value))
+                .map(([label, value]) => (
+                  <div key={label as string}>
+                    <dt className="rule-label">{label}</dt>
+                    <dd className="mt-1 text-sm whitespace-pre-wrap">{value}</dd>
+                  </div>
+                ))}
+            </dl>
+            <h3 className="mt-8 text-sm font-semibold">Attachments</h3>
+            <ul className="mt-3 space-y-2">
+              {attachments.length === 0 && (
+                <li className="text-sm text-muted-foreground">No files attached.</li>
+              )}
+              {attachments.map((a) => (
+                <li key={a.id} className="flex items-center gap-3 text-sm">
+                  <Paperclip className="size-3.5 text-muted-foreground" />
+                  <button
+                    className="text-primary hover:underline"
+                    onClick={async () => {
+                      try {
+                        window.open(await downloadAttachment(a.file_path), "_blank");
+                      } catch (e) {
+                        toast.error((e as Error).message);
+                      }
+                    }}
+                  >
+                    {a.file_name}
+                  </button>
+                  <span className="rule-label">
+                    {a.kind === "binding_agreement" ? "Binding agreement" : "Supporting"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
 
           <section className="panel p-6">
             <h2 className="text-lg font-semibold">Resolution</h2>

@@ -155,6 +155,91 @@ function Team() {
           <p className="p-6 text-sm text-muted-foreground">No staff accounts yet.</p>
         )}
       </div>
+
+      {isAdmin && (
+        <div className="panel p-5">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div>
+              <p className="rule-label">Invitations</p>
+              <h2 className="mt-1 text-xl font-semibold">Add a team member</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Pre-assign a role by email. When they register at the sign-up link, they get that
+                role automatically.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                void navigator.clipboard.writeText(signupLink);
+                toast.success("Sign-up link copied");
+              }}
+            >
+              Copy sign-up link
+            </Button>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-end gap-3">
+            <div className="min-w-56 flex-1">
+              <label className="text-xs text-muted-foreground">Email</label>
+              <Input
+                type="email"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                placeholder="name@exprealty.net"
+              />
+            </div>
+            <div className="min-w-40 flex-1">
+              <label className="text-xs text-muted-foreground">Name (optional)</label>
+              <Input value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground">Role</label>
+              <Select value={inviteRole} onValueChange={setInviteRole}>
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ROLES.map((r) => (
+                    <SelectItem key={r} value={r}>
+                      {r}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={() => addInvite.mutate()} disabled={addInvite.isPending}>
+              {addInvite.isPending ? "Adding…" : "Add invite"}
+            </Button>
+          </div>
+
+          <div className="mt-5 divide-y divide-border border-t border-border">
+            {pendingInvites.map((invite) => (
+              <div key={invite.id} className="flex flex-wrap items-center gap-3 py-3">
+                <div className="min-w-48 flex-1">
+                  <p className="text-sm font-medium">{invite.full_name || invite.email}</p>
+                  <p className="text-xs text-muted-foreground">{invite.email}</p>
+                </div>
+                <Badge variant="outline">{invite.role}</Badge>
+                <span className="text-xs text-muted-foreground">
+                  Invited {formatDate(invite.created_at)}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeInvite.mutate(invite.id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            {pendingInvites.length === 0 && (
+              <p className="py-4 text-sm text-muted-foreground">No pending invites.</p>
+            )}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

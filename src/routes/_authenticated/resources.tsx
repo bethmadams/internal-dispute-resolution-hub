@@ -104,22 +104,22 @@ const LIBRARY: { title: string; kind: string; url: string }[] = [
   {
     title: "eXp Citation Policy Folder",
     kind: "Drive folder",
-    url: "https://drive.google.com/drive/u/0/folders/1VhAC9tkZAe8WLqTtdqWOFH8MAr93QTov",
+    url: "https://drive.google.com/drive/folders/1VhAC9tkZAe8WLqTtdqWOFH8MAr93QTov",
   },
   {
     title: "Internal Dispute Panelists Jon App",
     kind: "Drive folder",
-    url: "https://drive.google.com/drive/u/0/folders/1D_xXUUCT3nlJqCawBhEI9Y-FL2ya-mC4",
+    url: "https://drive.google.com/drive/folders/1D_xXUUCT3nlJqCawBhEI9Y-FL2ya-mC4",
   },
   {
     title: "Internal Dispute Panelists",
     kind: "Drive folder",
-    url: "https://drive.google.com/drive/u/0/folders/1qFMkIrM02vx6U4sKdZJruT9QwHGWrLQk",
+    url: "https://drive.google.com/drive/folders/1qFMkIrM02vx6U4sKdZJruT9QwHGWrLQk",
   },
   {
     title: "Training",
     kind: "Drive folder",
-    url: "https://drive.google.com/drive/u/0/folders/19l3-YuUro0T8DC40qGaDckGZ4Vcq2s5b",
+    url: "https://drive.google.com/drive/folders/19l3-YuUro0T8DC40qGaDckGZ4Vcq2s5b",
   },
   {
     title: "Training to set up and lock the room",

@@ -298,10 +298,14 @@ function HearingRequest() {
               onChange={(e) => set("closing_date", e.target.value)}
             />
           </Field>
-          <Field label="Does this complaint involve a monetary amount?" required>
+          <Field
+            label="Does this complaint involve a monetary amount?"
+            required
+            error={errors['involves_money']}
+          >
             <Select value={form.involves_money} onValueChange={(v) => set("involves_money", v)}>
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Select yes or no" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="yes">Yes</SelectItem>

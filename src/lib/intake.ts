@@ -182,7 +182,11 @@ export const responseFormSchema = z.object({
   email: z.string().trim().email("Enter a valid email address").max(255).optional().or(z.literal("")),
   submission_date: z.string().min(1, "Submission date is required"),
   state: z.string().trim().min(2, "State is required").max(60),
-  responding_to: z.string().trim().max(120).optional().or(z.literal("")),
+  responding_to: z
+    .string()
+    .trim()
+    .min(2, "Enter the name of the agent who filed the complaint")
+    .max(120),
   summary: z.string().trim().min(20, "Please summarise your response").max(6000),
   additional_comments: z.string().trim().max(2000).optional().or(z.literal("")),
 });

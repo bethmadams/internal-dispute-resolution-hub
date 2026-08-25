@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field, IntakeShell } from "@/components/IntakeShell";
+import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
 import {
   BINDING_AGREEMENT_NOTE,
   DISPUTE_REASONS,
@@ -176,7 +176,7 @@ function HearingRequest() {
             />
           </Field>
           <Field label="State where the issue occurred" required error={errors['state']}>
-            <Input value={form.state} onChange={(e) => set("state", e.target.value)} />
+            <StateSelect value={form.state} onChange={(v) => set("state", v)} />
           </Field>
           <Field label="Submitted by (full name)" required error={errors['submitted_by']}>
             <Input

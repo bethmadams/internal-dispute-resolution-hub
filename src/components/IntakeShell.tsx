@@ -1,7 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { Scale } from "lucide-react";
 import type { ReactNode } from "react";
-import { REGULATORY_EMAIL } from "@/lib/intake";
+import { REGULATORY_EMAIL, US_STATES } from "@/lib/intake";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function IntakeShell({
   eyebrow,
@@ -67,5 +74,28 @@ export function Field({
       {children}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
+  );
+}
+
+export function StateSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger>
+        <SelectValue placeholder="Select a state" />
+      </SelectTrigger>
+      <SelectContent className="max-h-72">
+        {US_STATES.map((state) => (
+          <SelectItem key={state} value={state}>
+            {state}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

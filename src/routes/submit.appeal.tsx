@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field, IntakeShell } from "@/components/IntakeShell";
+import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
 import { APPELLANT_ROLES, appealRequestSchema, uploadIntakeFiles } from "@/lib/intake";
 
 export const Route = createFileRoute("/submit/appeal")({
@@ -150,7 +150,7 @@ function AppealForm() {
             </Select>
           </Field>
           <Field label="State where the issue occurred" error={errors['state']}>
-            <Input value={form.state} onChange={(e) => set("state", e.target.value)} />
+            <StateSelect value={form.state} onChange={(v) => set("state", v)} />
           </Field>
           <Field label="Your email address" required error={errors['email']}>
             <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />

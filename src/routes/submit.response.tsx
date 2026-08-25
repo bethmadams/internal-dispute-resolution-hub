@@ -149,6 +149,7 @@ function ResponseForm() {
         <div className="space-y-5 border-t border-border pt-6">
           <Field
             label="Responding to complaint submitted by (name of the other agent)"
+            required
             error={errors['responding_to']}
           >
             <Input

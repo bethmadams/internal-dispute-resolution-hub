@@ -166,7 +166,9 @@ export const hearingRequestSchema = z.object({
   steps_taken: z.string().trim().min(5, "Describe the steps taken so far").max(2000),
   property_address: z.string().trim().max(300).optional().or(z.literal("")),
   closing_date: z.string().optional().or(z.literal("")),
-  involves_money: z.enum(["yes", "no"]),
+  involves_money: z.enum(["yes", "no"], {
+    message: "Select whether this complaint involves a monetary amount",
+  }),
   monetary_amount: z.string().trim().max(30).optional().or(z.literal("")),
   additional_comments: z.string().trim().max(2000).optional().or(z.literal("")),
   submission_date: z.string().min(1, "Submission date is required"),

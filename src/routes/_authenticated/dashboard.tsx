@@ -1,7 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, ExternalLink, Copy } from "lucide-react";
+
+const PUBLIC_FORMS = [
+  {
+    to: "/submit/hearing-request",
+    label: "Hearing Request",
+    who: "Filed by the complaining agent",
+  },
+  { to: "/submit/response", label: "Hearing Response", who: "Filed by the respondent" },
+  { to: "/submit/appeal", label: "Appeal Request", who: "Filed after a hearing outcome" },
+] as const;
+
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/use-session";

@@ -60,7 +60,7 @@ function HearingRequest() {
     other_agent: "",
     other_agent_email: "",
     other_agent_phone: "",
-    other_agent_active: "yes",
+    other_agent_active: "",
     reasons: [] as string[],
     ethics_articles: "",
     summary: "",
@@ -211,13 +211,17 @@ function HearingRequest() {
                 onChange={(e) => set("other_agent_phone", e.target.value)}
               />
             </Field>
-            <Field label="Is the other agent active with eXp Realty?" required>
+            <Field
+              label="Is the other agent active with eXp?"
+              required
+              error={errors['other_agent_active']}
+            >
               <Select
                 value={form.other_agent_active}
                 onValueChange={(v) => set("other_agent_active", v)}
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select yes or no" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="yes">Yes</SelectItem>

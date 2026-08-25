@@ -155,7 +155,9 @@ export const hearingRequestSchema = z.object({
   other_agent: z.string().trim().min(2, "Name of the other agent is required").max(120),
   other_agent_email: z.string().trim().email("Enter a valid email for the other agent").max(255),
   other_agent_phone: z.string().trim().max(40).optional().or(z.literal("")),
-  other_agent_active: z.enum(["yes", "no"]),
+  other_agent_active: z.enum(["yes", "no"], {
+    message: "Select whether the other agent is active with eXp",
+  }),
   reasons: z.array(z.string()).min(1, "Select at least one reason"),
   ethics_articles: z.string().trim().max(500).optional().or(z.literal("")),
   summary: z.string().trim().min(20, "Please describe the facts of the issue").max(6000),

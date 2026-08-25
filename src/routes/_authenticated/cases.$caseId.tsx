@@ -232,33 +232,10 @@ function CaseDetail() {
                   </div>
                 ))}
             </dl>
-            <h3 className="mt-8 text-sm font-semibold">Attachments</h3>
-            <ul className="mt-3 space-y-2">
-              {attachments.length === 0 && (
-                <li className="text-sm text-muted-foreground">No files attached.</li>
-              )}
-              {attachments.map((a) => (
-                <li key={a.id} className="flex items-center gap-3 text-sm">
-                  <Paperclip className="size-3.5 text-muted-foreground" />
-                  <button
-                    className="text-primary hover:underline"
-                    onClick={async () => {
-                      try {
-                        window.open(await downloadAttachment(a.file_path), "_blank");
-                      } catch (e) {
-                        toast.error((e as Error).message);
-                      }
-                    }}
-                  >
-                    {a.file_name}
-                  </button>
-                  <span className="rule-label">
-                    {a.kind === "binding_agreement" ? "Binding agreement" : "Supporting"}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </section>
+
+          <CaseDocuments caseId={caseId} />
+
 
 
           <section className="panel p-6">

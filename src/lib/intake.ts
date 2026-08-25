@@ -17,6 +17,9 @@ export const DISPUTE_REASONS = [
 export const BINDING_AGREEMENT_NOTE =
   "Complete, sign and attach the eXp Internal Dispute Resolution Hearing Binding Agreement Form as part of your documentation.";
 
+export const BINDING_AGREEMENT_URL =
+  "https://docs.google.com/document/d/11pPjmcg3pgPi3lWGeKjuVmjDDkfe-fwNSdmnGxSYD-U/edit?tab=t.0";
+
 export const REGULATORY_EMAIL = "RegulatoryRelations@exprealty.net";
 
 export type DisputeResponseRow = {

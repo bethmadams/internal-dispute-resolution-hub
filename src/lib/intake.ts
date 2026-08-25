@@ -10,6 +10,7 @@ export const DISPUTE_REASONS = [
   "Team/downline dispute",
   "Client or listing procuring cause",
   "Professional conduct concern",
+  "eXp Policies & Procedures or ICA violation",
   "Other",
 ] as const;
 

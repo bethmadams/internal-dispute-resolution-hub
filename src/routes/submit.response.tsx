@@ -8,7 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
-import { BINDING_AGREEMENT_NOTE, responseFormSchema, uploadIntakeFiles } from "@/lib/intake";
+import {
+  BINDING_AGREEMENT_NOTE,
+  BINDING_AGREEMENT_URL,
+  responseFormSchema,
+  uploadIntakeFiles,
+} from "@/lib/intake";
 
 export const Route = createFileRoute("/submit/response")({
   head: () => ({

@@ -68,7 +68,7 @@ function HearingRequest() {
     steps_taken: "",
     property_address: "",
     closing_date: "",
-    involves_money: "no",
+    involves_money: "",
     monetary_amount: "",
     additional_comments: "",
   });

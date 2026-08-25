@@ -69,3 +69,26 @@ export function Field({
     </div>
   );
 }
+
+export function StateSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger>
+        <SelectValue placeholder="Select a state" />
+      </SelectTrigger>
+      <SelectContent className="max-h-72">
+        {US_STATES.map((state) => (
+          <SelectItem key={state} value={state}>
+            {state}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}

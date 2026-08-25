@@ -331,6 +331,14 @@ function HearingRequest() {
             hint={BINDING_AGREEMENT_NOTE}
             error={errors['agreement']}
           >
+            <a
+              href={BINDING_AGREEMENT_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="mb-3 inline-flex items-center text-sm font-medium text-primary underline underline-offset-4"
+            >
+              Download the Binding Agreement Form
+            </a>
             <Input
               type="file"
               multiple

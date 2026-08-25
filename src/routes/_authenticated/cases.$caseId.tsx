@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Paperclip } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/use-session";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { CaseDocuments } from "@/components/CaseDocuments";
 import {
   Select,
   SelectContent,
@@ -30,7 +31,7 @@ import {
   type Priority,
   type Stage,
 } from "@/lib/hub";
-import { attachmentsQuery, downloadAttachment } from "@/lib/intake";
+
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
   head: () => ({

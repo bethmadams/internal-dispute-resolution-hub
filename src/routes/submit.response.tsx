@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, IntakeShell } from "@/components/IntakeShell";
+import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
 import { BINDING_AGREEMENT_NOTE, responseFormSchema, uploadIntakeFiles } from "@/lib/intake";
 
 export const Route = createFileRoute("/submit/response")({
@@ -137,7 +137,7 @@ function ResponseForm() {
             />
           </Field>
           <Field label="State where the issue occurred" required error={errors['state']}>
-            <Input value={form.state} onChange={(e) => set("state", e.target.value)} />
+            <StateSelect value={form.state} onChange={(v) => set("state", v)} />
           </Field>
         </div>
 

@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field, IntakeShell } from "@/components/IntakeShell";
+import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
 import {
   BINDING_AGREEMENT_NOTE,
   DISPUTE_REASONS,

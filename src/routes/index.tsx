@@ -67,8 +67,7 @@ function Landing() {
           Internal Dispute Resolution Hub
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          The single place where internal disputes are filed, investigated, heard, appealed and
-          closed. Replacing the legacy document boards with a structured, auditable record.
+          Welcome to the centralized hub for managing eXp agent-to-agent disputes.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link

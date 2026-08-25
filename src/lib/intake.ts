@@ -35,11 +35,43 @@ export type Attachment = {
   id: string;
   dispute_id: string | null;
   response_id: string | null;
+  appeal_id: string | null;
   kind: string;
   file_path: string;
   file_name: string;
   created_at: string;
 };
+
+export const ATTACHMENT_KIND_LABELS: Record<string, string> = {
+  binding_agreement: "Binding agreement",
+  supporting: "Supporting document",
+  response: "Response document",
+  appeal: "Appeal document",
+  case_document: "Case document",
+  hearing_packet: "Hearing packet",
+  panel_decision: "Panel decision",
+};
+
+export function attachmentKindLabel(kind: string) {
+  return ATTACHMENT_KIND_LABELS[kind] ?? kind.replace(/_/g, " ");
+}
+
+export const STAFF_DOCUMENT_KINDS = [
+  "case_document",
+  "hearing_packet",
+  "panel_decision",
+  "supporting",
+] as const;
+
+export type DocumentPreviewType = "pdf" | "image" | "text" | "other";
+
+export function previewTypeFor(fileName: string): DocumentPreviewType {
+  const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
+  if (ext === "pdf") return "pdf";
+  if (["png", "jpg", "jpeg", "gif", "webp", "avif", "svg"].includes(ext)) return "image";
+  if (["txt", "csv", "md", "log"].includes(ext)) return "text";
+  return "other";
+}
 
 export const responsesQuery = {
   queryKey: ["dispute_responses"],
@@ -57,10 +89,21 @@ export function attachmentsQuery(disputeId: string) {
   return {
     queryKey: ["dispute_attachments", disputeId],
     queryFn: async (): Promise<Attachment[]> => {
+      const [responses, appeals] = await Promise.all([
+        supabase.from("dispute_responses").select("id").eq("dispute_id", disputeId),
+        supabase.from("dispute_appeals").select("id").eq("dispute_id", disputeId),
+      ]);
+      const responseIds = (responses.data ?? []).map((r) => r.id);
+      const appealIds = (appeals.data ?? []).map((a) => a.id);
+
+      const filters = [`dispute_id.eq.${disputeId}`];
+      if (responseIds.length) filters.push(`response_id.in.(${responseIds.join(",")})`);
+      if (appealIds.length) filters.push(`appeal_id.in.(${appealIds.join(",")})`);
+
       const { data, error } = await supabase
         .from("dispute_attachments")
         .select("*")
-        .eq("dispute_id", disputeId)
+        .or(filters.join(","))
         .order("created_at");
       if (error) throw error;
       return (data ?? []) as Attachment[];
@@ -73,6 +116,16 @@ export async function downloadAttachment(path: string) {
   if (error) throw error;
   return data.signedUrl;
 }
+
+export async function addCaseDocuments(disputeId: string, kind: string, files: File[]) {
+  const uploaded = await uploadIntakeFiles(`cases/${disputeId}`, files);
+  const { error } = await supabase.from("dispute_attachments").insert(
+    uploaded.map((u) => ({ dispute_id: disputeId, kind, ...u })),
+  );
+  if (error) throw error;
+  return uploaded.length;
+}
+
 
 const MAX_BYTES = 20 * 1024 * 1024;
 

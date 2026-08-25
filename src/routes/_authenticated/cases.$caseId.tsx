@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Paperclip } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/use-session";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { CaseDocuments } from "@/components/CaseDocuments";
 import {
   Select,
   SelectContent,
@@ -30,7 +31,7 @@ import {
   type Priority,
   type Stage,
 } from "@/lib/hub";
-import { attachmentsQuery, downloadAttachment } from "@/lib/intake";
+
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
   head: () => ({
@@ -87,7 +88,7 @@ function CaseDetail() {
   });
 
   const { data: profiles = [] } = useQuery(profilesQuery);
-  const { data: attachments = [] } = useQuery(attachmentsQuery(caseId));
+  
 
   useEffect(() => {
     if (dispute) setResolution(dispute.resolution ?? "");
@@ -232,33 +233,10 @@ function CaseDetail() {
                   </div>
                 ))}
             </dl>
-            <h3 className="mt-8 text-sm font-semibold">Attachments</h3>
-            <ul className="mt-3 space-y-2">
-              {attachments.length === 0 && (
-                <li className="text-sm text-muted-foreground">No files attached.</li>
-              )}
-              {attachments.map((a) => (
-                <li key={a.id} className="flex items-center gap-3 text-sm">
-                  <Paperclip className="size-3.5 text-muted-foreground" />
-                  <button
-                    className="text-primary hover:underline"
-                    onClick={async () => {
-                      try {
-                        window.open(await downloadAttachment(a.file_path), "_blank");
-                      } catch (e) {
-                        toast.error((e as Error).message);
-                      }
-                    }}
-                  >
-                    {a.file_name}
-                  </button>
-                  <span className="rule-label">
-                    {a.kind === "binding_agreement" ? "Binding agreement" : "Supporting"}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </section>
+
+          <CaseDocuments caseId={caseId} />
+
 
 
           <section className="panel p-6">

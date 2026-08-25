@@ -1,7 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { Scale } from "lucide-react";
 import type { ReactNode } from "react";
-import { REGULATORY_EMAIL } from "@/lib/intake";
+import { REGULATORY_EMAIL, US_STATES } from "@/lib/intake";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function IntakeShell({
   eyebrow,

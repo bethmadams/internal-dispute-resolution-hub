@@ -431,6 +431,30 @@ export type Database = {
         }
         Relationships: []
       }
+      territory_assignments: {
+        Row: {
+          created_at: string
+          investigator_email: string | null
+          investigator_name: string
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          investigator_email?: string | null
+          investigator_name: string
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          investigator_email?: string | null
+          investigator_name?: string
+          state?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

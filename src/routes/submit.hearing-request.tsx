@@ -19,6 +19,7 @@ import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
 import {
   BINDING_AGREEMENT_NOTE,
   BINDING_AGREEMENT_URL,
+  CODE_OF_ETHICS_ARTICLES,
   DISPUTE_REASONS,
   hearingRequestSchema,
   uploadIntakeFiles,
@@ -255,11 +256,21 @@ function HearingRequest() {
           {form.reasons.includes("REALTOR Code of Ethics complaint") && (
             <div className="mt-5">
               <Field label="Which Articles of the Code of Ethics?">
-                <Input
+                <Select
                   value={form.ethics_articles}
-                  onChange={(e) => set("ethics_articles", e.target.value)}
-                  placeholder="e.g. Article 1, Article 16"
-                />
+                  onValueChange={(v) => set("ethics_articles", v)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an article" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CODE_OF_ETHICS_ARTICLES.map((article) => (
+                      <SelectItem key={article} value={article}>
+                        {article}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </Field>
             </div>
           )}

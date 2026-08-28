@@ -1,14 +1,17 @@
-# Welcome to your Lovable project
+# Internal Dispute Resolution Hub
+
+I want to create a new project called "Internal Dispute Resolution HUB", this project will be bringing in the existing project and documents from Coda into this platform for processing going forward. 
+Here is  the link to the Coda Board(s) for this process - (https://docs.superhuman.com/d/Internal-Dispute-Resolution-HUB_dCd18-ZxX3D/Internal-Dispute-Resolution-Resources_sueGk7Pw#_luww21ai) tell me what you need to get this board set up
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/a4df2ad6-9251-478e-bd1c-f847920075df).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +23,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS

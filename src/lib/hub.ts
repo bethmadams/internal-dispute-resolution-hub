@@ -186,10 +186,13 @@ export function nextCaseNumber(disputes: Dispute[]) {
 export type CaseAccessGrant = {
   id: string;
   dispute_id: string;
-  user_id: string;
+  user_id: string | null;
   granted_by: string | null;
   expires_at: string | null;
   created_at: string;
+  invite_email: string | null;
+  invite_name: string | null;
+  states: string[] | null;
 };
 
 export const caseAccessQuery = (disputeId: string) => ({

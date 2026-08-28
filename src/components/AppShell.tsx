@@ -59,6 +59,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </p>
               )}
             </div>
+            <NotificationBell />
             <Button
               variant="ghost"
               size="icon"

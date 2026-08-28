@@ -382,7 +382,7 @@ function Dashboard() {
         </Select>
       </div>
 
-      <div className="panel overflow-hidden">
+      <div>
         {isLoading ? (
           <p className="p-8 text-sm text-muted-foreground">Loading cases…</p>
         ) : filtered.length === 0 ? (
@@ -390,34 +390,49 @@ function Dashboard() {
             No cases match. Log a dispute to get started.
           </p>
         ) : (
-          <ul className="divide-y divide-border">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((d) => (
-              <li key={d.id}>
-                <Link
-                  to="/cases/$caseId"
-                  params={{ caseId: d.id }}
-                  className="flex flex-wrap items-center gap-x-4 gap-y-2 p-4 transition-colors hover:bg-secondary/60"
-                >
-                  <span className="font-display text-xs font-semibold text-muted-foreground">
-                    {d.case_number}
-                  </span>
-                  <span className="min-w-40 flex-1 text-sm font-medium">{d.title}</span>
-                  <Badge variant="outline" className={stageStyles[d.stage]}>
-                    {d.stage}
-                  </Badge>
+              <Link
+                key={d.id}
+                to="/cases/$caseId"
+                params={{ caseId: d.id }}
+                className="group panel flex flex-col p-5 transition-shadow hover:shadow-lift"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-display text-xs font-semibold text-muted-foreground">
+                      {d.case_number}
+                    </p>
+                    <h3 className="mt-1 line-clamp-2 text-base font-semibold leading-snug">
+                      {d.title}
+                    </h3>
+                  </div>
                   <Badge variant="outline" className={priorityStyles[d.priority]}>
                     {d.priority}
                   </Badge>
-                  <span className="w-40 truncate text-xs text-muted-foreground">
-                    {nameFor(d.assigned_to)}
-                  </span>
-                  <span className="w-24 text-right text-xs text-muted-foreground">
-                    {formatDate(d.filed_at)}
-                  </span>
-                </Link>
-              </li>
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" className={stageStyles[d.stage]}>
+                    {d.stage}
+                  </Badge>
+                  {d.department && (
+                    <span className="text-xs text-muted-foreground">{d.department}</span>
+                  )}
+                </div>
+
+                <div className="mt-auto pt-5">
+                  <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                    <span className="truncate">{nameFor(d.assigned_to)}</span>
+                    <span className="shrink-0">{formatDate(d.filed_at)}</span>
+                  </div>
+                  <div className="mt-3 flex items-center gap-1 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    Open case <ExternalLink className="size-3.5" />
+                  </div>
+                </div>
+              </Link>
             ))}
-          </ul>
+          </div>
         )}
       </div>
 

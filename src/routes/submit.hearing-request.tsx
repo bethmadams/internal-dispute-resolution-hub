@@ -65,7 +65,7 @@ function HearingRequest() {
     other_agent_phone: "",
     other_agent_active: "",
     reasons: [] as string[],
-    ethics_articles: "",
+    ethics_articles: [] as string[],
     summary: "",
     seeking: "",
     steps_taken: "",
@@ -87,6 +87,14 @@ function HearingRequest() {
       reasons: f.reasons.includes(reason)
         ? f.reasons.filter((r) => r !== reason)
         : [...f.reasons, reason],
+    }));
+
+  const toggleEthicsArticle = (article: string) =>
+    setForm((f) => ({
+      ...f,
+      ethics_articles: f.ethics_articles.includes(article)
+        ? f.ethics_articles.filter((a) => a !== article)
+        : [...f.ethics_articles, article],
     }));
 
   const submit = useMutation({
@@ -122,7 +130,7 @@ function HearingRequest() {
         respondent_active: v.other_agent_active === "yes",
         state: v.state,
         reasons: v.reasons,
-        ethics_articles: v.ethics_articles || null,
+        ethics_articles: v.ethics_articles?.length ? v.ethics_articles.join(", ") : null,
         seeking: v.seeking,
         steps_taken: v.steps_taken,
         property_address: v.property_address || null,
@@ -269,27 +277,23 @@ function HearingRequest() {
                   ))}
                 </div>
               </Field>
-              {form.reasons.includes("REALTOR Code of Ethics complaint") && (
-                <div className="mt-5">
-                  <Field label="Which Articles of the Code of Ethics?">
-                    <Select
-                      value={form.ethics_articles}
-                      onValueChange={(v) => set("ethics_articles", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select an article" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CODE_OF_ETHICS_ARTICLES.map((article) => (
-                          <SelectItem key={article} value={article}>
-                            {article}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
+          {form.reasons.includes("REALTOR Code of Ethics complaint") && (
+            <div className="mt-5">
+              <Field label="Which Articles of the Code of Ethics?" hint="Select all that apply.">
+                <div className="grid gap-2.5 sm:grid-cols-3">
+                  {CODE_OF_ETHICS_ARTICLES.map((article) => (
+                    <label key={article} className="flex items-start gap-2.5 text-sm">
+                      <Checkbox
+                        checked={form.ethics_articles.includes(article)}
+                        onCheckedChange={() => toggleEthicsArticle(article)}
+                      />
+                      <span>{article}</span>
+                    </label>
+                  ))}
                 </div>
-              )}
+              </Field>
+            </div>
+          )}
             </div>
 
             <div className="space-y-5 border-t border-border pt-6">

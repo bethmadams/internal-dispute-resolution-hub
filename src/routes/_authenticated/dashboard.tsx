@@ -302,44 +302,6 @@ function Dashboard() {
         </Dialog>
       </div>
 
-      <section className="panel p-5">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="rule-label">Public submission forms</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Share these links with agents — submissions land in New Submission.
-            </p>
-          </div>
-        </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          {PUBLIC_FORMS.map((f) => (
-            <div key={f.to} className="rounded-md border border-border p-4">
-              <p className="text-sm font-medium">{f.label}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{f.who}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Link
-                  to={f.to}
-                  target="_blank"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                >
-                  <ExternalLink className="size-3.5" /> Open form
-                </Link>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-auto px-3 py-1.5 text-xs"
-                  onClick={() => {
-                    navigator.clipboard.writeText(`${window.location.origin}${f.to}`);
-                    toast.success("Link copied");
-                  }}
-                >
-                  <Copy className="mr-1.5 size-3.5" /> Copy link
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
 
       <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">

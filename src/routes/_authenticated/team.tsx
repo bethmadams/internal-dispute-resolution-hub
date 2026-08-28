@@ -240,6 +240,8 @@ function Team() {
         </div>
       )}
 
+      <TerritoryRouting canEdit={isAdmin} />
     </div>
   );
 }
+

@@ -130,7 +130,7 @@ function HearingRequest() {
         respondent_active: v.other_agent_active === "yes",
         state: v.state,
         reasons: v.reasons,
-        ethics_articles: v.ethics_articles || null,
+        ethics_articles: v.ethics_articles?.length ? v.ethics_articles.join(", ") : null,
         seeking: v.seeking,
         steps_taken: v.steps_taken,
         property_address: v.property_address || null,

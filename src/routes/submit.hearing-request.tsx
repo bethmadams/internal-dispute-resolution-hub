@@ -65,7 +65,7 @@ function HearingRequest() {
     other_agent_phone: "",
     other_agent_active: "",
     reasons: [] as string[],
-    ethics_articles: "",
+    ethics_articles: [] as string[],
     summary: "",
     seeking: "",
     steps_taken: "",

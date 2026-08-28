@@ -89,6 +89,14 @@ function HearingRequest() {
         : [...f.reasons, reason],
     }));
 
+  const toggleEthicsArticle = (article: string) =>
+    setForm((f) => ({
+      ...f,
+      ethics_articles: f.ethics_articles.includes(article)
+        ? f.ethics_articles.filter((a) => a !== article)
+        : [...f.ethics_articles, article],
+    }));
+
   const submit = useMutation({
     mutationFn: async () => {
       const parsed = hearingRequestSchema.safeParse(form);

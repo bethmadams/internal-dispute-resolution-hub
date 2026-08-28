@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.auto_assign_by_territory() FROM PUBLIC, anon, authenticated;

@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -74,6 +75,8 @@ function HearingRequest() {
     monetary_amount: "",
     additional_comments: "",
   });
+
+  const ineligible = form.other_agent_active === "no";
 
   const set = (key: keyof typeof form, value: unknown) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -232,159 +235,174 @@ function HearingRequest() {
               </Select>
             </Field>
           </div>
+
+          {ineligible && (
+            <Alert variant="destructive" className="mt-5">
+              <AlertCircle className="size-4" />
+              <AlertTitle>Not eligible for a hearing</AlertTitle>
+              <AlertDescription>
+                This dispute is not eligible for a hearing because the other agent is not active with eXp.
+                Internal Dispute Resolution is only available for disputes between active eXp agents.
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
 
-        <div className="border-t border-border pt-6">
-          <Field
-            label="Reason for requesting an internal dispute hearing"
-            required
-            hint="Select all that apply."
-            error={errors['reasons']}
-          >
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              {DISPUTE_REASONS.map((reason) => (
-                <label key={reason} className="flex items-start gap-2.5 text-sm">
-                  <Checkbox
-                    checked={form.reasons.includes(reason)}
-                    onCheckedChange={() => toggleReason(reason)}
-                  />
-                  <span>{reason}</span>
-                </label>
-              ))}
+        {!ineligible && (
+          <>
+            <div className="border-t border-border pt-6">
+              <Field
+                label="Reason for requesting an internal dispute hearing"
+                required
+                hint="Select all that apply."
+                error={errors['reasons']}
+              >
+                <div className="grid gap-2.5 sm:grid-cols-2">
+                  {DISPUTE_REASONS.map((reason) => (
+                    <label key={reason} className="flex items-start gap-2.5 text-sm">
+                      <Checkbox
+                        checked={form.reasons.includes(reason)}
+                        onCheckedChange={() => toggleReason(reason)}
+                      />
+                      <span>{reason}</span>
+                    </label>
+                  ))}
+                </div>
+              </Field>
+              {form.reasons.includes("REALTOR Code of Ethics complaint") && (
+                <div className="mt-5">
+                  <Field label="Which Articles of the Code of Ethics?">
+                    <Select
+                      value={form.ethics_articles}
+                      onValueChange={(v) => set("ethics_articles", v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select an article" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CODE_OF_ETHICS_ARTICLES.map((article) => (
+                          <SelectItem key={article} value={article}>
+                            {article}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </div>
+              )}
             </div>
-          </Field>
-          {form.reasons.includes("REALTOR Code of Ethics complaint") && (
-            <div className="mt-5">
-              <Field label="Which Articles of the Code of Ethics?">
-                <Select
-                  value={form.ethics_articles}
-                  onValueChange={(v) => set("ethics_articles", v)}
-                >
+
+            <div className="space-y-5 border-t border-border pt-6">
+              <Field label="General facts / summary of the issue" required error={errors['summary']}>
+                <Textarea rows={6} value={form.summary} onChange={(e) => set("summary", e.target.value)} />
+              </Field>
+              <Field label="What are you seeking?" required error={errors['seeking']}>
+                <Textarea rows={3} value={form.seeking} onChange={(e) => set("seeking", e.target.value)} />
+              </Field>
+              <Field
+                label="Steps taken to remedy thus far"
+                required
+                error={errors['steps_taken']}
+              >
+                <Textarea
+                  rows={3}
+                  value={form.steps_taken}
+                  onChange={(e) => set("steps_taken", e.target.value)}
+                />
+              </Field>
+            </div>
+
+            <div className="grid gap-5 border-t border-border pt-6 sm:grid-cols-2">
+              <Field label="Property address, if applicable">
+                <Input
+                  value={form.property_address}
+                  onChange={(e) => set("property_address", e.target.value)}
+                />
+              </Field>
+              <Field label="Date sale/lease/referral closed or is scheduled to close">
+                <Input
+                  type="date"
+                  value={form.closing_date}
+                  onChange={(e) => set("closing_date", e.target.value)}
+                />
+              </Field>
+              <Field
+                label="Does this complaint involve a monetary amount?"
+                required
+                error={errors['involves_money']}
+              >
+                <Select value={form.involves_money} onValueChange={(v) => set("involves_money", v)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select an article" />
+                    <SelectValue placeholder="Select yes or no" />
                   </SelectTrigger>
                   <SelectContent>
-                    {CODE_OF_ETHICS_ARTICLES.map((article) => (
-                      <SelectItem key={article} value={article}>
-                        {article}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
                   </SelectContent>
                 </Select>
               </Field>
+              {form.involves_money === "yes" && (
+                <Field label="Monetary amount involved">
+                  <Input
+                    value={form.monetary_amount}
+                    onChange={(e) => set("monetary_amount", e.target.value)}
+                    placeholder="e.g. 12500"
+                  />
+                </Field>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="space-y-5 border-t border-border pt-6">
-          <Field label="General facts / summary of the issue" required error={errors['summary']}>
-            <Textarea rows={6} value={form.summary} onChange={(e) => set("summary", e.target.value)} />
-          </Field>
-          <Field label="What are you seeking?" required error={errors['seeking']}>
-            <Textarea rows={3} value={form.seeking} onChange={(e) => set("seeking", e.target.value)} />
-          </Field>
-          <Field
-            label="Steps taken to remedy thus far"
-            required
-            error={errors['steps_taken']}
-          >
-            <Textarea
-              rows={3}
-              value={form.steps_taken}
-              onChange={(e) => set("steps_taken", e.target.value)}
-            />
-          </Field>
-        </div>
+            <div className="space-y-5 border-t border-border pt-6">
+              <Field
+                label="Signed binding agreement"
+                required
+                hint={BINDING_AGREEMENT_NOTE}
+                error={errors['agreement']}
+              >
+                <a
+                  href={BINDING_AGREEMENT_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mb-3 inline-flex items-center text-sm font-medium text-primary underline underline-offset-4"
+                >
+                  Download the Binding Agreement Form
+                </a>
+                <Input
+                  type="file"
+                  multiple
+                  onChange={(e) => setAgreement(Array.from(e.target.files ?? []))}
+                />
+              </Field>
+              <Field
+                label="Complaint and supporting documentation"
+                hint="Attach any documents that support your complaint (20MB per file)."
+              >
+                <Input
+                  type="file"
+                  multiple
+                  onChange={(e) => setSupporting(Array.from(e.target.files ?? []))}
+                />
+              </Field>
+              <Field label="Additional comments">
+                <Textarea
+                  rows={3}
+                  value={form.additional_comments}
+                  onChange={(e) => set("additional_comments", e.target.value)}
+                />
+              </Field>
+            </div>
 
-        <div className="grid gap-5 border-t border-border pt-6 sm:grid-cols-2">
-          <Field label="Property address, if applicable">
-            <Input
-              value={form.property_address}
-              onChange={(e) => set("property_address", e.target.value)}
-            />
-          </Field>
-          <Field label="Date sale/lease/referral closed or is scheduled to close">
-            <Input
-              type="date"
-              value={form.closing_date}
-              onChange={(e) => set("closing_date", e.target.value)}
-            />
-          </Field>
-          <Field
-            label="Does this complaint involve a monetary amount?"
-            required
-            error={errors['involves_money']}
-          >
-            <Select value={form.involves_money} onValueChange={(v) => set("involves_money", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select yes or no" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="yes">Yes</SelectItem>
-                <SelectItem value="no">No</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
-          {form.involves_money === "yes" && (
-            <Field label="Monetary amount involved">
-              <Input
-                value={form.monetary_amount}
-                onChange={(e) => set("monetary_amount", e.target.value)}
-                placeholder="e.g. 12500"
-              />
-            </Field>
-          )}
-        </div>
-
-        <div className="space-y-5 border-t border-border pt-6">
-          <Field
-            label="Signed binding agreement"
-            required
-            hint={BINDING_AGREEMENT_NOTE}
-            error={errors['agreement']}
-          >
-            <a
-              href={BINDING_AGREEMENT_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="mb-3 inline-flex items-center text-sm font-medium text-primary underline underline-offset-4"
-            >
-              Download the Binding Agreement Form
-            </a>
-            <Input
-              type="file"
-              multiple
-              onChange={(e) => setAgreement(Array.from(e.target.files ?? []))}
-            />
-          </Field>
-          <Field
-            label="Complaint and supporting documentation"
-            hint="Attach any documents that support your complaint (20MB per file)."
-          >
-            <Input
-              type="file"
-              multiple
-              onChange={(e) => setSupporting(Array.from(e.target.files ?? []))}
-            />
-          </Field>
-          <Field label="Additional comments">
-            <Textarea
-              rows={3}
-              value={form.additional_comments}
-              onChange={(e) => set("additional_comments", e.target.value)}
-            />
-          </Field>
-        </div>
-
-        <div className="flex items-center gap-3 border-t border-border pt-6">
-          <Button onClick={() => submit.mutate()} disabled={submit.isPending}>
-            {submit.isPending ? "Submitting…" : "Submit hearing request"}
-          </Button>
-          <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-            <CheckCircle2 className="size-3.5" /> Confidential — reviewed by Regulatory Relations
-            only
-          </span>
-        </div>
+            <div className="flex items-center gap-3 border-t border-border pt-6">
+              <Button onClick={() => submit.mutate()} disabled={submit.isPending}>
+                {submit.isPending ? "Submitting…" : "Submit hearing request"}
+              </Button>
+              <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                <CheckCircle2 className="size-3.5" /> Confidential — reviewed by Regulatory Relations
+                only
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </IntakeShell>
   );

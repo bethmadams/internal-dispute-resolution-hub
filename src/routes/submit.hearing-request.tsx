@@ -19,6 +19,7 @@ import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
 import {
   BINDING_AGREEMENT_NOTE,
   BINDING_AGREEMENT_URL,
+  CODE_OF_ETHICS_ARTICLES,
   DISPUTE_REASONS,
   hearingRequestSchema,
   uploadIntakeFiles,

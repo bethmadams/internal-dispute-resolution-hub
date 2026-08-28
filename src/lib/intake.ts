@@ -183,7 +183,7 @@ export const hearingRequestSchema = z.object({
     message: "Select whether the other agent is active with eXp",
   }),
   reasons: z.array(z.string()).min(1, "Select at least one reason"),
-  ethics_articles: z.string().trim().max(500).optional().or(z.literal("")),
+  ethics_articles: z.array(z.string()).optional(),
   summary: z.string().trim().min(20, "Please describe the facts of the issue").max(6000),
   seeking: z.string().trim().min(5, "Tell us what you are seeking").max(2000),
   steps_taken: z.string().trim().min(5, "Describe the steps taken so far").max(2000),

@@ -138,6 +138,16 @@ const LIBRARY: { title: string; kind: string; url: string }[] = [
   },
 ];
 
+const PUBLIC_FORMS = [
+  {
+    to: "/submit/hearing-request",
+    label: "Hearing Request",
+    who: "Filed by the complaining agent",
+  },
+  { to: "/submit/response", label: "Hearing Response", who: "Filed by the respondent" },
+  { to: "/submit/appeal", label: "Appeal Request", who: "Filed after a hearing outcome" },
+] as const;
+
 function Resources() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
@@ -263,6 +273,44 @@ function Resources() {
           ))}
         </div>
       )}
+
+      <section className="space-y-6">
+        <div>
+          <p className="rule-label">Agent intake</p>
+          <h2 className="mt-1 text-2xl font-semibold">Public submission forms</h2>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+            Share these links with agents — submissions land in New Submission.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {PUBLIC_FORMS.map((f) => (
+            <div key={f.to} className="panel p-5">
+              <p className="text-sm font-medium">{f.label}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{f.who}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  to={f.to}
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  <ExternalLink className="size-3.5" /> Open form
+                </Link>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-auto px-3 py-1.5 text-xs"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}${f.to}`);
+                    toast.success("Link copied");
+                  }}
+                >
+                  <Copy className="mr-1.5 size-3.5" /> Copy link
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="grid gap-4 md:grid-cols-2">
         {visible.map((r) => (

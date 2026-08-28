@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Search, ExternalLink, Copy } from "lucide-react";
+import { Plus, Search, ExternalLink } from "lucide-react";
 
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -41,15 +41,6 @@ import {
 } from "@/lib/hub";
 import { appealsQuery, responsesQuery } from "@/lib/intake";
 
-const PUBLIC_FORMS = [
-  {
-    to: "/submit/hearing-request",
-    label: "Hearing Request",
-    who: "Filed by the complaining agent",
-  },
-  { to: "/submit/response", label: "Hearing Response", who: "Filed by the respondent" },
-  { to: "/submit/appeal", label: "Appeal Request", who: "Filed after a hearing outcome" },
-] as const;
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -302,44 +293,6 @@ function Dashboard() {
         </Dialog>
       </div>
 
-      <section className="panel p-5">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="rule-label">Public submission forms</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Share these links with agents — submissions land in New Submission.
-            </p>
-          </div>
-        </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          {PUBLIC_FORMS.map((f) => (
-            <div key={f.to} className="rounded-md border border-border p-4">
-              <p className="text-sm font-medium">{f.label}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{f.who}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Link
-                  to={f.to}
-                  target="_blank"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                >
-                  <ExternalLink className="size-3.5" /> Open form
-                </Link>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-auto px-3 py-1.5 text-xs"
-                  onClick={() => {
-                    navigator.clipboard.writeText(`${window.location.origin}${f.to}`);
-                    toast.success("Link copied");
-                  }}
-                >
-                  <Copy className="mr-1.5 size-3.5" /> Copy link
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
 
       <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">

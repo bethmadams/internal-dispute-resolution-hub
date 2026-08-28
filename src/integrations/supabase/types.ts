@@ -21,7 +21,10 @@ export type Database = {
           expires_at: string | null
           granted_by: string | null
           id: string
-          user_id: string
+          invite_email: string | null
+          invite_name: string | null
+          states: string[]
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -29,7 +32,10 @@ export type Database = {
           expires_at?: string | null
           granted_by?: string | null
           id?: string
-          user_id: string
+          invite_email?: string | null
+          invite_name?: string | null
+          states?: string[]
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -37,7 +43,10 @@ export type Database = {
           expires_at?: string | null
           granted_by?: string | null
           id?: string
-          user_id?: string
+          invite_email?: string | null
+          invite_name?: string | null
+          states?: string[]
+          user_id?: string | null
         }
         Relationships: [
           {

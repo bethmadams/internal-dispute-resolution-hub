@@ -444,38 +444,48 @@ function Dashboard() {
             Responses arrive unmatched — link each one to the case it answers.
           </p>
         </div>
-        <div className="panel overflow-hidden">
+        <div>
           {responses.length === 0 ? (
             <p className="p-8 text-sm text-muted-foreground">No responses submitted yet.</p>
           ) : (
-            <ul className="divide-y divide-border">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {responses.map((r) => (
-                <li key={r.id} className="space-y-3 p-4">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                    <span className="text-sm font-medium">{r.responder_name}</span>
-                    {r.state && (
-                      <span className="text-xs text-muted-foreground">{r.state}</span>
-                    )}
-                    {r.responding_to_name && (
-                      <span className="text-xs text-muted-foreground">
-                        responding to {r.responding_to_name}
-                      </span>
-                    )}
-                    <span className="ml-auto text-xs text-muted-foreground">
+                <div key={r.id} className="panel flex flex-col p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-display text-xs font-semibold text-muted-foreground">
+                        Response
+                      </p>
+                      <h3 className="mt-1 text-base font-semibold leading-snug">
+                        {r.responder_name}
+                      </h3>
+                    </div>
+                    <span className="shrink-0 text-xs text-muted-foreground">
                       {formatDate(r.submitted_on)}
                     </span>
                   </div>
-                  <p className="line-clamp-3 text-sm text-muted-foreground whitespace-pre-wrap">
+
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    {r.state && <span>{r.state}</span>}
+                    {r.responding_to_name && (
+                      <span className="truncate">
+                        responding to {r.responding_to_name}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="mt-4 line-clamp-3 flex-1 text-sm text-muted-foreground whitespace-pre-wrap">
                     {r.summary}
                   </p>
-                  <div className="flex flex-wrap items-center gap-3">
+
+                  <div className="mt-5 flex flex-col gap-3 border-t border-border pt-4">
                     <Select
                       value={r.dispute_id ?? "unlinked"}
                       onValueChange={(v) =>
                         linkResponse.mutate({ id: r.id, disputeId: v === "unlinked" ? null : v })
                       }
                     >
-                      <SelectTrigger className="w-72">
+                      <SelectTrigger className="w-full">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -491,15 +501,15 @@ function Dashboard() {
                       <Link
                         to="/cases/$caseId"
                         params={{ caseId: r.dispute_id }}
-                        className="text-sm text-primary hover:underline"
+                        className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                       >
-                        Open case
+                        Open case <ExternalLink className="size-3.5" />
                       </Link>
                     )}
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </div>
       </section>

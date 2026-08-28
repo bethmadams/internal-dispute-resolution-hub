@@ -14,6 +14,26 @@ export const DISPUTE_REASONS = [
   "Other",
 ] as const;
 
+export const CODE_OF_ETHICS_ARTICLES = [
+  "Article 1",
+  "Article 2",
+  "Article 3",
+  "Article 4",
+  "Article 5",
+  "Article 6",
+  "Article 7",
+  "Article 8",
+  "Article 9",
+  "Article 10",
+  "Article 11",
+  "Article 12",
+  "Article 13",
+  "Article 14",
+  "Article 15",
+  "Article 16",
+  "Article 17",
+] as const;
+
 export const BINDING_AGREEMENT_NOTE =
   "Complete, sign and attach the eXp Internal Dispute Resolution Hearing Binding Agreement Form as part of your documentation.";
 

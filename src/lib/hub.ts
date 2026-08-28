@@ -207,3 +207,38 @@ export const caseAccessQuery = (disputeId: string) => ({
     return (data ?? []) as CaseAccessGrant[];
   },
 });
+
+export type Notification = {
+  id: string;
+  kind: string;
+  title: string;
+  body: string | null;
+  state: string | null;
+  dispute_id: string | null;
+  case_number: string | null;
+  created_at: string;
+};
+
+export const notificationsQuery = {
+  queryKey: ["notifications"],
+  queryFn: async (): Promise<Notification[]> => {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) throw error;
+    return (data ?? []) as Notification[];
+  },
+};
+
+export const notificationReadsQuery = {
+  queryKey: ["notification_reads"],
+  queryFn: async (): Promise<{ notification_id: string }[]> => {
+    const { data, error } = await supabase
+      .from("notification_reads")
+      .select("notification_id");
+    if (error) throw error;
+    return data ?? [];
+  },
+};

@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-session";
 import { rolesQuery } from "@/lib/hub";
+import { NotificationBell } from "@/components/NotificationBell";
 import type { ReactNode } from "react";
 
 const nav = [
@@ -59,6 +60,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </p>
               )}
             </div>
+            <NotificationBell />
             <Button
               variant="ghost"
               size="icon"

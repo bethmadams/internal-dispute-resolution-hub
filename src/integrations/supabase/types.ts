@@ -347,6 +347,76 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_reads: {
+        Row: {
+          id: string
+          notification_id: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          notification_id: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          notification_id?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_reads_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          case_number: string | null
+          created_at: string
+          dispute_id: string | null
+          id: string
+          kind: string
+          state: string | null
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          case_number?: string | null
+          created_at?: string
+          dispute_id?: string | null
+          id?: string
+          kind: string
+          state?: string | null
+          title: string
+        }
+        Update: {
+          body?: string | null
+          case_number?: string | null
+          created_at?: string
+          dispute_id?: string | null
+          id?: string
+          kind?: string
+          state?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

@@ -182,3 +182,25 @@ export function nextCaseNumber(disputes: Dispute[]) {
     .reduce((a, b) => Math.max(a, b), 0);
   return `${prefix}${String(highest + 1).padStart(3, "0")}`;
 }
+
+export type CaseAccessGrant = {
+  id: string;
+  dispute_id: string;
+  user_id: string;
+  granted_by: string | null;
+  expires_at: string | null;
+  created_at: string;
+};
+
+export const caseAccessQuery = (disputeId: string) => ({
+  queryKey: ["case_access", disputeId],
+  queryFn: async (): Promise<CaseAccessGrant[]> => {
+    const { data, error } = await supabase
+      .from("case_access")
+      .select("*")
+      .eq("dispute_id", disputeId)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as CaseAccessGrant[];
+  },
+});

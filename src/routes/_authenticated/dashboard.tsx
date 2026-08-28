@@ -6,6 +6,7 @@ import { Plus, Search, ExternalLink, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/use-session";
+import { useMyRole } from "@/hooks/use-role";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,6 +75,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function Dashboard() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
+  const { isStaff } = useMyRole();
   const { data: disputes = [], isLoading } = useQuery(disputesQuery);
   const { data: profiles = [] } = useQuery(profilesQuery);
   const { data: responses = [] } = useQuery(responsesQuery);
@@ -186,9 +188,11 @@ function Dashboard() {
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
-          <Button onClick={() => setOpen(true)}>
-            <Plus className="mr-1.5 size-4" /> Log a dispute
-          </Button>
+          {isStaff && (
+            <Button onClick={() => setOpen(true)}>
+              <Plus className="mr-1.5 size-4" /> Log a dispute
+            </Button>
+          )}
           <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>Log a new dispute</DialogTitle>

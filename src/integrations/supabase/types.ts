@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      case_access: {
+        Row: {
+          created_at: string
+          dispute_id: string
+          expires_at: string | null
+          granted_by: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dispute_id: string
+          expires_at?: string | null
+          granted_by?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dispute_id?: string
+          expires_at?: string | null
+          granted_by?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_access_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dispute_appeals: {
         Row: {
           appellant_email: string
@@ -410,6 +445,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_view_dispute: {
+        Args: { _dispute_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -417,6 +456,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "investigator" | "viewer"

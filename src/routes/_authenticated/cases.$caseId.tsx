@@ -11,6 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { CaseDocuments } from "@/components/CaseDocuments";
+import { CaseAccess } from "@/components/CaseAccess";
+import { useMyRole } from "@/hooks/use-role";
 import {
   Select,
   SelectContent,
@@ -58,6 +60,7 @@ function CaseDetail() {
   const { caseId } = Route.useParams();
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
+  const { isStaff } = useMyRole();
   const [note, setNote] = useState("");
   const [resolution, setResolution] = useState("");
 
@@ -237,29 +240,40 @@ function CaseDetail() {
 
           <CaseDocuments caseId={caseId} />
 
+          {isStaff && <CaseAccess caseId={caseId} isClosed={dispute.stage === "Closed"} />}
+
 
 
           <section className="panel p-6">
             <h2 className="text-lg font-semibold">Resolution</h2>
-            <Textarea
-              className="mt-3"
-              rows={4}
-              placeholder="Record the outcome, remedies and closure notes…"
-              value={resolution}
-              onChange={(e) => setResolution(e.target.value)}
-            />
-            <Button
-              className="mt-3"
-              variant="outline"
-              onClick={() => patch.mutate({ resolution: resolution || null })}
-              disabled={patch.isPending}
-            >
-              Save resolution
-            </Button>
+            {isStaff ? (
+              <>
+                <Textarea
+                  className="mt-3"
+                  rows={4}
+                  placeholder="Record the outcome, remedies and closure notes…"
+                  value={resolution}
+                  onChange={(e) => setResolution(e.target.value)}
+                />
+                <Button
+                  className="mt-3"
+                  variant="outline"
+                  onClick={() => patch.mutate({ resolution: resolution || null })}
+                  disabled={patch.isPending}
+                >
+                  Save resolution
+                </Button>
+              </>
+            ) : (
+              <p className="mt-3 text-sm whitespace-pre-wrap text-muted-foreground">
+                {dispute.resolution || "No resolution recorded."}
+              </p>
+            )}
           </section>
 
           <section className="panel p-6">
             <h2 className="text-lg font-semibold">Case notes</h2>
+            {isStaff && (
             <div className="mt-3 space-y-3">
               <Textarea
                 rows={3}
@@ -271,6 +285,7 @@ function CaseDetail() {
                 Add note
               </Button>
             </div>
+            )}
             <ul className="mt-6 space-y-4">
               {notes.length === 0 && (
                 <li className="text-sm text-muted-foreground">No notes yet.</li>
@@ -289,6 +304,13 @@ function CaseDetail() {
 
         <aside className="panel h-fit space-y-5 p-6">
           <h2 className="text-lg font-semibold">Case controls</h2>
+          {!isStaff && (
+            <p className="text-sm text-muted-foreground">
+              You have read-only access to this case.
+            </p>
+          )}
+          {isStaff && (
+          <>
           <div className="space-y-2">
             <Label>Stage</Label>
             <Select
@@ -357,6 +379,8 @@ function CaseDetail() {
               }
             />
           </div>
+          </>
+          )}
         </aside>
       </div>
     </div>

@@ -277,27 +277,23 @@ function HearingRequest() {
                   ))}
                 </div>
               </Field>
-              {form.reasons.includes("REALTOR Code of Ethics complaint") && (
-                <div className="mt-5">
-                  <Field label="Which Articles of the Code of Ethics?">
-                    <Select
-                      value={form.ethics_articles}
-                      onValueChange={(v) => set("ethics_articles", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select an article" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CODE_OF_ETHICS_ARTICLES.map((article) => (
-                          <SelectItem key={article} value={article}>
-                            {article}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
+          {form.reasons.includes("REALTOR Code of Ethics complaint") && (
+            <div className="mt-5">
+              <Field label="Which Articles of the Code of Ethics?" hint="Select all that apply.">
+                <div className="grid gap-2.5 sm:grid-cols-3">
+                  {CODE_OF_ETHICS_ARTICLES.map((article) => (
+                    <label key={article} className="flex items-start gap-2.5 text-sm">
+                      <Checkbox
+                        checked={form.ethics_articles.includes(article)}
+                        onCheckedChange={() => toggleEthicsArticle(article)}
+                      />
+                      <span>{article}</span>
+                    </label>
+                  ))}
                 </div>
-              )}
+              </Field>
+            </div>
+          )}
             </div>
 
             <div className="space-y-5 border-t border-border pt-6">

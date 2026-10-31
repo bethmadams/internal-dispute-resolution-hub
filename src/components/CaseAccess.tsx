@@ -105,7 +105,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
 
       {isClosed ? (
         <p className="mt-4 text-sm text-muted-foreground">
-          This case is closed, so viewer access has been revoked and cannot be granted.
+          This case is closed, so case access has been revoked and cannot be granted.
         </p>
       ) : (
         <div className="mt-4 space-y-4">

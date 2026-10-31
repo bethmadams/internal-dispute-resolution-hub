@@ -162,9 +162,9 @@ function Team() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {ROLES.map((r) => (
-                      <SelectItem key={r} value={r}>
-                        {r}
+                    {APP_ROLE_OPTIONS.map((r) => (
+                      <SelectItem key={r.value} value={r.value}>
+                        {r.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -32,6 +32,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
   const [email, setEmail] = useState("");
   const [states, setStates] = useState<string[]>([]);
   const [expires, setExpires] = useState("");
+  const [caseRole, setCaseRole] = useState("viewer");
 
   const { data: grants = [] } = useQuery(caseAccessQuery(caseId));
   const { data: profiles = [] } = useQuery(profilesQuery);

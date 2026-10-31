@@ -474,6 +474,30 @@ export type Database = {
         }
         Relationships: []
       }
+      submission_copy_queue: {
+        Row: {
+          copied_at: string | null
+          created_at: string
+          form_type: string
+          id: string
+          payload: Json
+        }
+        Insert: {
+          copied_at?: string | null
+          created_at?: string
+          form_type: string
+          id: string
+          payload: Json
+        }
+        Update: {
+          copied_at?: string | null
+          created_at?: string
+          form_type?: string
+          id?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
       team_invites: {
         Row: {
           accepted_at: string | null

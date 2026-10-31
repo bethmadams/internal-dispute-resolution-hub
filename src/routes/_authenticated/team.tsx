@@ -136,7 +136,7 @@ function Team() {
         <h1 className="mt-1 text-3xl font-semibold">Admin · Users &amp; access</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {isAdmin
-            ? "Registration is invite-only. Invite people below, change roles, or remove users. Admins manage access; investigators manage cases; viewers have read access."
+            ? "Registration is invite-only. Invite people below, change roles, or remove users. Admins manage access; investigators manage cases; all other roles have read-only access to the cases they are granted."
             : "Only admins can change roles."}
         </p>
       </div>

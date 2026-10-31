@@ -80,13 +80,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Internal Dispute Resolution Hub" },
+      { title: "eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
-          "Internal Dispute Resolution Hub — file, investigate, hear, appeal and close internal disputes in one auditable system.",
+          "eXp Internal Dispute Resolution Portal — file, investigate, hear, appeal and close internal disputes in one auditable system.",
       },
-      { property: "og:title", content: "Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content: "Case tracking and resolution resources for internal disputes.",

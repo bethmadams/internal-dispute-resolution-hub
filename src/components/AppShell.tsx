@@ -36,7 +36,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <span className="font-display text-sm leading-tight font-semibold tracking-tight">
               Internal Dispute
               <span className="block text-[0.65rem] tracking-[0.2em] text-ink-foreground/60 uppercase">
-                Resolution Hub
+                Resolution Portal
               </span>
             </span>
           </Link>

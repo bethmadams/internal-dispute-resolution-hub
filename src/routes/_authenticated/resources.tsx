@@ -23,13 +23,13 @@ import { resourcesQuery } from "@/lib/hub";
 export const Route = createFileRoute("/_authenticated/resources")({
   head: () => ({
     meta: [
-      { title: "Resolution Resources | Internal Dispute Resolution Hub" },
+      { title: "Resolution Resources | eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
           "Policies, SOP, checklists, intake templates, hearing guidelines and closure materials for the internal dispute resolution process.",
       },
-      { property: "og:title", content: "Resolution Resources | Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "Resolution Resources | eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content: "The reference library behind the internal dispute resolution process.",

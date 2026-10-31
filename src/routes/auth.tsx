@@ -12,13 +12,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Staff Sign In | Internal Dispute Resolution Hub" },
+      { title: "Staff Sign In | eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
-          "Secure staff sign in for the Internal Dispute Resolution Hub — access case files, hearings and resolution resources.",
+          "Secure staff sign in for the eXp Internal Dispute Resolution Portal — access case files, hearings and resolution resources.",
       },
-      { property: "og:title", content: "Staff Sign In | Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "Staff Sign In | eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content: "Secure staff access to dispute cases, hearings and resolution resources.",

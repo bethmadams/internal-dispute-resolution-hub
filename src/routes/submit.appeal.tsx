@@ -20,13 +20,13 @@ import { APPELLANT_ROLES, appealRequestSchema, uploadIntakeFiles } from "@/lib/i
 export const Route = createFileRoute("/submit/appeal")({
   head: () => ({
     meta: [
-      { title: "Appeal Request Form | Internal Dispute Resolution Hub" },
+      { title: "Appeal Request Form | eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
           "Appeal the outcome of an internal dispute resolution hearing by submitting new evidence and supporting documents for panel review.",
       },
-      { property: "og:title", content: "Appeal Request Form | Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "Appeal Request Form | eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content:

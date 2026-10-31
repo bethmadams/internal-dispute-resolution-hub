@@ -4,13 +4,13 @@ import { Scale, FolderOpen, Gavel, BookOpen } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Internal Dispute Resolution Hub" },
+      { title: "eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
           "Central hub for logging, investigating and resolving internal disputes — case board, hearing schedule, appeals and resolution resources.",
       },
-      { property: "og:title", content: "Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content:
@@ -50,7 +50,7 @@ function Landing() {
             <span className="flex size-8 items-center justify-center rounded-md bg-ink text-ink-foreground">
               <Scale className="size-4" />
             </span>
-            <span className="font-display text-sm font-semibold">IDR Hub</span>
+            <span className="font-display text-sm font-semibold">eXp IDR Portal</span>
           </div>
           <Link
             to="/auth"
@@ -64,7 +64,7 @@ function Landing() {
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <p className="rule-label">Internal use only</p>
         <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-semibold sm:text-5xl">
-          Internal Dispute Resolution Hub
+          eXp Internal Dispute Resolution Portal
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
           Welcome to the centralized hub for managing eXp agent-to-agent disputes.

@@ -45,13 +45,13 @@ import { appealsQuery, responsesQuery } from "@/lib/intake";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Case Board | Internal Dispute Resolution Hub" },
+      { title: "Case Board | eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
           "Track every internal dispute by stage, priority and assigned investigator on the IDR case board.",
       },
-      { property: "og:title", content: "Case Board | Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "Case Board | eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content: "Live view of internal disputes across submission, hearing, appeal and closure.",

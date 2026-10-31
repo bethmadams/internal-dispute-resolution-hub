@@ -18,13 +18,13 @@ import {
 export const Route = createFileRoute("/submit/response")({
   head: () => ({
     meta: [
-      { title: "Hearing Response Form | Internal Dispute Resolution Hub" },
+      { title: "Hearing Response Form | eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
           "Respondents submit their narrative response, signed binding agreement and supporting documentation to an internal dispute complaint.",
       },
-      { property: "og:title", content: "Hearing Response Form | Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "Hearing Response Form | eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content:

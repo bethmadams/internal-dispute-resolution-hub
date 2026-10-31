@@ -9,7 +9,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { caseAccessQuery, formatDate, profilesQuery } from "@/lib/hub";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CASE_ROLE_OPTIONS,
+  ROLE_LABELS,
+  caseAccessQuery,
+  formatDate,
+  profilesQuery,
+} from "@/lib/hub";
 import { US_STATES } from "@/lib/intake";
 
 export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boolean }) {

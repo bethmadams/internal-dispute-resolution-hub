@@ -68,7 +68,11 @@ function AuthPage() {
     });
     setBusy(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(
+        /database error|invite/i.test(error.message)
+          ? "This email hasn't been invited. Ask a hub admin to invite you first."
+          : error.message,
+      );
       return;
     }
     toast.success("Account created. Check your email if confirmation is required.");
@@ -80,7 +84,11 @@ function AuthPage() {
       redirect_uri: window.location.origin,
     });
     if (result.error) {
-      toast.error("Google sign-in failed. Please try again.");
+      toast.error(
+        /database error|invite/i.test(String(result.error?.message ?? result.error))
+          ? "This Google account hasn't been invited. Ask a hub admin to invite you first."
+          : "Google sign-in failed. Please try again.",
+      );
       return;
     }
     if (result.redirected) return;

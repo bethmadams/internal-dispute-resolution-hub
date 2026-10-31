@@ -11,7 +11,7 @@ import type { ReactNode } from "react";
 const nav = [
   { to: "/dashboard", label: "Case Board" },
   { to: "/resources", label: "Resources" },
-  { to: "/team", label: "Team" },
+  { to: "/team", label: "Admin" },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </span>
           </Link>
           <nav className="ml-2 hidden items-center gap-1 sm:flex">
-            {nav.map((item) => (
+            {nav.filter((i) => i.to !== "/team" || myRole === "admin").map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
@@ -73,7 +73,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </div>
         <nav className="flex items-center gap-1 border-t border-sidebar-border px-4 pb-2 sm:hidden">
-          {nav.map((item) => (
+          {nav.filter((i) => i.to !== "/team" || myRole === "admin").map((item) => (
             <Link
               key={item.to}
               to={item.to}

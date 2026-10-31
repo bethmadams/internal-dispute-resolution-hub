@@ -132,11 +132,11 @@ function Team() {
   return (
     <div className="space-y-8">
       <div>
-        <p className="rule-label">Access control</p>
-        <h1 className="mt-1 text-3xl font-semibold">Team &amp; roles</h1>
+        <p className="rule-label">Admin</p>
+        <h1 className="mt-1 text-3xl font-semibold">Admin · Users &amp; access</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {isAdmin
-            ? "Admins can change roles. Investigators manage cases; viewers have read access."
+            ? "Registration is invite-only. Invite people below, change roles, or remove users. Admins manage access; investigators manage cases; viewers have read access."
             : "Only admins can change roles."}
         </p>
       </div>

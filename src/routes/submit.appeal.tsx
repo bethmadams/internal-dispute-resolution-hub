@@ -15,6 +15,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
+import { SubmissionRecords } from "@/components/SubmissionRecords";
+import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { deliverSubmissionCopy } from "@/lib/submission-copy.functions";
 import { APPELLANT_ROLES, appealRequestSchema, uploadIntakeFiles } from "@/lib/intake";
 
 export const Route = createFileRoute("/submit/appeal")({
@@ -42,6 +46,8 @@ export const Route = createFileRoute("/submit/appeal")({
 type Errors = Record<string, string>;
 
 function AppealForm() {
+  const deliver = useServerFn(deliverSubmissionCopy);
+  const queryClient = useQueryClient();
   const [done, setDone] = useState<string | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [documents, setDocuments] = useState<File[]>([]);
@@ -84,6 +90,7 @@ function AppealForm() {
         submitted_on: v.submission_date,
       });
       if (error) throw error;
+      await deliver({ data: { id: appealId } }).catch(() => ({ copied: false }));
 
       if (files.length) {
         const { error: attErr } = await supabase.from("dispute_attachments").insert(
@@ -93,7 +100,7 @@ function AppealForm() {
       }
       return v.submitted_by;
     },
-    onSuccess: (name) => setDone(name),
+    onSuccess: (name) => { setDone(name); void queryClient.invalidateQueries({ queryKey: ['external-submissions'] }); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -107,6 +114,7 @@ function AppealForm() {
         <Link to="/" className="text-sm font-medium text-primary hover:underline">
           Return to the hub
         </Link>
+        <SubmissionRecords type="appeal" />
       </IntakeShell>
     );
   }
@@ -194,6 +202,7 @@ function AppealForm() {
           </span>
         </div>
       </div>
+      <SubmissionRecords type="appeal" />
     </IntakeShell>
   );
 }

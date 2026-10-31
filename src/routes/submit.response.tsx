@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, IntakeShell, StateSelect } from "@/components/IntakeShell";
+import { SubmissionRecords } from "@/components/SubmissionRecords";
+import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { deliverSubmissionCopy } from "@/lib/submission-copy.functions";
 import {
   BINDING_AGREEMENT_NOTE,
   BINDING_AGREEMENT_URL,
@@ -40,6 +44,8 @@ export const Route = createFileRoute("/submit/response")({
 type Errors = Record<string, string>;
 
 function ResponseForm() {
+  const deliver = useServerFn(deliverSubmissionCopy);
+  const queryClient = useQueryClient();
   const [done, setDone] = useState<string | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [agreement, setAgreement] = useState<File[]>([]);
@@ -88,6 +94,7 @@ function ResponseForm() {
         additional_comments: v.additional_comments || null,
       });
       if (error) throw error;
+      await deliver({ data: { id: responseId } }).catch(() => ({ copied: false }));
 
       const rows = [
         ...agreementFiles.map((f) => ({ ...f, kind: "binding_agreement", response_id: responseId })),
@@ -99,7 +106,7 @@ function ResponseForm() {
       }
       return v.submitted_by;
     },
-    onSuccess: (name) => setDone(name),
+    onSuccess: (name) => { setDone(name); void queryClient.invalidateQueries({ queryKey: ['external-submissions'] }); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -113,6 +120,7 @@ function ResponseForm() {
         <Link to="/" className="text-sm font-medium text-primary hover:underline">
           Return to the hub
         </Link>
+        <SubmissionRecords type="hearing_response" />
       </IntakeShell>
     );
   }
@@ -212,6 +220,7 @@ function ResponseForm() {
           </span>
         </div>
       </div>
+      <SubmissionRecords type="hearing_response" />
     </IntakeShell>
   );
 }

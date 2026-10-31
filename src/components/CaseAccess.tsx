@@ -99,8 +99,8 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
     <section className="panel p-6">
       <h2 className="text-lg font-semibold">Case access</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Add a viewer by email address. They only see this case, and access is removed automatically
-        when the case is moved to Closed.
+        Add a person by email address and pick their role on this case. They only see this case, and
+        access is removed automatically when the case is moved to Closed.
       </p>
 
       {isClosed ? (
@@ -165,7 +165,9 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
 
       <ul className="mt-6 space-y-3">
         {grants.length === 0 && (
-          <li className="text-sm text-muted-foreground">No viewers have access to this case.</li>
+        <li className="text-sm text-muted-foreground">
+          No one has been granted access to this case yet.
+        </li>
         )}
         {grants.map((g) => (
           <li
@@ -185,7 +187,10 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline">viewer</Badge>
+              <Badge variant="outline">
+                {ROLE_LABELS[(g.case_role ?? "viewer") as keyof typeof ROLE_LABELS] ??
+                  (g.case_role ?? "viewer")}
+              </Badge>
               <Button
                 variant="ghost"
                 size="sm"

@@ -109,7 +109,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
         </p>
       ) : (
         <div className="mt-4 space-y-4">
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
               <Label htmlFor="access-name">Name</Label>
               <Input
@@ -128,6 +128,21 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="jane@exprealty.net"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="access-role">Role on this case</Label>
+              <Select value={caseRole} onValueChange={setCaseRole}>
+                <SelectTrigger id="access-role">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {CASE_ROLE_OPTIONS.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>
+                      {r.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="access-expires">Expires (optional)</Label>

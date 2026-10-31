@@ -15,6 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatDate, invitesQuery, profilesQuery, rolesQuery } from "@/lib/hub";
+import { useServerFn } from "@tanstack/react-start";
+import { removeUser } from "@/lib/admin.functions";
 
 
 
@@ -49,8 +51,14 @@ function Team() {
   const { data: roles = [] } = useQuery(rolesQuery);
   const isAdmin = roles.some((r) => r.user_id === user?.id && r.role === "admin");
 
+  const adminCount = roles.filter((r) => r.role === "admin").length;
+  const removeUserFn = useServerFn(removeUser);
+
   const setRole = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: string }) => {
+      const current = roles.find((r) => r.user_id === userId)?.role;
+      if (current === "admin" && role !== "admin" && adminCount <= 1)
+        throw new Error("At least one admin is required");
       const { error: delError } = await supabase.from("user_roles").delete().eq("user_id", userId);
       if (delError) throw delError;
       const { error } = await supabase
@@ -61,6 +69,18 @@ function Team() {
     onSuccess: () => {
       toast.success("Role updated");
       queryClient.invalidateQueries({ queryKey: ["user_roles"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const deleteUser = useMutation({
+    mutationFn: async (userId: string) => {
+      await removeUserFn({ data: { userId } });
+    },
+    onSuccess: () => {
+      toast.success("User removed — they can no longer sign in");
+      queryClient.invalidateQueries({ queryKey: ["user_roles"] });
+      queryClient.invalidateQueries({ queryKey: ["profiles"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -149,6 +169,24 @@ function Team() {
                 </Select>
               ) : (
                 <Badge variant="outline">{role}</Badge>
+              )}
+              {isAdmin && p.id !== user?.id && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive"
+                  disabled={deleteUser.isPending}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        `Remove ${p.full_name || p.email}? They will lose all access and must be re-invited.`,
+                      )
+                    )
+                      deleteUser.mutate(p.id);
+                  }}
+                >
+                  Remove user
+                </Button>
               )}
             </div>
           );

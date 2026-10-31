@@ -60,6 +60,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
         invite_email: clean,
         invite_name: name.trim(),
         states,
+        case_role: caseRole,
         granted_by: user?.id ?? null,
         expires_at: expires ? new Date(expires).toISOString() : null,
       });

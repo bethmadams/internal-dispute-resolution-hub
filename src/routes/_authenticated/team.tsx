@@ -25,11 +25,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { removeUser } from "@/lib/admin.functions";
 
 
-
-
-
-const ROLES = ["admin", "investigator", "viewer"] as const;
-
 export const Route = createFileRoute("/_authenticated/team")({
   head: () => ({
     meta: [

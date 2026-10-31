@@ -9,7 +9,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { caseAccessQuery, formatDate, profilesQuery } from "@/lib/hub";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CASE_ROLE_OPTIONS,
+  ROLE_LABELS,
+  caseAccessQuery,
+  formatDate,
+  profilesQuery,
+} from "@/lib/hub";
 import { US_STATES } from "@/lib/intake";
 
 export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boolean }) {
@@ -19,6 +32,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
   const [email, setEmail] = useState("");
   const [states, setStates] = useState<string[]>([]);
   const [expires, setExpires] = useState("");
+  const [caseRole, setCaseRole] = useState("viewer");
 
   const { data: grants = [] } = useQuery(caseAccessQuery(caseId));
   const { data: profiles = [] } = useQuery(profilesQuery);
@@ -46,6 +60,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
         invite_email: clean,
         invite_name: name.trim(),
         states,
+        case_role: caseRole,
         granted_by: user?.id ?? null,
         expires_at: expires ? new Date(expires).toISOString() : null,
       });
@@ -57,6 +72,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
       setEmail("");
       setStates([]);
       setExpires("");
+      setCaseRole("viewer");
       queryClient.invalidateQueries({ queryKey: ["case_access", caseId] });
       toast.success(
         linked
@@ -83,17 +99,17 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
     <section className="panel p-6">
       <h2 className="text-lg font-semibold">Case access</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Add a viewer by email address. They only see this case, and access is removed automatically
-        when the case is moved to Closed.
+        Add a person by email address and pick their role on this case. They only see this case, and
+        access is removed automatically when the case is moved to Closed.
       </p>
 
       {isClosed ? (
         <p className="mt-4 text-sm text-muted-foreground">
-          This case is closed, so viewer access has been revoked and cannot be granted.
+          This case is closed, so case access has been revoked and cannot be granted.
         </p>
       ) : (
         <div className="mt-4 space-y-4">
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
               <Label htmlFor="access-name">Name</Label>
               <Input
@@ -112,6 +128,21 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="jane@exprealty.net"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="access-role">Role on this case</Label>
+              <Select value={caseRole} onValueChange={setCaseRole}>
+                <SelectTrigger id="access-role">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {CASE_ROLE_OPTIONS.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>
+                      {r.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="access-expires">Expires (optional)</Label>
@@ -149,7 +180,9 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
 
       <ul className="mt-6 space-y-3">
         {grants.length === 0 && (
-          <li className="text-sm text-muted-foreground">No viewers have access to this case.</li>
+        <li className="text-sm text-muted-foreground">
+          No one has been granted access to this case yet.
+        </li>
         )}
         {grants.map((g) => (
           <li
@@ -169,7 +202,10 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline">viewer</Badge>
+              <Badge variant="outline">
+                {ROLE_LABELS[(g.case_role ?? "viewer") as keyof typeof ROLE_LABELS] ??
+                  (g.case_role ?? "viewer")}
+              </Badge>
               <Button
                 variant="ghost"
                 size="sm"

@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { rolesQuery } from "@/lib/hub";
+import { rolesQuery, type AppRole } from "@/lib/hub";
 import { useCurrentUser } from "@/hooks/use-session";
-
-export type AppRole = "admin" | "investigator" | "viewer";
 
 export function useMyRole() {
   const { user, loading } = useCurrentUser();

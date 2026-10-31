@@ -71,7 +71,52 @@ export type Profile = {
   created_at: string;
 };
 
-export type UserRole = { id: string; user_id: string; role: "admin" | "investigator" | "viewer" };
+export type AppRole =
+  | "admin"
+  | "investigator"
+  | "viewer"
+  | "complainant"
+  | "respondent"
+  | "panel_member"
+  | "panel_chair"
+  | "broker"
+  | "director";
+
+export const ROLE_LABELS: Record<AppRole, string> = {
+  admin: "Admin",
+  investigator: "Investigator",
+  viewer: "Viewer",
+  complainant: "Complainant",
+  respondent: "Respondent",
+  panel_member: "Panel member",
+  panel_chair: "Panel chair",
+  broker: "Broker",
+  director: "Director",
+};
+
+export const APP_ROLE_OPTIONS: { value: AppRole; label: string }[] = [
+  { value: "admin", label: "Admin" },
+  { value: "investigator", label: "Investigator" },
+  { value: "viewer", label: "Viewer" },
+  { value: "complainant", label: "Complainant" },
+  { value: "respondent", label: "Respondent" },
+  { value: "panel_member", label: "Panel member" },
+  { value: "panel_chair", label: "Panel chair" },
+  { value: "broker", label: "Broker" },
+  { value: "director", label: "Director" },
+];
+
+export const CASE_ROLE_OPTIONS: { value: AppRole; label: string }[] = [
+  { value: "viewer", label: "Viewer" },
+  { value: "complainant", label: "Complainant" },
+  { value: "respondent", label: "Respondent" },
+  { value: "panel_member", label: "Panel member" },
+  { value: "panel_chair", label: "Panel chair" },
+  { value: "broker", label: "Broker" },
+  { value: "director", label: "Director" },
+];
+
+export type UserRole = { id: string; user_id: string; role: AppRole };
 
 export const stageStyles: Record<Stage, string> = {
   "New Submission": "bg-stage-new/12 text-stage-new border-stage-new/25",
@@ -141,7 +186,7 @@ export const rolesQuery = {
 export type TeamInvite = {
   id: string;
   email: string;
-  role: "admin" | "investigator" | "viewer";
+  role: AppRole;
   full_name: string | null;
   invited_by: string | null;
   accepted_at: string | null;
@@ -193,6 +238,7 @@ export type CaseAccessGrant = {
   invite_email: string | null;
   invite_name: string | null;
   states: string[] | null;
+  case_role: string | null;
 };
 
 export const caseAccessQuery = (disputeId: string) => ({

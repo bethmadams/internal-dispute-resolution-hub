@@ -14,14 +14,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formatDate, invitesQuery, profilesQuery, rolesQuery } from "@/lib/hub";
+import {
+  APP_ROLE_OPTIONS,
+  formatDate,
+  invitesQuery,
+  profilesQuery,
+  rolesQuery,
+} from "@/lib/hub";
 import { useServerFn } from "@tanstack/react-start";
 import { removeUser } from "@/lib/admin.functions";
 
-
-
-
-const ROLES = ["admin", "investigator", "viewer"] as const;
 
 export const Route = createFileRoute("/_authenticated/team")({
   head: () => ({
@@ -136,7 +138,7 @@ function Team() {
         <h1 className="mt-1 text-3xl font-semibold">Admin · Users &amp; access</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {isAdmin
-            ? "Registration is invite-only. Invite people below, change roles, or remove users. Admins manage access; investigators manage cases; viewers have read access."
+            ? "Registration is invite-only. Invite people below, change roles, or remove users. Admins manage access; investigators manage cases; all other roles have read-only access to the cases they are granted."
             : "Only admins can change roles."}
         </p>
       </div>
@@ -160,9 +162,9 @@ function Team() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {ROLES.map((r) => (
-                      <SelectItem key={r} value={r}>
-                        {r}
+                    {APP_ROLE_OPTIONS.map((r) => (
+                      <SelectItem key={r.value} value={r.value}>
+                        {r.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -240,9 +242,9 @@ function Team() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {ROLES.map((r) => (
-                    <SelectItem key={r} value={r}>
-                      {r}
+                  {APP_ROLE_OPTIONS.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>
+                      {r.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

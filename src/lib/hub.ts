@@ -186,7 +186,7 @@ export const rolesQuery = {
 export type TeamInvite = {
   id: string;
   email: string;
-  role: "admin" | "investigator" | "viewer";
+  role: AppRole;
   full_name: string | null;
   invited_by: string | null;
   accepted_at: string | null;
@@ -238,6 +238,7 @@ export type CaseAccessGrant = {
   invite_email: string | null;
   invite_name: string | null;
   states: string[] | null;
+  case_role: string | null;
 };
 
 export const caseAccessQuery = (disputeId: string) => ({

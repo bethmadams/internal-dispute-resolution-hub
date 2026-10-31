@@ -72,6 +72,7 @@ export function CaseAccess({ caseId, isClosed }: { caseId: string; isClosed: boo
       setEmail("");
       setStates([]);
       setExpires("");
+      setCaseRole("viewer");
       queryClient.invalidateQueries({ queryKey: ["case_access", caseId] });
       toast.success(
         linked

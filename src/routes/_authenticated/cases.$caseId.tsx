@@ -38,13 +38,13 @@ import {
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
   head: () => ({
     meta: [
-      { title: "Case File | Internal Dispute Resolution Hub" },
+      { title: "Case File | eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
           "Full case file: parties, stage history, hearing schedule, investigator notes and resolution record.",
       },
-      { property: "og:title", content: "Case File | Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "Case File | eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
         content: "Parties, stage, hearing date, notes and resolution for a single internal dispute.",

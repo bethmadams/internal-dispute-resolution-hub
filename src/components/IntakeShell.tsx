@@ -29,7 +29,7 @@ export function IntakeShell({
             <span className="flex size-8 items-center justify-center rounded-md bg-ink text-ink-foreground">
               <Scale className="size-4" />
             </span>
-            <span className="font-display text-sm font-semibold">IDR Hub</span>
+            <span className="font-display text-sm font-semibold">eXp IDR Portal</span>
           </Link>
           <Link to="/auth" className="text-sm text-muted-foreground hover:text-foreground">
             Staff sign in

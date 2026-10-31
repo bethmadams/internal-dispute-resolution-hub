@@ -28,16 +28,16 @@ import { removeUser } from "@/lib/admin.functions";
 export const Route = createFileRoute("/_authenticated/team")({
   head: () => ({
     meta: [
-      { title: "Team & Roles | Internal Dispute Resolution Hub" },
+      { title: "Team & Roles | eXp Internal Dispute Resolution Portal" },
       {
         name: "description",
         content:
           "Manage who can access the dispute hub and what each staff member is allowed to do.",
       },
-      { property: "og:title", content: "Team & Roles | Internal Dispute Resolution Hub" },
+      { property: "og:title", content: "Team & Roles | eXp Internal Dispute Resolution Portal" },
       {
         property: "og:description",
-        content: "Staff directory and role assignments for the internal dispute resolution hub.",
+        content: "Staff directory and role assignments for the eXp internal dispute resolution portal.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

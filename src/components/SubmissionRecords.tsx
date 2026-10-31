@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ErrorBoundary } from "@tanstack/react-router";
+import { CatchBoundary } from "@tanstack/react-router";
 import { useCurrentUser } from "@/hooks/use-session";
 import { supabase } from "@/integrations/supabase/client";
 import { canReadSubmissionCopies, type SubmissionType } from "@/lib/submission-copy";
@@ -10,11 +10,11 @@ import { readSubmissionCopies } from "@/lib/submission-copy.functions";
 export function SubmissionRecords({ type }: { type: SubmissionType }) {
   const { user } = useCurrentUser();
   if (!user) return null;
-  return <ErrorBoundary errorComponent={() => <p role="alert" className="mt-8 text-sm text-muted-foreground">External submission records are unavailable. Original submissions remain on the Case Board.</p>}>
+  return <CatchBoundary getResetKey={() => `${user.id}:${type}`} errorComponent={() => <p role="alert" className="mt-8 text-sm text-muted-foreground">External submission records are unavailable. Original submissions remain on the Case Board.</p>}>
     <Suspense fallback={<p className="mt-8 text-sm text-muted-foreground">Loading submissions…</p>}>
       <StaffRecords type={type} userId={user.id} />
     </Suspense>
-  </ErrorBoundary>;
+  </CatchBoundary>;
 }
 
 function StaffRecords({ type, userId }: { type: SubmissionType; userId: string }) {

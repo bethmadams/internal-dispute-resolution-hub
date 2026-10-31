@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       case_access: {
         Row: {
+          case_role: string
           created_at: string
           dispute_id: string
           expires_at: string | null
@@ -27,6 +28,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          case_role?: string
           created_at?: string
           dispute_id: string
           expires_at?: string | null
@@ -38,6 +40,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          case_role?: string
           created_at?: string
           dispute_id?: string
           expires_at?: string | null
@@ -562,7 +565,16 @@ export type Database = {
       is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "investigator" | "viewer"
+      app_role:
+        | "admin"
+        | "investigator"
+        | "viewer"
+        | "complainant"
+        | "respondent"
+        | "panel_member"
+        | "panel_chair"
+        | "broker"
+        | "director"
       dispute_priority: "Low" | "Medium" | "High" | "Urgent"
       dispute_stage:
         | "New Submission"
@@ -697,7 +709,17 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "investigator", "viewer"],
+      app_role: [
+        "admin",
+        "investigator",
+        "viewer",
+        "complainant",
+        "respondent",
+        "panel_member",
+        "panel_chair",
+        "broker",
+        "director",
+      ],
       dispute_priority: ["Low", "Medium", "High", "Urgent"],
       dispute_stage: [
         "New Submission",

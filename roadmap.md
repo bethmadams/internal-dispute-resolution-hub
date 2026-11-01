@@ -1,6 +1,6 @@
 # Tasks
-- [ ] Match the portal workspace to the uploaded REsolve screenshot, preserving existing case access and notification delivery.
-- [ ] Add user manual, metrics, training, notifications and reminder views using existing authorized records; verify signed-in navigation.
+- [x] Match the portal workspace to the uploaded REsolve screenshot, preserving existing case access and notification delivery.
+- [x] Add user manual, metrics, training, notifications and reminder views using existing authorized records; verify signed-in navigation.
 - [x] Retry the master Drive folder after the permission update and use accessible checklists to refine SOP tasks; uploaded SOP governs conflicts.
 - [x] Implement SOP deadlines, case checklists, and mediation/readiness review; verify saved tasks and workflow through the signed-in UI.
 - [x] Implement proposed-panel eligibility and challenges, evidence review and selected-document hearing packets.

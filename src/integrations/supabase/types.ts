@@ -1188,6 +1188,12 @@ export type Database = {
         | "Hearing Scheduled"
         | "Appeal Filed"
         | "Closed"
+        | "Eligibility Review"
+        | "Evidence Review"
+        | "Panel Selection"
+        | "Decision Review"
+        | "Appeal Window"
+        | "Compliance Follow-up"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1334,6 +1340,12 @@ export const Constants = {
         "Hearing Scheduled",
         "Appeal Filed",
         "Closed",
+        "Eligibility Review",
+        "Evidence Review",
+        "Panel Selection",
+        "Decision Review",
+        "Appeal Window",
+        "Compliance Follow-up",
       ],
     },
   },

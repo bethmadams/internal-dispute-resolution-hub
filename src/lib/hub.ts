@@ -1,14 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
+import { CHECKLIST_STAGES, type CaseStage } from './case-stages';
 
-export const STAGES = [
-  "New Submission",
-  "In Progress",
-  "Awaiting Response",
-  "Hearing Scheduled",
-  "Appeal Filed",
-  "Closed",
-] as const;
-export type Stage = (typeof STAGES)[number];
+export const STAGES = CHECKLIST_STAGES;
+export type Stage = CaseStage;
 
 export const PRIORITIES = ["Low", "Medium", "High", "Urgent"] as const;
 export type Priority = (typeof PRIORITIES)[number];
@@ -125,6 +119,12 @@ export type UserRole = { id: string; user_id: string; role: AppRole };
 export const stageStyles: Record<Stage, string> = {
   "New Submission": "bg-stage-new/12 text-stage-new border-stage-new/25",
   "In Progress": "bg-stage-progress/12 text-stage-progress border-stage-progress/25",
+  "Eligibility Review": "bg-stage-progress/12 text-stage-progress border-stage-progress/25",
+  "Evidence Review": "bg-stage-progress/12 text-stage-progress border-stage-progress/25",
+  "Panel Selection": "bg-stage-progress/12 text-stage-progress border-stage-progress/25",
+  "Decision Review": "bg-stage-hearing/15 text-stage-hearing border-stage-hearing/30",
+  "Appeal Window": "bg-stage-appeal/12 text-stage-appeal border-stage-appeal/25",
+  "Compliance Follow-up": "bg-stage-closed/12 text-stage-closed border-stage-closed/25",
   "Awaiting Response": "bg-stage-hearing/15 text-stage-hearing border-stage-hearing/30",
   "Hearing Scheduled": "bg-stage-hearing/15 text-stage-hearing border-stage-hearing/30",
   "Appeal Filed": "bg-stage-appeal/12 text-stage-appeal border-stage-appeal/25",

@@ -3,13 +3,93 @@
   "status": "Proposed operating workflow • November 1, 2026",
   "authority": "Based on the imported Pre-Hearing, Hearing Panel, Post-Hearing and Appeal checklists. The uploaded eXp Agent Internal Dispute Resolution SOP governs any conflict. Brokerage Operations owns this process; Regulatory Relations facilitates it, keeping MB/DMB and the Regional Director informed. This summary does not replace the governing SOP.",
   "phases": [
-    {"title":"Mediation and referral","stage":"Before hearing submission","owner":"State broker / MB / DMB","steps":["Gather information and attempt state-level mediation within 7 business days of complaint notification.","Retain supporting documents and mediation notes in Enterprise and Hubspot. Consult the Regional Director.","If resolved, document the outcome. If unsuccessful, direct the complainant to the hearing request process."],"gate":"Unsuccessful mediation is documented before proceeding to the hearing process."},
-    {"title":"Intake and eligibility","stage":"New Submission → In Progress","owner":"Regulatory Relations / assigned investigator; complainant and respondent","steps":["Create the IDR case number and Complainant last name v. Respondent last name card. Assign the territory investigator; send Hub and red-bell notifications.","Verify the respondent is active and not suspended, mediation is complete, regional consultation, voluntary participation and signed binding agreements. An inactive or suspended respondent stops eligibility review and requires broker notification.","Grant participants access only to the relevant case and organize complainant and respondent documents separately."],"gate":"Confirm hearing eligibility and required intake materials. Missing responses require staff review and notification, not an assumed automatic disposition."},
-    {"title":"Evidence and panel preparation","stage":"In Progress • Pre-Hearing checklist","owner":"Regulatory Relations / investigator; parties and proposed panelists","steps":["Receive respondent defense paperwork within 10 calendar days of the staff-confirmed clock start. Review completeness and document missing or late evidence; late-evidence consideration remains at panel discretion.","Witness statements must be emailed directly to RegulatoryRelations@exprealty.net, copying the supported agent, at least 5 days before the hearing.","Select up to 5 approved panelists. Exclude a panelist licensed, or whose team members are licensed, in the dispute state. Provide the panel list and resolve party challenges before setting the hearing date.","Appoint a chair, organize the selected hearing packet and verify applicable confidentiality requirements. Staff remain neutral and do not build either party’s case."],"gate":"Required paperwork is received and panel conflicts and challenges are resolved before scheduling."},
-    {"title":"Scheduling and hearing","stage":"Hearing Scheduled • Hearing Panel checklist","owner":"Regulatory Relations; chair and hearing panel","steps":["Confirm the hearing date and time within 2 weeks after all paperwork is received. This is a confirmation deadline, not a requirement to hold the hearing within 2 weeks. Give at least 2 days’ notice before the hearing.","Send calendar invitations and location details; prepare the eXp.world room, phone access, cameras, chair script and case-specific Hub chat with panelists and MB/DMB.","Do not record the hearing. Agents present their own cases without attorneys. Brokers attend only if requested in advance and speak only when called on for state legal questions.","Allow complainant 30 minutes, respondent 30 minutes and panel questions 20 minutes, plus opening, closing and deliberation time. The chair closes proceedings; the panel deliberates and completes findings and the Hearing Award and Final Disposition."],"gate":"A completed award, findings and panel signatures move the matter to decision review."},
-    {"title":"Decision review and release","stage":"Post-Hearing checklist • retain existing stage pending finalization","owner":"Regulatory Relations; Regional Director and MB/DMB","steps":["Record findings, rationale and recommendations; obtain panel signatures. RR sends the decision to the Regional Director and DMB/MB before the parties.","Allow 48 hours for review and acknowledgment. RR releases the reviewed decision only after acknowledgment, copying the broker and Regional Director.","DMB files the decision email in Enterprise and Hubspot within 2 business days. MB/DMB discusses the outcome separately with each agent.","Track repayment of already-disbursed funds within 15 calendar days where applicable, using a staff-confirmed clock start."],"gate":"Required decision acknowledgments precede release; payment and compliance obligations remain tracked."},
-    {"title":"Appeal review","stage":"Appeal Filed, if applicable • Appeal checklist","owner":"Appellant; Regulatory Relations and original hearing panel","steps":["The appeal window is 15 calendar days from the panel decision. Review genuinely new information and why it was unavailable during the original hearing; previously submitted or previously available material is not a qualifying basis.","Notify MB/DMB and the original chair; refer the appeal to the original panel. The panel may request a written response from the other party or deny the appeal without one.","Hold another hearing only if requested by the panel. If held, allow appellant 20 minutes, respondent 20 minutes and panel questions 15 minutes, plus opening, closing and deliberation.","Communicate the appeal decision. Award payout waits until the appeal window expires or a filed appeal is decided."],"gate":"Record appeal expiry or the panel’s appeal decision before authorizing award payout."},
-    {"title":"Compliance and closure","stage":"Closed • Post-Hearing / Appeal follow-up","owner":"Regulatory Relations; MB/DMB and obligated agents","steps":["Confirm award payout, repayment and broker-supervised follow-up. Required live continuing education must be completed within 90 days, with the certificate provided to the broker; confirm the clock start.","Retain final decisions, evidence and required Enterprise and Hubspot records. Complete applicable panelist recognition and archive the Hub chat after appeal expiry or decision.","Proposed closure gate: close only when required follow-up is completed or formally resolved. Distinguish record archival from outstanding compliance obligations.","Closing the portal case revokes participant case access. Closure does not mean deletion of retained case records."],"gate":"Staff confirm final disposition and resolution of required follow-up before marking Closed."}
+    {
+      "title": "Mediation and referral",
+      "stage": "Before hearing submission",
+      "owner": "State broker / MB / DMB",
+      "steps": [
+        "Gather information and attempt state-level mediation within 7 business days of complaint notification.",
+        "Retain supporting documents and mediation notes in Enterprise and Hubspot. Consult the Regional Director.",
+        "If resolved, document the outcome. If unsuccessful, direct the complainant to the hearing request process."
+      ],
+      "gate": "Unsuccessful mediation is documented before proceeding to the hearing process."
+    },
+    {
+      "title": "Intake and eligibility",
+      "stage": "New Submission → In Progress → Eligibility Review",
+      "owner": "Regulatory Relations / assigned investigator; complainant and respondent",
+      "steps": [
+        "Create the IDR case number and Complainant last name v. Respondent last name card. Assign the territory investigator; send Hub and red-bell notifications.",
+        "Verify the respondent is active and not suspended, mediation is complete, regional consultation, voluntary participation and signed binding agreements. An inactive or suspended respondent stops eligibility review and requires broker notification.",
+        "Grant participants access only to the relevant case and organize complainant and respondent documents separately."
+      ],
+      "gate": "Confirm hearing eligibility and required intake materials. Missing responses require staff review and notification, not an assumed automatic disposition."
+    },
+    {
+      "title": "Evidence and panel preparation",
+      "stage": "Awaiting Response → Evidence Review → Panel Selection • Pre-Hearing checklist",
+      "owner": "Regulatory Relations / investigator; parties and proposed panelists",
+      "steps": [
+        "Receive respondent defense paperwork within 10 calendar days of the staff-confirmed clock start. Review completeness and document missing or late evidence; late-evidence consideration remains at panel discretion.",
+        "Witness statements must be emailed directly to RegulatoryRelations@exprealty.net, copying the supported agent, at least 5 days before the hearing.",
+        "Select up to 5 approved panelists. Exclude a panelist licensed, or whose team members are licensed, in the dispute state. Provide the panel list and resolve party challenges before setting the hearing date.",
+        "Appoint a chair, organize the selected hearing packet and verify applicable confidentiality requirements. Staff remain neutral and do not build either party’s case."
+      ],
+      "gate": "Required paperwork is received and panel conflicts and challenges are resolved before scheduling."
+    },
+    {
+      "title": "Scheduling and hearing",
+      "stage": "Hearing Scheduled • Hearing Panel checklist",
+      "owner": "Regulatory Relations; chair and hearing panel",
+      "steps": [
+        "Confirm the hearing date and time within 2 weeks after all paperwork is received. This is a confirmation deadline, not a requirement to hold the hearing within 2 weeks. Give at least 2 days’ notice before the hearing.",
+        "Send calendar invitations and location details; prepare the eXp.world room, phone access, cameras, chair script and case-specific Hub chat with panelists and MB/DMB.",
+        "Do not record the hearing. Agents present their own cases without attorneys. Brokers attend only if requested in advance and speak only when called on for state legal questions.",
+        "Allow complainant 30 minutes, respondent 30 minutes and panel questions 20 minutes, plus opening, closing and deliberation time. The chair closes proceedings; the panel deliberates and completes findings and the Hearing Award and Final Disposition."
+      ],
+      "gate": "A completed award, findings and panel signatures move the matter to decision review."
+    },
+    {
+      "title": "Decision review and release",
+      "stage": "Decision Review • Post-Hearing checklist",
+      "owner": "Regulatory Relations; Regional Director and MB/DMB",
+      "steps": [
+        "Record findings, rationale and recommendations; obtain panel signatures. RR sends the decision to the Regional Director and DMB/MB before the parties.",
+        "Allow 48 hours for review and acknowledgment. RR releases the reviewed decision only after acknowledgment, copying the broker and Regional Director.",
+        "DMB files the decision email in Enterprise and Hubspot within 2 business days. MB/DMB discusses the outcome separately with each agent.",
+        "Track repayment of already-disbursed funds within 15 calendar days where applicable, using a staff-confirmed clock start."
+      ],
+      "gate": "Required decision acknowledgments precede release; payment and compliance obligations remain tracked."
+    },
+    {
+      "title": "Appeal review",
+      "stage": "Appeal Window → Appeal Filed, if applicable • Appeal checklist",
+      "owner": "Appellant; Regulatory Relations and original hearing panel",
+      "steps": [
+        "The appeal window is 15 calendar days from the panel decision. Review genuinely new information and why it was unavailable during the original hearing; previously submitted or previously available material is not a qualifying basis.",
+        "Notify MB/DMB and the original chair; refer the appeal to the original panel. The panel may request a written response from the other party or deny the appeal without one.",
+        "Hold another hearing only if requested by the panel. If held, allow appellant 20 minutes, respondent 20 minutes and panel questions 15 minutes, plus opening, closing and deliberation.",
+        "Communicate the appeal decision. Award payout waits until the appeal window expires or a filed appeal is decided."
+      ],
+      "gate": "Record appeal expiry or the panel’s appeal decision before authorizing award payout."
+    },
+    {
+      "title": "Compliance and closure",
+      "stage": "Compliance Follow-up → Closed • Post-Hearing follow-up",
+      "owner": "Regulatory Relations; MB/DMB and obligated agents",
+      "steps": [
+        "Confirm award payout, repayment and broker-supervised follow-up. Required live continuing education must be completed within 90 days, with the certificate provided to the broker; confirm the clock start.",
+        "Retain final decisions, evidence and required Enterprise and Hubspot records. Complete applicable panelist recognition and archive the Hub chat after appeal expiry or decision.",
+        "Proposed closure gate: close only when required follow-up is completed or formally resolved. Distinguish record archival from outstanding compliance obligations.",
+        "Closing the portal case revokes participant case access. Closure does not mean deletion of retained case records."
+      ],
+      "gate": "Staff confirm final disposition and resolution of required follow-up before marking Closed."
+    }
   ],
-  "cautions":["The uploaded SOP overrides older checklist references to 24-business-hour review, a 20-day appeal period, and Slack. Use 48-hour review, 15-calendar-day appeal and Hub.","Staff must confirm unspecified response, repayment and continuing-education clock starts, time zones and holiday calendars. Do not invent dates or automatically reject late evidence or appeals.","The workflow is a proposed process summary. Some checkpoints are tracked manually rather than enforced automatically by the portal. The proposed closure gate requires operational confirmation.","Personal reminders and AI suggestions do not change SOP deadlines; staff review suggested dates before saving."]
+  "cautions": [
+    "The uploaded SOP overrides older checklist references to 24-business-hour review, a 20-day appeal period, and Slack. Use 48-hour review, 15-calendar-day appeal and Hub.",
+    "Staff must confirm unspecified response, repayment and continuing-education clock starts, time zones and holiday calendars. Do not invent dates or automatically reject late evidence or appeals.",
+    "The workflow is a proposed process summary. Some checkpoints are tracked manually rather than enforced automatically by the portal. The proposed closure gate requires operational confirmation.",
+    "Personal reminders and AI suggestions do not change SOP deadlines; staff review suggested dates before saving."
+  ]
 }

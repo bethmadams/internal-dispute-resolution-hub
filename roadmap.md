@@ -1,4 +1,9 @@
 # Tasks
+- [ ] Implement SOP deadlines, case checklists, and mediation/readiness review.
+- [ ] Implement panel eligibility and challenges, evidence review and hearing packets.
+- [ ] Implement controlled decision release, appeals and compliance follow-up.
+- [ ] Implement communication tracking, calendar downloads, audit history, case export and archiving.
+- [ ] Check access to linked Google checklists; obtain actual checklist contents if restricted.
 - [x] Add admin-only confirmed deletion for case, response, and appeal cards; verify cancellation and deletion with a temporary case.
 - [x] Enforce assigned-case privacy across board, case files, and external submission lists.
 - [x] Name complaint cards by party last names and nest uniquely matching responses under the complaint.

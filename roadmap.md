@@ -1,5 +1,5 @@
 # Tasks
-- [ ] Add the proposed case workflow to User Manual | SOP and verify a shareable PDF download containing no private case records.
+- [x] Add the proposed case workflow to User Manual | SOP and verify a shareable PDF download containing no private case records.
 - [x] Add staff-only AI Gateway reminder extraction with suggested due dates and review before saving; verified a real request and saved draft.
 - [x] Make reminder case names clickable from My Reminders and verify direct matter navigation.
 - [ ] Rename Hub sender identity. Blocked: supplied Hub API documents no rename operation; Hub bot owner must rename it or supply a separately named bot key.

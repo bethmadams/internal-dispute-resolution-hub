@@ -387,6 +387,7 @@ export type Database = {
           dispute_id: string | null
           hearing_date: string | null
           id: string
+          mb_dmb_email: string | null
           new_evidence: string
           state: string | null
           submitted_on: string
@@ -400,6 +401,7 @@ export type Database = {
           dispute_id?: string | null
           hearing_date?: string | null
           id?: string
+          mb_dmb_email?: string | null
           new_evidence: string
           state?: string | null
           submitted_on?: string
@@ -413,6 +415,7 @@ export type Database = {
           dispute_id?: string | null
           hearing_date?: string | null
           id?: string
+          mb_dmb_email?: string | null
           new_evidence?: string
           state?: string | null
           submitted_on?: string
@@ -539,6 +542,7 @@ export type Database = {
           created_at: string
           dispute_id: string | null
           id: string
+          mb_dmb_email: string | null
           responder_email: string | null
           responder_name: string
           responding_to_name: string | null
@@ -552,6 +556,7 @@ export type Database = {
           created_at?: string
           dispute_id?: string | null
           id?: string
+          mb_dmb_email?: string | null
           responder_email?: string | null
           responder_name: string
           responding_to_name?: string | null
@@ -565,6 +570,7 @@ export type Database = {
           created_at?: string
           dispute_id?: string | null
           id?: string
+          mb_dmb_email?: string | null
           responder_email?: string | null
           responder_name?: string
           responding_to_name?: string | null
@@ -601,6 +607,7 @@ export type Database = {
           hearing_date: string | null
           id: string
           involves_money: boolean | null
+          mb_dmb_email: string | null
           monetary_amount: number | null
           priority: Database["public"]["Enums"]["dispute_priority"]
           property_address: string | null
@@ -635,6 +642,7 @@ export type Database = {
           hearing_date?: string | null
           id?: string
           involves_money?: boolean | null
+          mb_dmb_email?: string | null
           monetary_amount?: number | null
           priority?: Database["public"]["Enums"]["dispute_priority"]
           property_address?: string | null
@@ -669,6 +677,7 @@ export type Database = {
           hearing_date?: string | null
           id?: string
           involves_money?: boolean | null
+          mb_dmb_email?: string | null
           monetary_amount?: number | null
           priority?: Database["public"]["Enums"]["dispute_priority"]
           property_address?: string | null

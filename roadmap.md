@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Add and verify an MB/DMB email address field on all three submission forms, with saved submission data.
 - [x] Replace the long case file with section tabs, preserving staff and participant access; verified desktop/mobile tab selection.
 - [x] Add stage-triggered checklist setup and staff-confirmed response due dates; verified 20 pre-hearing tasks, ten-day deadline and repeat-transition preservation on a temporary case.
 - [x] Check email sending availability and suggest additional process stages without changing the governing SOP; sender domain is not configured.

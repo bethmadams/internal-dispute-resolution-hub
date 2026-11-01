@@ -26,7 +26,7 @@ export function SubmissionEditor({ kind, record }: { kind: SubmissionKind; recor
     mutationFn: async () => {
       const values = submissionChanges(kind, original, draft);
       if (!Object.keys(values).length) return;
-      const result = await supabase.rpc('edit_submitted_form', { _kind: kind, _id: record.id, _expected_updated_at: String(original.updated_at), _values: values });
+      const result = await supabase.rpc('edit_submitted_form', { _kind: kind, _id: record.id, _expected_updated_at: String(original['updated_at']), _values: values });
       if (result.error) throw result.error;
     },
     onSuccess: () => { setOpen(false); toast.success('Submission updated'); for (const key of ['dispute','disputes','dispute_responses','dispute_appeals','case_audit','case-progress','submission-edit-history']) void queryClient.invalidateQueries({ queryKey: [key] }); },

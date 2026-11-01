@@ -1,5 +1,5 @@
 # Tasks
-- [ ] Verify immediate In Progress email sending after stage confirmation with the approved Regulatory Relations sender.
+- [x] Verify immediate In Progress email sending after stage confirmation; Gmail accepted the Anna-only test, Communications recorded it, response deadline stayed unset, and the temporary case was removed. Existing Banana v. Orange needs MB/DMB email before delivery.
 - [x] Limit Hub delivery to new form submissions and due reminders; verified signed-in case-update suppression with red-bell record retained, future reminder rejected as not due, and 15 passing tests.
 - [x] Restyle case cards and opened case details using supplied REsolve screenshots; verified card opening, case tabs and mobile layout without overflow or runtime errors. Existing fields, permissions and actions retained.
 - [x] Connect Anna's Gmail and verify Regulatory Relations is an accepted send-as address; sending permission is granted and Gmail accepted live test stage messages.

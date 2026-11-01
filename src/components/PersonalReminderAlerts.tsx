@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -6,11 +7,31 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/use-session";
 import { remindersQuery } from "@/lib/reminders";
 import { disputesQuery } from "@/lib/hub";
+import { dispatchReminderHub } from "@/lib/reminder-hub.functions";
+import { isHubReminderDue } from "@/lib/hub-notify";
+import { useMyRole } from "@/hooks/use-role";
 
 export function PersonalReminderAlerts() {
   const { user } = useCurrentUser(); const router = useRouter(); const client = useQueryClient();
+  const { isStaff } = useMyRole();
+  const dispatchHub = useServerFn(dispatchReminderHub);
+  const hubBusy = useRef(false);
   const { data: reminders = [] } = useQuery(remindersQuery);
   const { data: cases = [] } = useQuery(disputesQuery);
+  useEffect(() => {
+    if (!isStaff || !user || hubBusy.current) return;
+    const due = reminders.filter(r => (r.user_id === user.id || r.created_by === user.id) && isHubReminderDue(r));
+    if (!due.length) return;
+    hubBusy.current = true;
+    void (async () => {
+      try {
+        for (const r of due) {
+          try { await dispatchHub({ data: { id: r.id } }); }
+          catch { /* Keep the bell independent; retry pending delivery on the next refresh. */ }
+        }
+      } finally { hubBusy.current = false; }
+    })();
+  }, [reminders, user, isStaff, dispatchHub]);
   useEffect(() => {
     const refresh = () => { void client.invalidateQueries({ queryKey: ["personal_reminders"] }); };
     window.addEventListener("focus", refresh);

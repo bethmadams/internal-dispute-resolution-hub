@@ -11,7 +11,6 @@ import { remindersQuery, saveReminder } from "@/lib/reminders";
 import { LEAD_OPTIONS, ownsReminder, reminderStatus, canManageReminder, type Reminder } from "@/lib/reminder-rules";
 import { suggestReminder } from "@/lib/reminder-ai.functions";
 import { useMyRole } from "@/hooks/use-role";
-import { dispatchReminderHub } from "@/lib/reminder-hub.functions";
 import { disputesQuery, formatDateTime } from "@/lib/hub";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +26,6 @@ type Editor = { reminder?: Reminder; caseId: string; allowReassign?: boolean };
 function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }) {
   const { user } = useCurrentUser();
   const queryClient = useQueryClient();
-  const dispatch = useServerFn(dispatchReminderHub);
   const r = editor.reminder;
   const { isStaff } = useMyRole();
   const suggest = useServerFn(suggestReminder);
@@ -67,13 +65,9 @@ function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }
     due.setHours(h, m, 0, 0);
     setBusy(true);
     try {
-      const id = await saveReminder(r ? "edit" : "create", { ...(r ? { id: r.id } : { dispute_id: editor.caseId }), body: body.trim(), due_at: due.toISOString(), lead_minutes: Number(lead), user_id: assignee });
+      await saveReminder(r ? "edit" : "create", { ...(r ? { id: r.id } : { dispute_id: editor.caseId }), body: body.trim(), due_at: due.toISOString(), lead_minutes: Number(lead), user_id: assignee });
       void queryClient.invalidateQueries({ queryKey: ["personal_reminders"] });
       close(); toast.success(r ? "Reminder updated" : "Reminder created");
-      if (!r && id) {
-        try { const result = await dispatch({ data: { id } }); if (!["sent", "already_claimed", "staff_only"].includes(result.status)) toast.warning("Reminder saved; Hub announcement is pending or unavailable."); }
-        catch { toast.warning("Reminder saved; Hub announcement could not be confirmed."); }
-      }
     } catch (error) { toast.error(error instanceof Error ? error.message : "Unable to save reminder"); }
     finally { setBusy(false); }
   };

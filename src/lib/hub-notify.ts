@@ -7,6 +7,18 @@ export const HUB_API_BASE =
 // "Internal Dispute Resolution Notification" Hub channel.
 export const HUB_CONVERSATION_ID = "f07d027f-7bb7-4327-9b81-8f0a5e5b076f";
 
+export function isHubSubmission(kind: string): boolean {
+  return ["hearing_request", "response", "appeal"].includes(kind);
+}
+
+export function isHubHearingSource(source: string | null | undefined): boolean {
+  return source === "public_form";
+}
+
+export function isHubReminderDue(reminder: { done: boolean; remind_at: string }, now = Date.now()): boolean {
+  return !reminder.done && Date.parse(reminder.remind_at) <= now;
+}
+
 export function hubPortalOrigin(requestUrl: URL): string {
   return ["localhost", "127.0.0.1", "[::1]"].includes(requestUrl.hostname)
     ? "https://id-preview--a4df2ad6-9251-478e-bd1c-f847920075df.lovable.app"

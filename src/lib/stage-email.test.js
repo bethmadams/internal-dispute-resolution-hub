@@ -1,5 +1,6 @@
 import { test, expect } from 'bun:test';
 import { stageEmail, rawStageEmail } from './stage-email';
+import {readFileSync} from 'node:fs';
 const matter = { id: 'case-id', title: 'Smith v. Jones', complainant_email: 'complainant@example.com', respondent_email: 'respondent@example.com', mb_dmb_email: 'broker@example.com' };
 test('New Submission receipts go to complainant and MB/DMB', () => {
   const mail = stageEmail(matter, 'New Submission', null, 'https://portal.example.com', null);
@@ -17,4 +18,9 @@ test('missing MB/DMB blocks sending rather than substituting another recipient',
 test('mail always uses approved Regulatory Relations sender', () => {
   const raw = rawStageEmail(stageEmail(matter, 'New Submission', null, 'https://portal.example.com', null));
   expect(Buffer.from(raw, 'base64url').toString('utf8')).toContain('From: Regulatory Relations <regulatoryrelations@exprealty.net>');
+});
+test('response deadline is ten days after confirmed sending and retains an existing deadline',()=>{
+  const sql=readFileSync(new URL('../../drizzle/migrations/0014_stage_email_queue.sql',import.meta.url),'utf8');
+  expect(sql).toContain("_sent_at+interval '240 hours'");
+  expect(sql).toContain('WHERE case_tasks.due_at IS NULL AND case_tasks.completed_at IS NULL');
 });

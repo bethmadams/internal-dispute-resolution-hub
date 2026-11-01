@@ -1,10 +1,10 @@
 # Tasks
-- [x] Connect Anna's Gmail and verify Regulatory Relations is an accepted send-as address; sending permission is granted. Stage email delivery has not been enabled or tested.
+- [x] Connect Anna's Gmail and verify Regulatory Relations is an accepted send-as address; sending permission is granted and Gmail accepted live test stage messages.
 - [x] Add MB/DMB name and email address fields on all three submission forms; verify editable fields, validation tests and database columns. Live submission delivery remains untested to avoid generating test case notifications.
 - [x] Replace the long case file with section tabs, preserving staff and participant access; verified desktop/mobile tab selection.
 - [x] Add stage-triggered checklist setup and staff-confirmed response due dates; verified 20 pre-hearing tasks, ten-day deadline and repeat-transition preservation on a temporary case.
 - [x] Check email sending availability and suggest additional process stages without changing the governing SOP; sender domain is not configured.
-- [ ] Enable emails for New Submission, In Progress and the new Awaiting Response stage using the verified Regulatory Relations Gmail sender; respondent receives stage emails with complainant, investigator and MB/DMB copied. Response clock starts from confirmed invitation sending, not merely a stage change.
+- [x] Enable initial receipt delivery on public submission and stage email delivery while staff workspace is open; verified live In Progress/Awaiting Response sends to Anna only, sent status in Communications and exactly ten-day response deadline. No existing cases were backfilled. Missing contacts block sends; failed/blocked sends offer staff retry, uncertain sends do not replay.
 - [x] Add a case progress dashboard with current stages, recorded deadlines and assignments; verified signed-in case navigation, search, mobile layout and 17 passing tests.
 - [x] Add the proposed case workflow to User Manual | SOP and verify a shareable PDF download containing no private case records.
 - [x] Add staff-only AI Gateway reminder extraction with suggested due dates and review before saving; verified a real request and saved draft.

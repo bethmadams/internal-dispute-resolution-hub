@@ -42,19 +42,22 @@ export function buildHubMessage(opts: {
   kind: string;
   title: string;
   state: string | null;
-  caseNumber: string | null;
+  caseName: string | null;
   caseUrl: string | null;
   investigatorName: string | null;
   mention: HubMention | null;
 }): HubMessage {
+  // Hub collapses single line breaks, so separate each item with a blank line.
   const lines = [
     "Internal Dispute Resolution Notification",
-    `Notification type: ${hubKindLabel(opts.kind)}`,
     "",
-    [opts.caseNumber, opts.title, opts.state ? `(${opts.state})` : null]
-      .filter(Boolean)
-      .join(" - "),
+    `Notification type: ${hubKindLabel(opts.kind)}`,
   ];
+  if (opts.caseName) lines.push("", `Case: ${opts.caseName}`);
+  const detail = [opts.title, opts.state ? `(${opts.state})` : null]
+    .filter(Boolean)
+    .join(" ");
+  if (detail) lines.push("", detail);
   if (opts.mention) {
     lines.push(
       "",

@@ -8,9 +8,11 @@ test("Hub links use a public origin instead of localhost", () => {
 
 test("Hub messages preserve the IDR channel, investigator mention and matter link", () => {
   const mention = { userId: "anna-test", displayName: "Anna Luedke", username: "annaluedke" };
-  const message = buildHubMessage({ kind: "hearing_request", title: "Smith v. Jones", state: "Arizona", caseNumber: "IDR-2026-001", caseUrl: "https://portal.example/cases/example", investigatorName: "Anna Luedke", mention });
+  const message = buildHubMessage({ kind: "hearing_request", title: "New hearing request submitted", state: "Arizona", caseName: "Smith v. Jones", caseUrl: "https://portal.example/cases/example", investigatorName: "Anna Luedke", mention });
   expect(message.conversation_id).toBe(HUB_CONVERSATION_ID);
   expect(message.mentions).toEqual([mention]);
   expect(message.content).toContain("@annaluedke");
   expect(message.content).toContain("https://portal.example/cases/example");
+  expect(message.content).toContain("Case: Smith v. Jones");
+  expect(message.content).not.toContain("IDR-");
 });

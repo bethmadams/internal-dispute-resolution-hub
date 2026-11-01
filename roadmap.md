@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Review the Regulatory Relations Google Group link and explain requirements for sending portal emails from its address.
 - [ ] Add and verify MB/DMB name and email address fields on all three submission forms, with saved submission data.
 - [x] Replace the long case file with section tabs, preserving staff and participant access; verified desktop/mobile tab selection.
 - [x] Add stage-triggered checklist setup and staff-confirmed response due dates; verified 20 pre-hearing tasks, ten-day deadline and repeat-transition preservation on a temporary case.

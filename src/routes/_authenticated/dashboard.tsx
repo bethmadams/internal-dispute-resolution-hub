@@ -374,6 +374,17 @@ function Dashboard() {
                   )}
                 </div>
 
+                {responses.some((r) => r.dispute_id === d.id) && (
+                  <div className="mt-4 space-y-1 border-l-2 border-primary/40 pl-3">
+                    <p className="rule-label">Respondent's response</p>
+                    {responses.filter((r) => r.dispute_id === d.id).map((r) => (
+                      <p key={r.id} className="text-xs text-muted-foreground">
+                        {r.responder_name} · {formatDate(r.submitted_on)}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
                 <div className="mt-auto pt-5">
                   <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
                     <span className="truncate">{nameFor(d.assigned_to)}</span>
@@ -392,17 +403,17 @@ function Dashboard() {
       <section className="space-y-4">
         <div>
           <p className="rule-label">Respondent submissions</p>
-          <h2 className="mt-1 text-xl font-semibold">Hearing response forms</h2>
+          <h2 className="mt-1 text-xl font-semibold">Unmatched hearing responses</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Responses arrive unmatched — link each one to the case it answers.
+            Responses are attached to their case automatically when the names match. These couldn't be matched — link each one by hand.
           </p>
         </div>
         <div>
-          {responses.length === 0 ? (
-            <p className="p-8 text-sm text-muted-foreground">No responses submitted yet.</p>
+          {responses.filter((r) => !r.dispute_id).length === 0 ? (
+            <p className="p-8 text-sm text-muted-foreground">Every response is matched to a case.</p>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {responses.map((r) => (
+              {responses.filter((r) => !r.dispute_id).map((r) => (
                 <div key={r.id} className="panel flex flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -445,7 +456,7 @@ function Dashboard() {
                         <SelectItem value="unlinked">Not linked to a case</SelectItem>
                         {disputes.map((d) => (
                           <SelectItem key={d.id} value={d.id}>
-                            {d.case_number} — {d.filed_by ?? d.title}
+                            {d.case_number} — {d.title}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -523,7 +534,7 @@ function Dashboard() {
                         <SelectItem value="unlinked">Not linked to a case</SelectItem>
                         {disputes.map((d) => (
                           <SelectItem key={d.id} value={d.id}>
-                            {d.case_number} — {d.filed_by ?? d.title}
+                            {d.case_number} — {d.title}
                           </SelectItem>
                         ))}
                       </SelectContent>

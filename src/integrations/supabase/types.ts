@@ -102,6 +102,44 @@ export type Database = {
           },
         ]
       }
+      case_checklist_forms: {
+        Row: {
+          answers: Json
+          dispute_id: string
+          id: string
+          stage: Database["public"]["Enums"]["dispute_stage"]
+          updated_at: string
+          updated_by: string | null
+          version: number
+        }
+        Insert: {
+          answers?: Json
+          dispute_id: string
+          id?: string
+          stage: Database["public"]["Enums"]["dispute_stage"]
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Update: {
+          answers?: Json
+          dispute_id?: string
+          id?: string
+          stage?: Database["public"]["Enums"]["dispute_stage"]
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_checklist_forms_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       case_communications: {
         Row: {
           body: string
@@ -1041,6 +1079,39 @@ export type Database = {
         }
         Relationships: []
       }
+      submission_corrections: {
+        Row: {
+          actor_id: string
+          after_data: Json
+          before_data: Json
+          created_at: string
+          dispute_id: string | null
+          form_type: string
+          id: string
+          submission_id: string
+        }
+        Insert: {
+          actor_id: string
+          after_data: Json
+          before_data: Json
+          created_at?: string
+          dispute_id?: string | null
+          form_type: string
+          id?: string
+          submission_id: string
+        }
+        Update: {
+          actor_id?: string
+          after_data?: Json
+          before_data?: Json
+          created_at?: string
+          dispute_id?: string | null
+          form_type?: string
+          id?: string
+          submission_id?: string
+        }
+        Relationships: []
+      }
       team_invites: {
         Row: {
           accepted_at: string | null
@@ -1130,6 +1201,15 @@ export type Database = {
         }[]
       }
       claim_due_reminder: { Args: { _id: string }; Returns: boolean }
+      edit_submitted_form: {
+        Args: {
+          _expected_updated_at: string
+          _id: string
+          _kind: string
+          _values: Json
+        }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1158,6 +1238,15 @@ export type Database = {
       save_personal_reminder: {
         Args: { _action: string; _data: Json }
         Returns: string
+      }
+      save_stage_checklist: {
+        Args: {
+          _answers: Json
+          _case_id: string
+          _stage: Database["public"]["Enums"]["dispute_stage"]
+          _version: number
+        }
+        Returns: number
       }
       transition_case_stage: {
         Args: {

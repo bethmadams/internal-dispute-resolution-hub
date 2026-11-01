@@ -29,7 +29,8 @@ import {
   type Dispute,
   type DisputeNote,
 } from "@/lib/hub";
-import { responsesQuery } from "@/lib/intake";
+import { responsesQuery, appealsQuery } from "@/lib/intake";
+import { SubmissionEditor } from '@/components/SubmissionEditor';
 import { caseTitle } from "@/lib/case-rules";
 import { DeleteCard } from "@/components/DeleteCard";
 import { CaseTasks } from "@/components/CaseTasks";
@@ -42,12 +43,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CaseStageChange } from "@/components/CaseStageChange";
 import { CaseStageEmails } from "@/components/CaseStageEmails";
 import { CASE_STAGE_GUIDE } from '@/lib/case-stages';
+import { CHECKLIST_STAGES, type CaseStage } from '@/lib/case-stages';
+import { StageChecklistForm } from '@/components/StageChecklistForm';
 
 const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
-  validateSearch: (search: Record<string, unknown>): { tab?: (typeof CASE_TABS)[number] } => { const tab = CASE_TABS.find(tab => tab === search['tab']); return tab ? { tab } : {}; },
+  validateSearch: (search: Record<string, unknown>): { tab?: (typeof CASE_TABS)[number]; checklist?: CaseStage } => { const tab = CASE_TABS.find(tab => tab === search['tab']); const checklist = CHECKLIST_STAGES.find(stage => stage === search['checklist']); return { ...(tab ? { tab } : {}), ...(checklist ? { checklist } : {}) }; },
   head: () => ({
     meta: [
       { title: "Case File | eXp Internal Dispute Resolution Portal" },
@@ -73,7 +76,7 @@ function CaseDetail() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
   const { isStaff } = useMyRole();
-  const { tab = 'overview' } = Route.useSearch();
+  const { tab = 'overview', checklist } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [note, setNote] = useState("");
   const [resolution, setResolution] = useState("");
@@ -107,6 +110,8 @@ function CaseDetail() {
   const { data: profiles = [] } = useQuery(profilesQuery);
   const { data: allResponses = [] } = useQuery(responsesQuery);
   const responses = allResponses.filter((response) => response.dispute_id === caseId);
+  const { data: allAppeals = [] } = useQuery(appealsQuery);
+  const appeals = allAppeals.filter(appeal => appeal.dispute_id === caseId);
   
 
   useEffect(() => {
@@ -221,6 +226,7 @@ function CaseDetail() {
 
           <TabsContent value="submission"><section className="py-6">
             <h2 className="text-lg font-semibold">Submission details</h2>
+            <SubmissionEditor kind="hearing_request" record={dispute} />
             {dispute.reasons?.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
                 {dispute.reasons.map((r) => (
@@ -269,18 +275,22 @@ function CaseDetail() {
               {responses.map((response) => (
                 <li key={response.id} className="border-l-2 border-accent pl-4">
                   <h3 className="font-medium">{response.responder_name}</h3>
+                  <SubmissionEditor kind="response" record={response} />
                   <p className="mt-1 text-xs text-muted-foreground">Respondent · {formatDate(response.submitted_on)} · {response.state ?? "—"}</p>
                   <p className="mt-3 whitespace-pre-wrap text-sm">{response.summary}</p>
                   {response.additional_comments && <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">{response.additional_comments}</p>}
                 </li>
               ))}
             </ul>
+            <h2 className="mt-6 text-lg font-semibold">Appeal requests</h2>
+            {appeals.length === 0 && <p className="mt-3 text-sm text-muted-foreground">No appeals received for this case.</p>}
+            <ul className="mt-4 space-y-5">{appeals.map(appeal => <li key={appeal.id} className="border-l-2 border-accent pl-4"><h3 className="font-medium">{appeal.appellant_name}</h3><p className="my-2 text-xs text-muted-foreground">{appeal.appellant_role} · {formatDate(appeal.submitted_on)}</p><SubmissionEditor kind="appeal" record={appeal} /><p className="mt-3 whitespace-pre-wrap text-sm">{appeal.new_evidence}</p></li>)}</ul>
           </section></TabsContent>
 
           <TabsContent value="documents"><CaseDocuments caseId={caseId} /></TabsContent>
           <TabsContent value="reminders"><PersonalReminders caseId={caseId} /></TabsContent>
 
-          {isStaff && <><TabsContent value="checklist"><CaseTasks caseId={caseId}/></TabsContent><TabsContent value="workflow"><CaseWorkflow caseId={caseId}/></TabsContent><TabsContent value="panel"><CasePanel caseId={caseId} state={dispute.state}/></TabsContent><TabsContent value="communications"><CaseStageEmails dispute={dispute}/><CaseCommunications caseId={caseId}/></TabsContent><TabsContent value="history"><CaseOperations dispute={dispute}/></TabsContent></>}
+          {isStaff && <><TabsContent value="checklist"><StageChecklistForm key={checklist ?? dispute.stage} caseId={caseId} stage={checklist ?? dispute.stage} onStageChange={stage => navigate({ search: { tab:'checklist',checklist:stage }, replace:true })} onOpenRecords={() => { const target = CASE_STAGE_GUIDE[checklist ?? dispute.stage].tab; navigate({search:{tab:target==='checklist'?'workflow':target},replace:true}); }} /><details className="mt-6 border-t border-border pt-4"><summary className="cursor-pointer text-sm font-semibold">SOP task completion & confirmed deadlines</summary><CaseTasks caseId={caseId}/></details></TabsContent><TabsContent value="workflow"><CaseWorkflow caseId={caseId}/></TabsContent><TabsContent value="panel"><CasePanel caseId={caseId} state={dispute.state}/></TabsContent><TabsContent value="communications"><CaseStageEmails dispute={dispute}/><CaseCommunications caseId={caseId}/></TabsContent><TabsContent value="history"><CaseOperations dispute={dispute}/></TabsContent></>}
 
           {isStaff && <TabsContent value="access"><CaseAccess caseId={caseId} isClosed={dispute.stage === "Closed"} /></TabsContent>}
 
@@ -356,7 +366,7 @@ function CaseDetail() {
           <CaseStageChange dispute={dispute} />
           <div className="space-y-3 border-b border-border pb-4">
             <p className="text-sm leading-relaxed text-muted-foreground">{CASE_STAGE_GUIDE[dispute.stage].checkpoint}</p>
-            <Button variant="outline" size="sm" className="h-auto w-full whitespace-normal py-2" onClick={() => navigate({ search: { tab: CASE_STAGE_GUIDE[dispute.stage].tab }, replace: true })}>{CASE_STAGE_GUIDE[dispute.stage].action}</Button>
+            <Button variant="outline" size="sm" className="h-auto w-full whitespace-normal py-2" onClick={() => navigate({ search: { tab: 'checklist', checklist: dispute.stage }, replace: true })}>Open {dispute.stage} checklist</Button>
           </div>
           <div className="space-y-2">
             <Label>Assigned to</Label>

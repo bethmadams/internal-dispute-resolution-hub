@@ -36,6 +36,20 @@
       "when": 1793493192038,
       "tag": "0004_fix_response_and_appeal_copy_queue_trigger",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793494028727,
+      "tag": "0005_sop_case_workflow",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793494306149,
+      "tag": "0006_sop_document_attribution",
+      "breakpoints": true
     }
   ]
 }

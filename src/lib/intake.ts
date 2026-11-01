@@ -64,6 +64,12 @@ export type Attachment = {
   file_path: string;
   file_name: string;
   created_at: string;
+  submitted_by_name: string;
+  submitted_as: string;
+  review_status: string;
+  review_note: string;
+  in_hearing_packet: boolean;
+  visibility: string;
 };
 
 export const ATTACHMENT_KIND_LABELS: Record<string, string> = {

@@ -33,3 +33,4 @@
 - The manual workflow is sourced from case-process.json; regenerate its public distribution PDF when that content changes, keeping it free of case records and labeled as proposed rather than replacing the governing SOP.
 - Case progress uses authenticated RLS-scoped reads and recorded task/workflow dates; operational deadlines stay staff-only and no due dates are inferred by the dashboard.
 - Submission-date reporting uses authorized intake rows and each form's recorded filing date, preserving calendar days for monthly aggregation and inclusive date filters without changing case permissions.
+- Case timelines remain staff-only and read paginated case audit transitions; distinguish current, previously visited and unrecorded stages without inferring completion or dates from stage order or unrelated updates.

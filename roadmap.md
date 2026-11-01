@@ -1,4 +1,6 @@
 # Tasks
+- [x] Add a staff-only case Timeline tab with all twelve stage statuses and recorded transition dates; verified live two-transition history, refresh, mobile width and two passing tests without inferred completion or dates.
+- [ ] Import case data from the supplied Coda Internal Dispute Submission Tracker. Blocked: linked document exposes its title but no case rows; awaiting a CSV or Excel export before mapping or importing records.
 - [x] Add filing-date filters, monthly submission totals and dated submission records to Metrics & Reporting; verified signed-in record dates, inclusive filters, empty periods and validation tests with authorized access preserved.
 - [x] Add monthly submission trend charts and submission-type comparisons that follow the filing-date filters; verified populated charts, filter reset, mobile width and no runtime errors.
 - [x] Make the case board investigator-assigned by default; tested investigator scoping and admin oversight, verified admin assignment filters through the signed-in board; existing case permissions retained.

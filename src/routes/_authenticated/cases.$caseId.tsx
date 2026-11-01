@@ -45,8 +45,9 @@ import { CaseStageEmails } from "@/components/CaseStageEmails";
 import { CASE_STAGE_GUIDE } from '@/lib/case-stages';
 import { CHECKLIST_STAGES, type CaseStage } from '@/lib/case-stages';
 import { StageChecklistForm } from '@/components/StageChecklistForm';
+import { CaseTimeline } from '@/components/CaseTimeline';
 
-const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
+const CASE_TABS = ['overview', 'timeline', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
@@ -183,9 +184,9 @@ function CaseDetail() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
-        <Tabs value={!isStaff && ['checklist','workflow','panel','communications','history','access'].includes(tab) ? 'overview' : tab} onValueChange={value => { const next = CASE_TABS.find(item => item === value); if(next) navigate({ search: { tab: next }, replace: true }); }} className="min-w-0">
+        <Tabs value={!isStaff && ['timeline','checklist','workflow','panel','communications','history','access'].includes(tab) ? 'overview' : tab} onValueChange={value => { const next = CASE_TABS.find(item => item === value); if(next) navigate({ search: { tab: next }, replace: true }); }} className="min-w-0">
           <TabsList aria-label="Case sections" className="h-auto w-full flex-wrap justify-start gap-1 rounded-lg bg-surface p-1">
-            {CASE_TABS.filter(item => isStaff || !['checklist','workflow','panel','communications','history','access'].includes(item)).map(item => <TabsTrigger key={item} value={item}>{({overview:'Overview',submission:'Submission',responses:'Responses',documents:'Documents',reminders:'Reminders',checklist:'Checklist',workflow:'Workflow',panel:'Panel',communications:'Communications',history:'History & exports',access:'Case access',resolution:'Resolution',notes:'Notes'})[item]}</TabsTrigger>)}
+            {CASE_TABS.filter(item => isStaff || !['timeline','checklist','workflow','panel','communications','history','access'].includes(item)).map(item => <TabsTrigger key={item} value={item}>{({overview:'Overview',timeline:'Timeline',submission:'Submission',responses:'Responses',documents:'Documents',reminders:'Reminders',checklist:'Checklist',workflow:'Workflow',panel:'Panel',communications:'Communications',history:'History & exports',access:'Case access',resolution:'Resolution',notes:'Notes'})[item]}</TabsTrigger>)}
           </TabsList>
           <TabsContent value="overview"><section className="py-6">
             <div className="grid gap-3">
@@ -224,6 +225,7 @@ function CaseDetail() {
             </dl>
           </section></TabsContent>
 
+          {isStaff && <TabsContent value="timeline"><CaseTimeline dispute={dispute} /></TabsContent>}
           <TabsContent value="submission"><section className="py-6">
             <h2 className="text-lg font-semibold">Submission details</h2>
             <SubmissionEditor kind="hearing_request" record={dispute} />

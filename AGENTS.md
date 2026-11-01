@@ -22,3 +22,4 @@
 - Personal reminder Hub announcements use durable per-reminder delivery claims and server-only transport; shared staff-channel dispatch is staff-only to avoid exposing participant-created reminder text, and uncertain deliveries are never automatically replayed.
 - Shared training links and new-view head metadata live in portal-library so reference views stay consistent without importing route modules.
 - Reminder AI uses authenticated staff-only server functions and server-only Responses helpers; suggestions populate an editable draft and never save automatically or change SOP deadlines.
+- The manual workflow is sourced from case-process.json; regenerate its public distribution PDF when that content changes, keeping it free of case records and labeled as proposed rather than replacing the governing SOP.

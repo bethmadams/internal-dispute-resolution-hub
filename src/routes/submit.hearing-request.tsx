@@ -22,6 +22,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { deliverSubmissionCopy } from "@/lib/submission-copy.functions";
 import { caseTitle } from "@/lib/case-rules";
+import { deliverStageReceipt } from "@/lib/stage-email.functions";
 import {
   BINDING_AGREEMENT_NOTE,
   BINDING_AGREEMENT_URL,
@@ -57,6 +58,7 @@ type Errors = Record<string, string>;
 
 function HearingRequest() {
   const deliver = useServerFn(deliverSubmissionCopy);
+  const receipt = useServerFn(deliverStageReceipt);
   const queryClient = useQueryClient();
   const [done, setDone] = useState<string | null>(null);
   const [errors, setErrors] = useState<Errors>({});
@@ -156,6 +158,7 @@ function HearingRequest() {
       });
       if (error) throw error;
       await deliver({ data: { id: disputeId } }).catch(() => ({ copied: false }));
+      await receipt({ data: { id: disputeId } }).catch(() => ({ status: 'pending' }));
 
       const rows = [
         ...agreementFiles.map((f) => ({ ...f, kind: "binding_agreement", dispute_id: disputeId })),

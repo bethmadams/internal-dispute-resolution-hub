@@ -1,10 +1,10 @@
 # Tasks
-- [x] Review the Regulatory Relations Google Group link; settings require Google sign-in. Sending requires a verified domain or an authorized Google mailbox with the group as a verified send-as address; no Gmail connection exists yet.
+- [x] Connect Anna's Gmail and verify Regulatory Relations is an accepted send-as address; sending permission is granted. Stage email delivery has not been enabled or tested.
 - [x] Add MB/DMB name and email address fields on all three submission forms; verify editable fields, validation tests and database columns. Live submission delivery remains untested to avoid generating test case notifications.
 - [x] Replace the long case file with section tabs, preserving staff and participant access; verified desktop/mobile tab selection.
 - [x] Add stage-triggered checklist setup and staff-confirmed response due dates; verified 20 pre-hearing tasks, ten-day deadline and repeat-transition preservation on a temporary case.
 - [x] Check email sending availability and suggest additional process stages without changing the governing SOP; sender domain is not configured.
-- [ ] Verify a user-controlled email sender and enable emails for New Submission, In Progress and the new Awaiting Response stage. Blocked: sender-domain verification and approved recipient/template rules; response clock must start from confirmed invitation sending, not merely a stage change.
+- [ ] Enable emails for New Submission, In Progress and the new Awaiting Response stage using the verified Regulatory Relations Gmail sender. Blocked: approved In Progress/Awaiting Response recipient/template rules; response clock must start from confirmed invitation sending, not merely a stage change.
 - [x] Add a case progress dashboard with current stages, recorded deadlines and assignments; verified signed-in case navigation, search, mobile layout and 17 passing tests.
 - [x] Add the proposed case workflow to User Manual | SOP and verify a shareable PDF download containing no private case records.
 - [x] Add staff-only AI Gateway reminder extraction with suggested due dates and review before saving; verified a real request and saved draft.

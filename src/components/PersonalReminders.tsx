@@ -21,7 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
-type Editor = { reminder?: Reminder; caseId: string };
+type Editor = { reminder?: Reminder; caseId: string; allowReassign?: boolean };
 function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }) {
   const { user } = useCurrentUser();
   const queryClient = useQueryClient();
@@ -60,7 +60,7 @@ function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }
     <div className="space-y-4"><div className="space-y-2"><Label htmlFor="reminder-body">Reminder *</Label><Textarea id="reminder-body" value={body} onChange={e => setBody(e.target.value)} required /></div>
     <div className="grid grid-cols-2 gap-3"><div className="space-y-2"><Label>Due date *</Label><Popover><PopoverTrigger asChild><Button variant="outline" className="w-full justify-start"><CalendarIcon className="size-4" />{date ? format(date, "MMM d, yyyy") : "Pick a date"}</Button></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={date} onSelect={setDate} className="p-3 pointer-events-auto" /></PopoverContent></Popover></div><div className="space-y-2"><Label htmlFor="reminder-time">Due time *</Label><Input id="reminder-time" type="time" value={time} onChange={e => setTime(e.target.value)} required /></div></div>
     <div className="space-y-2"><Label>Advance notice</Label><Select value={lead} onValueChange={setLead}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{LEAD_OPTIONS.map(([n, label]) => <SelectItem key={n} value={String(n)}>{label}</SelectItem>)}</SelectContent></Select></div>
-    <div className="space-y-2"><Label>Assigned to *</Label><Select value={assignee} onValueChange={setAssignee}><SelectTrigger><SelectValue placeholder="Select teammate" /></SelectTrigger><SelectContent><Input aria-label="Search eligible teammates" placeholder="Search teammates…" value={search} onChange={e => setSearch(e.target.value)} className="mb-2" />{people.filter(p => `${p.full_name} ${p.email}`.toLowerCase().includes(search.toLowerCase())).map(p => <SelectItem key={p.id} value={p.id}>{p.full_name || p.email}{p.id === user?.id ? " (me)" : ""}</SelectItem>)}</SelectContent></Select></div></div>
+    <div className="space-y-2"><Label>Assigned to *</Label><Select value={assignee} onValueChange={setAssignee} disabled={Boolean(r) && !editor.allowReassign}><SelectTrigger><SelectValue placeholder="Select teammate" /></SelectTrigger><SelectContent><Input aria-label="Search eligible teammates" placeholder="Search teammates…" value={search} onChange={e => setSearch(e.target.value)} className="mb-2" />{people.filter(p => `${p.full_name} ${p.email}`.toLowerCase().includes(search.toLowerCase())).map(p => <SelectItem key={p.id} value={p.id}>{p.full_name || p.email}{p.id === user?.id ? " (me)" : ""}</SelectItem>)}</SelectContent></Select></div></div>
     <DialogFooter><Button variant="outline" onClick={close} disabled={busy}>Cancel</Button><Button disabled={busy || !date || !body.trim() || !time || !assignee} onClick={() => void save()}>{busy ? "Saving…" : "Save reminder"}</Button></DialogFooter>
   </DialogContent></Dialog>;
 }
@@ -73,7 +73,7 @@ export function PersonalReminders({ caseId }: { caseId?: string }) {
   const [showAll, setShowAll] = useState(false); const [editor, setEditor] = useState<Editor | null>(null);
   const [snooze, setSnooze] = useState<Reminder | null>(null); const [quantity, setQuantity] = useState("1"); const [unit, setUnit] = useState("hours");
   const [deleting, setDeleting] = useState<Reminder | null>(null); const [busy, setBusy] = useState(false);
-  const base = reminders.filter(r => (!caseId || r.dispute_id === caseId) && (caseId && showAll || ownsReminder(r, user?.id ?? "", scope)));
+  const base = reminders.filter(r => (!caseId || r.dispute_id === caseId) && (caseId && showAll || ownsReminder(r, user?.id ?? "", caseId ? "all" : scope)));
   const filtered = base.filter(r => reminderStatus(r, status) && `${r.body} ${cases.find(c => c.id === r.dispute_id)?.title ?? ""} ${r.user_email} ${r.created_by_email}`.toLowerCase().includes(search.toLowerCase()));
   const act = async (action: string, r: Reminder, extra: Record<string, string | boolean | number> = {}) => {
     setBusy(true); try { await saveReminder(action, { id: r.id, ...extra }); void queryClient.invalidateQueries({ queryKey: ["personal_reminders"] }); setSnooze(null); setDeleting(null); } catch { toast.error("Unable to update reminder"); } finally { setBusy(false); }

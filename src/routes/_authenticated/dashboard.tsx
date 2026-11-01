@@ -148,8 +148,9 @@ function Dashboard() {
   const createCase = useMutation({
     mutationFn: async () => {
       if (!user) throw new Error("Not signed in");
-      // case_number is assigned by the assign_case_number trigger, same as form submissions
+      // blank case_number is filled by the assign_case_number trigger, same as form submissions
       const { error } = await supabase.from("disputes").insert({
+        case_number: "",
         title: form.title,
         description: form.description || null,
         filed_by: form.filed_by || null,

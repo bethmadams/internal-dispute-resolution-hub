@@ -10,7 +10,7 @@
 <!-- LOVABLE:END -->
 
 - Keep Cloud as the authoritative intake store; database insert triggers queue external copies so copy outages cannot lose submissions.
-- Submission broker contact emails use the shared intake validation and dedicated nullable columns on each submission type; queued external copies retain them in payload without external schema changes.
+- Submission broker contact names and emails use shared intake validation and dedicated nullable columns on each submission type; queued external copies retain them in payload without external schema changes.
 - External copies use a server-only client; list reads verify roles and scope non-staff row IDs through authoritative Cloud RLS before querying external data. Public delivery accepts only a stored submission ID and exposes no records.
 - Case naming and staff-role helpers live in case-rules; database triggers own unique response matching and attachment linkage so every intake path obeys the same rules.
 - External table DDL is supplied for the owner to apply separately; managed migrations only target the portal's Cloud database.

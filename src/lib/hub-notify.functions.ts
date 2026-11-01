@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestUrl } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { buildHubMessage } from "./hub-notify";
+import { buildHubMessage, hubPortalOrigin } from "./hub-notify";
 
 // Delivers one portal notification to the eXp Hub "Internal Dispute
 // Resolution Notification" channel, tagging the territory investigator.
@@ -70,7 +70,7 @@ export const dispatchHubNotification = createServerFn({ method: "POST" })
         .single();
       if (dispute) {
         state = state ?? (dispute.state as string | null);
-        const origin = getRequestUrl().origin;
+        const origin = hubPortalOrigin(getRequestUrl());
         caseUrl = `${origin}/cases/${dispute.id}`;
       }
     }

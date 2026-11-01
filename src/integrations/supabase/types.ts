@@ -796,6 +796,79 @@ export type Database = {
           },
         ]
       }
+      personal_reminders: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string
+          created_by_email: string
+          dispute_id: string
+          done: boolean
+          due_at: string
+          id: string
+          lead_minutes: number
+          notified_at: string | null
+          remind_at: string
+          updated_at: string
+          user_email: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by: string
+          created_by_email?: string
+          dispute_id: string
+          done?: boolean
+          due_at: string
+          id?: string
+          lead_minutes?: number
+          notified_at?: string | null
+          remind_at: string
+          updated_at?: string
+          user_email?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string
+          created_by_email?: string
+          dispute_id?: string
+          done?: boolean
+          due_at?: string
+          id?: string
+          lead_minutes?: number
+          notified_at?: string | null
+          remind_at?: string
+          updated_at?: string
+          user_email?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "personal_reminders_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "personal_reminders_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "personal_reminders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -816,6 +889,41 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      reminder_hub_deliveries: {
+        Row: {
+          claimed_at: string | null
+          created_at: string
+          error: string | null
+          reminder_id: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          created_at?: string
+          error?: string | null
+          reminder_id: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          claimed_at?: string | null
+          created_at?: string
+          error?: string | null
+          reminder_id?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_hub_deliveries_reminder_id_fkey"
+            columns: ["reminder_id"]
+            isOneToOne: true
+            referencedRelation: "personal_reminders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       resources: {
         Row: {
@@ -962,6 +1070,7 @@ export type Database = {
           released_at: string
         }[]
       }
+      claim_due_reminder: { Args: { _id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -971,6 +1080,22 @@ export type Database = {
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       person_last_name: { Args: { _name: string }; Returns: string }
+      reminder_eligible_users: {
+        Args: { _dispute_id: string }
+        Returns: {
+          email: string
+          full_name: string
+          id: string
+        }[]
+      }
+      reminder_user_eligible: {
+        Args: { _dispute_id: string; _user_id: string }
+        Returns: boolean
+      }
+      save_personal_reminder: {
+        Args: { _action: string; _data: Json }
+        Returns: string
+      }
     }
     Enums: {
       app_role:

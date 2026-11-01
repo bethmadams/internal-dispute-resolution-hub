@@ -7,6 +7,12 @@ export const HUB_API_BASE =
 // "Internal Dispute Resolution Notification" Hub channel.
 export const HUB_CONVERSATION_ID = "f07d027f-7bb7-4327-9b81-8f0a5e5b076f";
 
+export function hubPortalOrigin(requestUrl: URL): string {
+  return ["localhost", "127.0.0.1", "[::1]"].includes(requestUrl.hostname)
+    ? "https://id-preview--a4df2ad6-9251-478e-bd1c-f847920075df.lovable.app"
+    : requestUrl.origin;
+}
+
 export type HubMention = {
   userId: string;
   displayName: string;

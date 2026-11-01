@@ -1,5 +1,9 @@
 # Tasks
-- [ ] Match My Reminders to the uploaded REsolve layout and personal reminder rules, preserving SOP deadlines; awaiting confirmation of optional Google Calendar scope.
+- [x] Add staff-only AI Gateway reminder extraction with suggested due dates and review before saving; verified a real request and saved draft.
+- [x] Make reminder case names clickable from My Reminders and verify direct matter navigation.
+- [ ] Rename Hub sender identity. Blocked: supplied Hub API documents no rename operation; Hub bot owner must rename it or supply a separately named bot key.
+- [x] Match My Reminders to the uploaded REsolve layout and personal reminder rules, preserving SOP deadlines; verified signed-in creation, snooze, completion and deletion.
+- [ ] Enable per-user Google Calendar reminder sync. Blocked: connection setup was declined; no Calendar client is configured.
 - [x] Match the portal workspace to the uploaded REsolve screenshot, preserving existing case access and notification delivery.
 - [x] Add user manual, metrics, training, notifications and reminder views using existing authorized records; verify signed-in navigation.
 - [x] Retry the master Drive folder after the permission update and use accessible checklists to refine SOP tasks; uploaded SOP governs conflicts.

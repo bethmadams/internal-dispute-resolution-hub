@@ -1,0 +1,13 @@
+import { test, expect } from 'bun:test';
+import { LEAD_OPTIONS, notificationTime, snoozeTime, ownsReminder, reminderStatus, canManageReminder } from './reminder-rules';
+const r = {user_id:'assignee',created_by:'creator',done:false,remind_at:'2026-11-09T14:00:00Z'};
+test('advance notice has the eleven specified choices',()=>expect(LEAD_OPTIONS.map(x=>x[0])).toEqual([0,5,10,15,30,60,120,1440,2880,10080,43200]));
+test('one day lead subtracts one day from due time',()=>expect(notificationTime('2026-11-10T14:00:00Z',1440)).toBe('2026-11-09T14:00:00.000Z'));
+test('month lead is thirty days',()=>expect(notificationTime('2026-11-30T14:00:00Z',43200)).toBe('2026-10-31T14:00:00.000Z'));
+test('all ownership excludes unrelated reminders',()=>{expect(ownsReminder(r,'stranger','all')).toBe(false);expect(ownsReminder(r,'creator','all')).toBe(true);});
+test('assigned to others excludes self-assignment',()=>expect(ownsReminder({...r,user_id:'creator'},'creator','others')).toBe(false));
+test('due changes at notification time',()=>{expect(reminderStatus(r,'due',Date.parse('2026-11-09T13:59:59Z'))).toBe(false);expect(reminderStatus(r,'due',Date.parse(r.remind_at))).toBe(true);});
+test('completed reminders excluded from due',()=>expect(reminderStatus({...r,done:true},'due',Date.parse('2026-11-10T00:00:00Z'))).toBe(false));
+test('snooze minimum quantity is one',()=>expect(()=>snoozeTime(0,0,'minutes')).toThrow());
+test('snooze is relative to now with thirty-day months',()=>expect(snoozeTime(Date.parse('2026-11-01T00:00:00Z'),1,'months')).toBe('2026-12-01T00:00:00.000Z'));
+test('only creator or assignee can manage',()=>{expect(canManageReminder(r,'creator')).toBe(true);expect(canManageReminder(r,'assignee')).toBe(true);expect(canManageReminder(r,'stranger')).toBe(false);});

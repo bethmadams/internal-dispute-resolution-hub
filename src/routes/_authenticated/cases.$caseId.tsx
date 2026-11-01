@@ -23,15 +23,11 @@ import {
 import {
   formatDate,
   formatDateTime,
-  PRIORITIES,
   priorityStyles,
   profilesQuery,
-  STAGES,
   stageStyles,
   type Dispute,
   type DisputeNote,
-  type Priority,
-  type Stage,
 } from "@/lib/hub";
 import { responsesQuery } from "@/lib/intake";
 import { caseTitle } from "@/lib/case-rules";
@@ -45,6 +41,7 @@ import { PersonalReminders } from "@/components/PersonalReminders";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CaseStageChange } from "@/components/CaseStageChange";
 import { CaseStageEmails } from "@/components/CaseStageEmails";
+import { CASE_STAGE_GUIDE } from '@/lib/case-stages';
 
 const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
 
@@ -357,31 +354,18 @@ function CaseDetail() {
           {isStaff && (
           <>
           <CaseStageChange dispute={dispute} />
-          <div className="space-y-2">
-            <Label>Priority</Label>
-            <Select
-              value={dispute.priority}
-              onValueChange={(v) => patch.mutate({ priority: v as Priority })}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {PRIORITIES.map((p) => (
-                  <SelectItem key={p} value={p}>
-                    {p}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="space-y-3 border-b border-border pb-4">
+            <p className="text-sm leading-relaxed text-muted-foreground">{CASE_STAGE_GUIDE[dispute.stage].checkpoint}</p>
+            <Button variant="outline" size="sm" className="h-auto w-full whitespace-normal py-2" onClick={() => navigate({ search: { tab: CASE_STAGE_GUIDE[dispute.stage].tab }, replace: true })}>{CASE_STAGE_GUIDE[dispute.stage].action}</Button>
           </div>
           <div className="space-y-2">
             <Label>Assigned to</Label>
             <Select
               value={dispute.assigned_to ?? "unassigned"}
+              disabled={patch.isPending}
               onValueChange={(v) => patch.mutate({ assigned_to: v === "unassigned" ? null : v })}
             >
-              <SelectTrigger>
+              <SelectTrigger aria-label="Assigned to">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

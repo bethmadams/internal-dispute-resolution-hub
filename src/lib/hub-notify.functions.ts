@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestUrl } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { buildHubMessage, hubPortalOrigin } from "./hub-notify";
+import { buildHubMessage, hubPortalOrigin, isHubSubmission } from "./hub-notify";
 
 // Delivers one portal notification to the eXp Hub "Internal Dispute
 // Resolution Notification" channel, tagging the territory investigator.
@@ -24,6 +24,8 @@ export const dispatchHubNotification = createServerFn({ method: "POST" })
       .eq("id", data.notificationId)
       .single();
     if (noticeError || !notice) throw new Error("Notification not found");
+    // Bell-only events must never reach Hub, including previously queued updates.
+    if (!isHubSubmission(notice.kind)) return { delivered: false, reason: "bell_only" };
 
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"

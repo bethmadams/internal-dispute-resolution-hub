@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { notificationsQuery } from "@/lib/hub";
 import { dispatchHubNotification } from "@/lib/hub-notify.functions";
+import { isHubSubmission } from "@/lib/hub-notify";
 
 const INITIAL_DELAY_MS = 2500;
 const POLL_INTERVAL_MS = 20000;
@@ -32,7 +33,7 @@ export function HubNoticeDispatcher() {
     if (!notifications || !deliveries) return;
     const delivered = new Set(deliveries.map((d) => d.notification_id));
     const pending = notifications
-      .filter((n) => !delivered.has(n.id))
+      .filter((n) => isHubSubmission(n.kind) && !delivered.has(n.id))
       .slice(0, MAX_PER_CYCLE);
     if (pending.length === 0 || busy.current) return;
 

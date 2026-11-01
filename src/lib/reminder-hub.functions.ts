@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { HUB_CONVERSATION_ID, hubPortalOrigin } from "@/lib/hub-notify";
+import { HUB_CONVERSATION_ID, hubPortalOrigin, isHubReminderDue } from "@/lib/hub-notify";
 import { searchHubUser, sendHubMessage } from "@/lib/hub-notify.server";
 
 export const dispatchReminderHub = createServerFn({ method: "POST" })
@@ -10,6 +10,7 @@ export const dispatchReminderHub = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: r, error } = await context.supabase.from("personal_reminders").select("*").eq("id", data.id).maybeSingle();
     if (error || !r || (r.created_by !== context.userId && r.user_id !== context.userId)) return { status: "unavailable" };
+    if (!isHubReminderDue(r)) return { status: "not_due" };
     // Personal reminder text must not leak into the shared staff Hub channel.
     const { data: staff } = await context.supabase.rpc("is_staff", { _user_id: context.userId });
     if (!staff) return { status: "staff_only" };
@@ -25,7 +26,7 @@ export const dispatchReminderHub = createServerFn({ method: "POST" })
     const request = getRequest();
     const requestUrl = new URL(request.url);
     const origin = hubPortalOrigin(requestUrl);
-    const content = ["Internal Dispute Resolution Notification", "New reminder", `Case: ${matter.title}`, `Assigned to: ${mention ? `@${mention.username}` : r.user_email}`, `Created by: ${r.created_by_email}`, `Due: ${due} (America/Chicago)`, r.body, `View the matter: ${origin}/cases/${r.dispute_id}`].join("\n\n");
+    const content = ["Internal Dispute Resolution Notification", "Reminder due", `Case: ${matter.title}`, `Assigned to: ${mention ? `@${mention.username}` : r.user_email}`, `Created by: ${r.created_by_email}`, `Due: ${due} (America/Chicago)`, r.body, `View the matter: ${origin}/cases/${r.dispute_id}`].join("\n\n");
     const result = await sendHubMessage(key, { conversation_id: HUB_CONVERSATION_ID, content, ...(mention ? { mentions: [mention] } : {}) });
     const status = result.ok ? "sent" : result.status === 0 ? "uncertain" : result.status === 429 ? "pending" : "failed";
     await supabaseAdmin.from("reminder_hub_deliveries").update({ status, sent_at: result.ok ? new Date().toISOString() : null, error: result.error ?? null }).eq("reminder_id", r.id);

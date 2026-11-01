@@ -1,7 +1,7 @@
 # Tasks
-- [ ] Make the case board investigator-assigned by default, retaining admin oversight and existing case permissions.
-- [ ] Build complete stage-linked checklist sections with real questions and saved answers using the governing SOP and accessible checklists.
-- [ ] Add administrator-only submitted-form editing for hearing requests, responses and appeals with recorded changes and verify saving/readback and access safeguards.
+- [x] Make the case board investigator-assigned by default; tested investigator scoping and admin oversight, verified admin assignment filters through the signed-in board; existing case permissions retained.
+- [x] Build complete stage-linked checklist sections with real questions and saved answers; verified all twelve sections, persisted answer readback, mobile layout and governing SOP tests; answers do not change operational deadlines or stages.
+- [x] Add administrator-only submitted-form editing for hearing requests, responses and appeals with recorded changes; verified hearing-request save/readback and restoration, durable correction history, database admin guards and validation tests.
 - [x] Refresh the overall workspace UI from the available REsolve reference; verified signed-in board, case tab navigation, mobile menu and no horizontal overflow/runtime errors; six existing case-rule tests passed.
 - [x] Verify administrators can change Assigned to; tested unassignment and reassignment through case controls with stored assignment confirmed.
 - [x] Remove Priority from case controls and add checklist-aligned stages with section navigation; verified six added stages, unique preserved tasks, no inferred deadlines or extra stage emails, mobile layout, 22 tests, and updated manual/PDF.

@@ -66,6 +66,7 @@ function HearingRequest() {
     submission_date: new Date().toISOString().slice(0, 10),
     submitted_by: "",
     email: "",
+    mb_dmb_email: "",
     state: "",
     other_agent: "",
     other_agent_email: "",
@@ -131,6 +132,7 @@ function HearingRequest() {
         description: v.summary,
         filed_by: v.submitted_by,
         complainant_email: v.email,
+        mb_dmb_email: v.mb_dmb_email || null,
         respondent: v.other_agent,
         respondent_email: v.other_agent_email,
         respondent_phone: v.other_agent_phone || null,
@@ -208,6 +210,9 @@ function HearingRequest() {
           </Field>
           <Field label="Your email address" required error={errors['email']}>
             <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
+          </Field>
+          <Field label="MB/DMB email address" error={errors['mb_dmb_email']}>
+            <Input aria-label="MB/DMB email address" type="email" value={form.mb_dmb_email} onChange={(e) => set("mb_dmb_email", e.target.value)} />
           </Field>
         </div>
 

@@ -1,7 +1,8 @@
 # Tasks
-- [ ] Replace the long case file with section tabs, preserving staff and participant access.
-- [ ] Add stage-triggered checklist setup and staff-confirmed due dates based on the pre-hearing checklist; verify repeat transitions do not duplicate tasks.
-- [ ] Check email sending availability and suggest additional process stages without changing the governing SOP.
+- [x] Replace the long case file with section tabs, preserving staff and participant access; verified desktop/mobile tab selection.
+- [x] Add stage-triggered checklist setup and staff-confirmed response due dates; verified 20 pre-hearing tasks, ten-day deadline and repeat-transition preservation on a temporary case.
+- [x] Check email sending availability and suggest additional process stages without changing the governing SOP; sender domain is not configured.
+- [ ] Enable stage-triggered email sending. Blocked: a verified sending domain and approved recipient/template rules are required.
 - [x] Add a case progress dashboard with current stages, recorded deadlines and assignments; verified signed-in case navigation, search, mobile layout and 17 passing tests.
 - [x] Add the proposed case workflow to User Manual | SOP and verify a shareable PDF download containing no private case records.
 - [x] Add staff-only AI Gateway reminder extraction with suggested due dates and review before saving; verified a real request and saved draft.

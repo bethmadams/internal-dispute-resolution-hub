@@ -42,9 +42,14 @@ import { CaseWorkflow, ReleasedDecision } from "@/components/CaseWorkflow";
 import { CaseCommunications } from "@/components/CaseCommunications";
 import { CaseOperations } from "@/components/CaseOperations";
 import { PersonalReminders } from "@/components/PersonalReminders";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CaseStageChange } from "@/components/CaseStageChange";
+
+const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
+  validateSearch: (search: Record<string, unknown>): { tab?: (typeof CASE_TABS)[number] } => { const tab = CASE_TABS.find(tab => tab === search['tab']); return tab ? { tab } : {}; },
   head: () => ({
     meta: [
       { title: "Case File | eXp Internal Dispute Resolution Portal" },
@@ -70,6 +75,8 @@ function CaseDetail() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
   const { isStaff } = useMyRole();
+  const { tab = 'overview' } = Route.useSearch();
+  const navigate = Route.useNavigate();
   const [note, setNote] = useState("");
   const [resolution, setResolution] = useState("");
 
@@ -116,6 +123,8 @@ function CaseDetail() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dispute", caseId] });
       queryClient.invalidateQueries({ queryKey: ["disputes"] });
+      queryClient.invalidateQueries({ queryKey: ["case_tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["case-progress"] });
       toast.success("Case updated");
     },
     onError: (e: Error) => toast.error(e.message),
@@ -171,8 +180,11 @@ function CaseDetail() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
-        <div className="space-y-6">
-          <section className="panel p-6">
+        <Tabs value={!isStaff && ['checklist','workflow','panel','communications','history','access'].includes(tab) ? 'overview' : tab} onValueChange={value => { const next = CASE_TABS.find(item => item === value); if(next) navigate({ search: { tab: next }, replace: true }); }} className="min-w-0">
+          <TabsList aria-label="Case sections" className="h-auto w-full flex-wrap justify-start gap-1 rounded-none border-b border-border bg-transparent p-0 pb-3">
+            {CASE_TABS.filter(item => isStaff || !['checklist','workflow','panel','communications','history','access'].includes(item)).map(item => <TabsTrigger key={item} value={item}>{({overview:'Overview',submission:'Submission',responses:'Responses',documents:'Documents',reminders:'Reminders',checklist:'Checklist',workflow:'Workflow',panel:'Panel',communications:'Communications',history:'History & exports',access:'Case access',resolution:'Resolution',notes:'Notes'})[item]}</TabsTrigger>)}
+          </TabsList>
+          <TabsContent value="overview"><section className="py-6">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold">Summary</h2>
               {dispute.source === "public_form" && (
@@ -205,9 +217,9 @@ function CaseDetail() {
                 </div>
               ))}
             </dl>
-          </section>
+          </section></TabsContent>
 
-          <section className="panel p-6">
+          <TabsContent value="submission"><section className="py-6">
             <h2 className="text-lg font-semibold">Submission details</h2>
             {dispute.reasons?.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
@@ -248,9 +260,9 @@ function CaseDetail() {
                   </div>
                 ))}
             </dl>
-          </section>
+          </section></TabsContent>
 
-          <section className="border-t border-border pt-6">
+          <TabsContent value="responses"><section className="py-6">
             <h2 className="text-lg font-semibold">Hearing responses</h2>
             {responses.length === 0 && <p className="mt-3 text-sm text-muted-foreground">No responses received for this case.</p>}
             <ul className="mt-4 space-y-5">
@@ -263,19 +275,18 @@ function CaseDetail() {
                 </li>
               ))}
             </ul>
-          </section>
+          </section></TabsContent>
 
-          <CaseDocuments caseId={caseId} />
-          <PersonalReminders caseId={caseId} />
+          <TabsContent value="documents"><CaseDocuments caseId={caseId} /></TabsContent>
+          <TabsContent value="reminders"><PersonalReminders caseId={caseId} /></TabsContent>
 
-          {isStaff && <><CaseTasks caseId={caseId}/><CaseWorkflow caseId={caseId}/><CasePanel caseId={caseId} state={dispute.state}/><CaseCommunications caseId={caseId}/><CaseOperations dispute={dispute}/></>}
-          {!isStaff && <ReleasedDecision caseId={caseId}/>}
+          {isStaff && <><TabsContent value="checklist"><CaseTasks caseId={caseId}/></TabsContent><TabsContent value="workflow"><CaseWorkflow caseId={caseId}/></TabsContent><TabsContent value="panel"><CasePanel caseId={caseId} state={dispute.state}/></TabsContent><TabsContent value="communications"><CaseCommunications caseId={caseId}/></TabsContent><TabsContent value="history"><CaseOperations dispute={dispute}/></TabsContent></>}
 
-          {isStaff && <CaseAccess caseId={caseId} isClosed={dispute.stage === "Closed"} />}
-
+          {isStaff && <TabsContent value="access"><CaseAccess caseId={caseId} isClosed={dispute.stage === "Closed"} /></TabsContent>}
 
 
-          <section className="panel p-6">
+
+          <TabsContent value="resolution">{!isStaff && <ReleasedDecision caseId={caseId}/>}<section className="py-6">
             <h2 className="text-lg font-semibold">Resolution</h2>
             {isStaff ? (
               <>
@@ -300,9 +311,9 @@ function CaseDetail() {
                 {dispute.resolution || "No resolution recorded."}
               </p>
             )}
-          </section>
+          </section></TabsContent>
 
-          <section className="panel p-6">
+          <TabsContent value="notes"><section className="py-6">
             <h2 className="text-lg font-semibold">Case notes</h2>
             {isStaff && (
             <div className="mt-3 space-y-3">
@@ -330,8 +341,8 @@ function CaseDetail() {
                 </li>
               ))}
             </ul>
-          </section>
-        </div>
+          </section></TabsContent>
+        </Tabs>
 
         <aside className="panel h-fit space-y-5 p-6">
           <h2 className="text-lg font-semibold">Case controls</h2>
@@ -342,24 +353,7 @@ function CaseDetail() {
           )}
           {isStaff && (
           <>
-          <div className="space-y-2">
-            <Label>Stage</Label>
-            <Select
-              value={dispute.stage}
-              onValueChange={(v) => patch.mutate({ stage: v as Stage })}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {STAGES.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <CaseStageChange dispute={dispute} />
           <div className="space-y-2">
             <Label>Priority</Label>
             <Select

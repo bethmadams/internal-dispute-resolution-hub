@@ -32,7 +32,7 @@ const pillars = [
   {
     icon: Gavel,
     title: "Stage tracking",
-    body: "New Submission, In Progress, Hearing Scheduled, Appeal Filed and Closed — with a full note trail.",
+    body: "New Submission, In Progress, Awaiting Response, Hearing Scheduled, Appeal Filed and Closed — with a full note trail.",
   },
   {
     icon: BookOpen,

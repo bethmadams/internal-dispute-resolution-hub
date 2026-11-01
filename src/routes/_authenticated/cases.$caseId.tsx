@@ -44,6 +44,7 @@ import { CaseOperations } from "@/components/CaseOperations";
 import { PersonalReminders } from "@/components/PersonalReminders";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CaseStageChange } from "@/components/CaseStageChange";
+import { CaseStageEmails } from "@/components/CaseStageEmails";
 
 const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
 
@@ -280,7 +281,7 @@ function CaseDetail() {
           <TabsContent value="documents"><CaseDocuments caseId={caseId} /></TabsContent>
           <TabsContent value="reminders"><PersonalReminders caseId={caseId} /></TabsContent>
 
-          {isStaff && <><TabsContent value="checklist"><CaseTasks caseId={caseId}/></TabsContent><TabsContent value="workflow"><CaseWorkflow caseId={caseId}/></TabsContent><TabsContent value="panel"><CasePanel caseId={caseId} state={dispute.state}/></TabsContent><TabsContent value="communications"><CaseCommunications caseId={caseId}/></TabsContent><TabsContent value="history"><CaseOperations dispute={dispute}/></TabsContent></>}
+          {isStaff && <><TabsContent value="checklist"><CaseTasks caseId={caseId}/></TabsContent><TabsContent value="workflow"><CaseWorkflow caseId={caseId}/></TabsContent><TabsContent value="panel"><CasePanel caseId={caseId} state={dispute.state}/></TabsContent><TabsContent value="communications"><CaseStageEmails dispute={dispute}/><CaseCommunications caseId={caseId}/></TabsContent><TabsContent value="history"><CaseOperations dispute={dispute}/></TabsContent></>}
 
           {isStaff && <TabsContent value="access"><CaseAccess caseId={caseId} isClosed={dispute.stage === "Closed"} /></TabsContent>}
 

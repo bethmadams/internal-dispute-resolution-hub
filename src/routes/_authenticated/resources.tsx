@@ -81,6 +81,11 @@ const PAGES = [
 ];
 
 const LIBRARY: { title: string; kind: string; url: string }[] = [
+  { title: "Internal Dispute Hearing Process — Master Folder", kind: "Drive folder", url: "https://drive.google.com/drive/folders/1oxLsHJ0roG5t-tEgoH3aVXv7ejHJ80ju" },
+  { title: "Pre-Hearing Checklist — Document", kind: "Google Doc", url: "https://docs.google.com/document/d/1JvO2Zh7QDkedG-8pGKxlJakN1dS73d5niWspi9YDSnc/edit" },
+  { title: "Hearing Panelist Checklist — Document", kind: "Google Doc", url: "https://docs.google.com/document/d/19IQzi16e_5rvfMXdLGxJKoQLt0DMttgIfue3MwiLfLU/edit" },
+  { title: "Post-Hearing Checklist — Current Document", kind: "Google Doc", url: "https://docs.google.com/document/d/1zmEUGK0S3V-mRsADZE7tdGZT61VEzBwFja0058OkvaA/edit" },
+  { title: "Appeal Checklist — Document", kind: "Google Doc", url: "https://docs.google.com/document/d/1g_5QQI19K9M7kzqY7YphG39AnC7qIJA2d30k-EkKvO4/edit" },
   {
     title: "Pre-Hearing Checklist",
     kind: "Drive folder",

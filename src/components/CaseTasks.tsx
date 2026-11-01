@@ -25,7 +25,7 @@ export function CaseTasks({caseId}:{caseId:string}) {
   const rule=SOP_TIMELINES.find(r=>r.key===clock);
   return <section className="space-y-5 border-t border-border pt-6">
     <div className="flex flex-wrap justify-between gap-3"><h2 className="text-xl font-semibold">SOP tasks & deadlines</h2><Button variant="outline" onClick={generate} disabled={mutation.isPending}><CheckCheck className="size-4"/>Add SOP tasks</Button></div>
-    <p className="text-sm text-muted-foreground">SOP-based task set · Google checklist contents awaiting upload</p>
+    <p className="text-sm text-muted-foreground">Uploaded SOP governs deadlines · supplemented by current Drive checklists</p>
     {error && <p className="text-destructive">Unable to load tasks.</p>}
     <div className="flex flex-wrap gap-2">{['Pre-hearing','Hearing','Post-hearing','Appeal'].map(p=><Button key={p} variant={p===phase?'default':'outline'} onClick={()=>setPhase(p)}>{p}</Button>)}</div>
     <ul className="divide-y divide-border">{tasks.filter(t=>t.phase===phase).map(task=><li key={task.id} className="space-y-3 py-4">

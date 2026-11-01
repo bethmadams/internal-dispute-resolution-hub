@@ -32,3 +32,4 @@
 - Reminder AI uses authenticated staff-only server functions and server-only Responses helpers; suggestions populate an editable draft and never save automatically or change SOP deadlines.
 - The manual workflow is sourced from case-process.json; regenerate its public distribution PDF when that content changes, keeping it free of case records and labeled as proposed rather than replacing the governing SOP.
 - Case progress uses authenticated RLS-scoped reads and recorded task/workflow dates; operational deadlines stay staff-only and no due dates are inferred by the dashboard.
+- Submission-date reporting uses authorized intake rows and each form's recorded filing date, preserving calendar days for monthly aggregation and inclusive date filters without changing case permissions.

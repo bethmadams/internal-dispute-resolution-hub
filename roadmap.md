@@ -1,4 +1,6 @@
 # Tasks
+- [x] Add filing-date filters, monthly submission totals and dated submission records to Metrics & Reporting; verified signed-in record dates, inclusive filters, empty periods and validation tests with authorized access preserved.
+- [x] Add monthly submission trend charts and submission-type comparisons that follow the filing-date filters; verified populated charts, filter reset, mobile width and no runtime errors.
 - [x] Make the case board investigator-assigned by default; tested investigator scoping and admin oversight, verified admin assignment filters through the signed-in board; existing case permissions retained.
 - [x] Build complete stage-linked checklist sections with real questions and saved answers; verified all twelve sections, persisted answer readback, mobile layout and governing SOP tests; answers do not change operational deadlines or stages.
 - [x] Add administrator-only submitted-form editing for hearing requests, responses and appeals with recorded changes; verified hearing-request save/readback and restoration, durable correction history, database admin guards and validation tests.

@@ -354,29 +354,28 @@ function Dashboard() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((d) => (
-              <div key={d.id} className="group panel flex flex-col p-5 transition-shadow hover:shadow-lift">
+              <div key={d.id} className="group flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-card transition-shadow hover:shadow-lift">
               <Link
                 key={d.id}
                 to="/cases/$caseId"
                 params={{ caseId: d.id }}
-                className="flex flex-1 flex-col"
+                className="flex min-w-0 flex-1 flex-col"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-display text-xs font-semibold text-muted-foreground">
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 bg-ink px-5 py-4 text-ink-foreground">
+                  <div className="min-w-0">
+                    <p className="font-display text-xs font-semibold text-ink-foreground/70">
                       {d.case_number}
                     </p>
                     <h3 className="mt-1 line-clamp-2 text-base font-semibold leading-snug">
                       {caseTitle(d.filed_by, d.respondent, d.title)}
                     </h3>
-                    {isStaff && tasks.filter(t=>t.dispute_id===d.id&&!t.completed_at).sort((a,b)=>(a.due_at??'9999').localeCompare(b.due_at??'9999')).slice(0,1).map(t=><p key={t.id} className="mt-2 text-xs text-muted-foreground">Next: {t.title} · <span className={deadlineState(t.due_at,t.completed_at)==='Overdue'?'text-destructive':''}>{deadlineState(t.due_at,t.completed_at)}{t.due_at?` · ${formatDate(t.due_at)}`:''}</span></p>)}
                   </div>
-                  <Badge variant="outline" className={priorityStyles[d.priority]}>
+                  <Badge variant="outline" className="shrink-0 border-ink-foreground/25 text-ink-foreground">
                     {d.priority}
                   </Badge>
                 </div>
 
-                <div className="mt-4 flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 px-5 pt-4">
                   <Badge variant="outline" className={stageStyles[d.stage]}>
                     {d.stage}
                   </Badge>
@@ -385,8 +384,11 @@ function Dashboard() {
                   )}
                 </div>
 
+                <dl className="grid grid-cols-2 gap-4 px-5 pt-4 text-sm"><div className="min-w-0"><dt className="text-xs text-muted-foreground">Complainant</dt><dd className="mt-1 break-words">{d.filed_by || '—'}</dd></div><div className="min-w-0"><dt className="text-xs text-muted-foreground">Respondent</dt><dd className="mt-1 break-words">{d.respondent || '—'}</dd></div><div><dt className="text-xs text-muted-foreground">State</dt><dd className="mt-1">{d.state || '—'}</dd></div><div><dt className="text-xs text-muted-foreground">Filed</dt><dd className="mt-1">{formatDate(d.filed_at)}</dd></div></dl>
+                {isStaff && tasks.filter(t=>t.dispute_id===d.id&&!t.completed_at).sort((a,b)=>(a.due_at??'9999').localeCompare(b.due_at??'9999')).slice(0,1).map(t=><p key={t.id} className="mx-5 mt-4 border-t border-border pt-3 text-xs text-muted-foreground">Next: {t.title} · <span className={deadlineState(t.due_at,t.completed_at)==='Overdue'?'text-destructive':''}>{deadlineState(t.due_at,t.completed_at)}{t.due_at?` · ${formatDate(t.due_at)}`:''}</span></p>)}
+
                 {responses.some((r) => r.dispute_id === d.id) && (
-                  <div className="mt-4 border-t border-border pt-3">
+                  <div className="mx-5 mt-4 border-t border-border pt-3">
                     <p className="rule-label">Respondent submissions</p>
                     <ul className="mt-2 space-y-3">
                       {responses.filter((r) => r.dispute_id === d.id).map((r) => (
@@ -399,17 +401,17 @@ function Dashboard() {
                     </ul>
                   </div>
                 )}
-                <div className="mt-auto pt-5">
+                <div className="mt-auto px-5 pt-5">
                   <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
                     <span className="truncate">{nameFor(d.assigned_to)}</span>
-                    <span className="shrink-0">{formatDate(d.filed_at)}</span>
+                    <span className="shrink-0">Investigator</span>
                   </div>
-                  <div className="mt-3 flex items-center gap-1 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="mt-3 flex items-center gap-1 text-sm font-medium text-primary">
                     Open case <ExternalLink className="size-3.5" />
                   </div>
                 </div>
               </Link>
-              <div className="mt-2 flex justify-end">
+              <div className="mt-2 flex justify-end px-5 pb-4">
                 <DeleteCard table="disputes" id={d.id} label={`${d.case_number} — ${caseTitle(d.filed_by, d.respondent, d.title)}`} />
               </div>
               </div>

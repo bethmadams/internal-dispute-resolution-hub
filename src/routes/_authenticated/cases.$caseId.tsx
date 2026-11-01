@@ -156,7 +156,7 @@ function CaseDetail() {
   if (!dispute) return <p className="text-sm text-muted-foreground">Case not found.</p>;
 
   return (
-    <div className="space-y-8">
+    <div className="case-file space-y-6">
       <Link
         to="/dashboard"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
@@ -182,14 +182,14 @@ function CaseDetail() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
         <Tabs value={!isStaff && ['checklist','workflow','panel','communications','history','access'].includes(tab) ? 'overview' : tab} onValueChange={value => { const next = CASE_TABS.find(item => item === value); if(next) navigate({ search: { tab: next }, replace: true }); }} className="min-w-0">
-          <TabsList aria-label="Case sections" className="h-auto w-full flex-wrap justify-start gap-1 rounded-none border-b border-border bg-transparent p-0 pb-3">
+          <TabsList aria-label="Case sections" className="h-auto w-full flex-wrap justify-start gap-1 rounded-lg bg-surface p-1">
             {CASE_TABS.filter(item => isStaff || !['checklist','workflow','panel','communications','history','access'].includes(item)).map(item => <TabsTrigger key={item} value={item}>{({overview:'Overview',submission:'Submission',responses:'Responses',documents:'Documents',reminders:'Reminders',checklist:'Checklist',workflow:'Workflow',panel:'Panel',communications:'Communications',history:'History & exports',access:'Case access',resolution:'Resolution',notes:'Notes'})[item]}</TabsTrigger>)}
           </TabsList>
           <TabsContent value="overview"><section className="py-6">
-            <div className="flex items-center justify-between gap-3">
+            <div className="grid gap-3">
               <h2 className="text-lg font-semibold">Summary</h2>
               {dispute.source === "public_form" && (
-                <Badge variant="outline">Submitted via hearing request form</Badge>
+                <Badge variant="outline" className="justify-self-start">Submitted via hearing request form</Badge>
               )}
             </div>
             <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">
@@ -199,6 +199,8 @@ function CaseDetail() {
               {[
                 ["Complainant", dispute.filed_by || "—"],
                 ["Complainant email", dispute.complainant_email || "—"],
+                ["MB/DMB name", dispute.mb_dmb_name || "—"],
+                ["MB/DMB email", dispute.mb_dmb_email || "—"],
                 ["Respondent", dispute.respondent || "—"],
                 ["Respondent email", dispute.respondent_email || "—"],
                 ["Respondent phone", dispute.respondent_phone || "—"],
@@ -231,7 +233,7 @@ function CaseDetail() {
                 ))}
               </div>
             )}
-            <dl className="mt-5 space-y-5">
+            <dl className="mt-5 grid gap-5 sm:grid-cols-2">
               {[
                 ["Code of Ethics articles cited", dispute.ethics_articles],
                 ["What the complainant is seeking", dispute.seeking],
@@ -345,7 +347,7 @@ function CaseDetail() {
           </section></TabsContent>
         </Tabs>
 
-        <aside className="panel h-fit space-y-5 p-6">
+        <aside className="case-controls h-fit space-y-5 border border-border bg-card p-5">
           <h2 className="text-lg font-semibold">Case controls</h2>
           {!isStaff && (
             <p className="text-sm text-muted-foreground">

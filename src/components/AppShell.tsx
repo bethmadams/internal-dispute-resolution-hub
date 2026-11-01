@@ -8,6 +8,7 @@ import { rolesQuery, ROLE_LABELS } from "@/lib/hub";
 import { NotificationBell } from "@/components/NotificationBell";
 import { HubNoticeDispatcher } from "@/components/HubNoticeDispatcher";
 import { PersonalReminderAlerts } from "@/components/PersonalReminderAlerts";
+import { StageEmailDispatcher } from "@/components/StageEmailDispatcher";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
@@ -60,6 +61,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </header>
         <PersonalReminderAlerts />
+        <StageEmailDispatcher />
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8 sm:py-10">{children}</main>
       </div>
     </div>

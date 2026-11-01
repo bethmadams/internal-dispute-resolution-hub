@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const STAGES = [
   "New Submission",
   "In Progress",
+  "Awaiting Response",
   "Hearing Scheduled",
   "Appeal Filed",
   "Closed",
@@ -30,6 +31,8 @@ export type Dispute = {
   created_at: string;
   updated_at: string;
   complainant_email: string | null;
+  mb_dmb_name: string | null;
+  mb_dmb_email: string | null;
   state: string | null;
   respondent_email: string | null;
   respondent_phone: string | null;
@@ -122,6 +125,7 @@ export type UserRole = { id: string; user_id: string; role: AppRole };
 export const stageStyles: Record<Stage, string> = {
   "New Submission": "bg-stage-new/12 text-stage-new border-stage-new/25",
   "In Progress": "bg-stage-progress/12 text-stage-progress border-stage-progress/25",
+  "Awaiting Response": "bg-stage-hearing/15 text-stage-hearing border-stage-hearing/30",
   "Hearing Scheduled": "bg-stage-hearing/15 text-stage-hearing border-stage-hearing/30",
   "Appeal Filed": "bg-stage-appeal/12 text-stage-appeal border-stage-appeal/25",
   Closed: "bg-stage-closed/12 text-stage-closed border-stage-closed/25",

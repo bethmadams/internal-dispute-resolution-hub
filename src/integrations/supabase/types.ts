@@ -976,6 +976,47 @@ export type Database = {
         }
         Relationships: []
       }
+      stage_email_queue: {
+        Row: {
+          created_at: string
+          dispute_id: string
+          error: string | null
+          gmail_id: string | null
+          id: string
+          sent_at: string | null
+          stage: Database["public"]["Enums"]["dispute_stage"]
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          dispute_id: string
+          error?: string | null
+          gmail_id?: string | null
+          id?: string
+          sent_at?: string | null
+          stage: Database["public"]["Enums"]["dispute_stage"]
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          dispute_id?: string
+          error?: string | null
+          gmail_id?: string | null
+          id?: string
+          sent_at?: string | null
+          stage?: Database["public"]["Enums"]["dispute_stage"]
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stage_email_queue_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       submission_copy_queue: {
         Row: {
           copied_at: string | null
@@ -1098,6 +1139,10 @@ export type Database = {
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       person_last_name: { Args: { _name: string }; Returns: string }
+      record_stage_email_sent: {
+        Args: { _gmail_id: string; _queue_id: string; _sent_at: string }
+        Returns: undefined
+      }
       reminder_eligible_users: {
         Args: { _dispute_id: string }
         Returns: {
@@ -1139,6 +1184,7 @@ export type Database = {
       dispute_stage:
         | "New Submission"
         | "In Progress"
+        | "Awaiting Response"
         | "Hearing Scheduled"
         | "Appeal Filed"
         | "Closed"
@@ -1284,6 +1330,7 @@ export const Constants = {
       dispute_stage: [
         "New Submission",
         "In Progress",
+        "Awaiting Response",
         "Hearing Scheduled",
         "Appeal Filed",
         "Closed",

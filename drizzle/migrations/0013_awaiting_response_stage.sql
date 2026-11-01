@@ -1,0 +1,1 @@
+ALTER TYPE public.dispute_stage ADD VALUE IF NOT EXISTS 'Awaiting Response' AFTER 'In Progress';

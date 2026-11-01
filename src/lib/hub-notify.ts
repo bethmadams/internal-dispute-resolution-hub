@@ -42,8 +42,8 @@ export function buildHubMessage(opts: {
   mention: HubMention | null;
 }): HubMessage {
   const lines = [
+    "Internal Dispute Resolution Notification",
     `Notification type: ${hubKindLabel(opts.kind)}`,
-    "Internal Dispute Resolution",
     "",
     [opts.caseNumber, opts.title, opts.state ? `(${opts.state})` : null]
       .filter(Boolean)

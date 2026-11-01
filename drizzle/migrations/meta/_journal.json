@@ -43,6 +43,13 @@
       "when": 1793494028727,
       "tag": "0005_sop_case_workflow",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793494306149,
+      "tag": "0006_sop_document_attribution",
+      "breakpoints": true
     }
   ]
 }

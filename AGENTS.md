@@ -23,6 +23,7 @@
 - Case exports use the signed-in client and authorized storage links; private archives include staff data while hearing packets include selected documents only.
 - Hub delivery eligibility is shared in src/lib/hub-notify.ts and enforced in both client dispatchers and authenticated server handlers; public.hub_deliveries retains one-row-per-notification claims so bell-only events cannot leak through direct calls or old queues.
 - Authenticated workspace navigation lives in AppShell; metrics derive from RLS-visible disputes. Personal reminders use a separate case-authorized table and guarded RPCs because creator/assignee ownership, snoozing and popup claims must not alter SOP tasks or generate workflow audit alerts.
+- Shared workspace presentation stays in AppShell and scoped global tokens/styles; page controls reuse design-system components so visual refreshes preserve case permissions and workflow behavior.
 - Personal reminder Hub delivery runs from PersonalReminderAlerts independently of popup claims and checks stored reminder timing server-side; durable per-reminder claims prevent duplicate sends, shared-channel dispatch stays staff-only, and uncertain deliveries are never automatically replayed.
 - Shared training links and new-view head metadata live in portal-library so reference views stay consistent without importing route modules.
 - Reminder AI uses authenticated staff-only server functions and server-only Responses helpers; suggestions populate an editable draft and never save automatically or change SOP deadlines.

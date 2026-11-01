@@ -303,18 +303,20 @@ function Dashboard() {
 
 
 
-      <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">
         {counts.map(({ stage, count }) => (
-          <button
+          <Button
             key={stage}
+            variant="outline"
+            aria-pressed={stageFilter === stage}
             onClick={() => setStageFilter(stageFilter === stage ? "all" : stage)}
-            className={`panel p-4 text-left transition-shadow hover:shadow-lift ${
-              stageFilter === stage ? "ring-2 ring-ring" : ""
+            className={`case-stage-count flex flex-col border-border bg-card px-3 py-2.5 text-left ${
+              stageFilter === stage ? "border-primary bg-secondary ring-1 ring-ring" : ""
             }`}
           >
-            <p className="rule-label">{stage}</p>
-            <p className="mt-2 font-display text-2xl font-semibold">{count}</p>
-          </button>
+            <span className="text-xs font-medium text-muted-foreground">{stage}</span>
+            <span className="text-xl font-semibold text-foreground">{count}</span>
+          </Button>
         ))}
       </div>
 

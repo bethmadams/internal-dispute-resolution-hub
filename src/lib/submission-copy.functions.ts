@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { canReadSubmissionCopies, submissionTables, submitterLabel } from "./submission-copy";
 import { externalClient, flushCopies } from "./submission-copy.server";
+import { scopeSubmissionIds } from "./case-rules";
 
 // Public callers can only request delivery of an already-persisted queue row.
 // No submitted payload, destination, or case data is accepted or returned.
@@ -21,11 +22,21 @@ export const readSubmissionCopies = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: roles, error } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId);
     if (error || !canReadSubmissionCopies((roles ?? []).map((r) => r.role))) throw new Error("You need portal access to view submissions.");
+    // Cloud RLS is authoritative: never trust stale case IDs in external payloads.
+    const sourceTable = data.type === 'hearing_request' ? 'disputes' : data.type === 'hearing_response' ? 'dispute_responses' : 'dispute_appeals';
+    const visible = await context.supabase.from(sourceTable).select('id');
+    if (visible.error) throw new Error('Unable to verify case access.');
+    const allowedIds = scopeSubmissionIds((roles ?? []).map((r) => r.role), (visible.data ?? []).map((r) => r.id));
+    if (allowedIds?.length === 0) return { rows: [], warning: null };
     const key = process.env['EXTERNAL_SUBMISSIONS_SECRET_KEY'];
     if (!key) throw new Error("External submission connection is not configured.");
     let warning: string | null = null;
-    try { await flushCopies(key); } catch { warning = "Some external copies are pending. Original submissions remain available on the Case Board."; }
-    const result = await externalClient(key).from(submissionTables[data.type]).select("id,submitted_by,state,submitted_on,summary,payload").order("created_at", { ascending: false }).limit(200);
+    if (allowedIds === null) {
+      try { await flushCopies(key); } catch { warning = "Some external copies are pending. Original submissions remain available on the Case Board."; }
+    }
+    let query = externalClient(key).from(submissionTables[data.type]).select("id,submitted_by,state,submitted_on,summary,payload");
+    if (allowedIds !== null) query = query.in('id', allowedIds);
+    const result = await query.order("created_at", { ascending: false }).limit(200);
     if (result.error) throw new Error("External submission tables are not ready. Original submissions remain available on the Case Board.");
     const rows = (result.data ?? []) as { id: string; submitted_by: string | null; state: string | null; submitted_on: string | null; summary: string | null; payload: Record<string, unknown> | null }[];
     return { rows: rows.map(({ payload, ...r }) => ({ ...r, submitted_as: submitterLabel(data.type, payload) })), warning };

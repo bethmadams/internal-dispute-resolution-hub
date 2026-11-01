@@ -21,6 +21,7 @@ import { SubmissionRecords } from "@/components/SubmissionRecords";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { deliverSubmissionCopy } from "@/lib/submission-copy.functions";
+import { caseTitle } from "@/lib/case-rules";
 import {
   BINDING_AGREEMENT_NOTE,
   BINDING_AGREEMENT_URL,
@@ -126,7 +127,7 @@ function HearingRequest() {
       const { error } = await supabase.from("disputes").insert({
         id: disputeId,
         case_number: "",
-        title: `${v.reasons[0]} — ${v.submitted_by} v. ${v.other_agent}`,
+        title: caseTitle(v.submitted_by, v.other_agent, "Hearing request"),
         description: v.summary,
         filed_by: v.submitted_by,
         complainant_email: v.email,

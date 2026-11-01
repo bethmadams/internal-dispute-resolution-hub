@@ -40,6 +40,7 @@ import {
   type Stage,
 } from "@/lib/hub";
 import { appealsQuery, responsesQuery } from "@/lib/intake";
+import { caseTitle } from "@/lib/case-rules";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -132,7 +133,7 @@ function Dashboard() {
         !q ||
         [d.case_number, d.title, d.filed_by, d.respondent, d.department]
           .filter(Boolean)
-          .some((v) => v!.toLowerCase().includes(q));
+          .some((v) => v?.toLowerCase().includes(q));
       return matchesStage && matchesQuery;
     });
   }, [disputes, search, stageFilter]);
@@ -340,7 +341,7 @@ function Dashboard() {
           <p className="p-8 text-sm text-muted-foreground">Loading cases…</p>
         ) : filtered.length === 0 ? (
           <p className="p-8 text-sm text-muted-foreground">
-            No cases match. Log a dispute to get started.
+            {isStaff ? "No cases match." : "No assigned cases match."}
           </p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -357,7 +358,7 @@ function Dashboard() {
                       {d.case_number}
                     </p>
                     <h3 className="mt-1 line-clamp-2 text-base font-semibold leading-snug">
-                      {d.title}
+                      {caseTitle(d.filed_by, d.respondent, d.title)}
                     </h3>
                   </div>
                   <Badge variant="outline" className={priorityStyles[d.priority]}>
@@ -374,6 +375,20 @@ function Dashboard() {
                   )}
                 </div>
 
+                {responses.some((r) => r.dispute_id === d.id) && (
+                  <div className="mt-4 border-t border-border pt-3">
+                    <p className="rule-label">Respondent submissions</p>
+                    <ul className="mt-2 space-y-3">
+                      {responses.filter((r) => r.dispute_id === d.id).map((r) => (
+                        <li key={r.id} className="border-l-2 border-accent pl-3">
+                          <p className="text-sm font-medium">{r.responder_name}</p>
+                          <p className="text-xs text-muted-foreground">Respondent · {formatDate(r.submitted_on)}</p>
+                          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.summary}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <div className="mt-auto pt-5">
                   <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
                     <span className="truncate">{nameFor(d.assigned_to)}</span>
@@ -389,20 +404,20 @@ function Dashboard() {
         )}
       </div>
 
-      <section className="space-y-4">
+      {isStaff && <section className="space-y-4">
         <div>
           <p className="rule-label">Respondent submissions</p>
           <h2 className="mt-1 text-xl font-semibold">Hearing response forms</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Responses arrive unmatched — link each one to the case it answers.
+            Unmatched responses
           </p>
         </div>
         <div>
-          {responses.length === 0 ? (
-            <p className="p-8 text-sm text-muted-foreground">No responses submitted yet.</p>
+          {responses.filter((r) => !r.dispute_id).length === 0 ? (
+            <p className="p-8 text-sm text-muted-foreground">No unmatched responses.</p>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {responses.map((r) => (
+              {responses.filter((r) => !r.dispute_id).map((r) => (
                 <div key={r.id} className="panel flex flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -465,7 +480,7 @@ function Dashboard() {
             </div>
           )}
         </div>
-      </section>
+      </section>}
 
       <section className="space-y-4">
         <div>
@@ -510,7 +525,7 @@ function Dashboard() {
                   </p>
 
                   <div className="mt-5 flex flex-col gap-3 border-t border-border pt-4">
-                    <Select
+                    {isStaff && <Select
                       value={a.dispute_id ?? "unlinked"}
                       onValueChange={(v) =>
                         linkAppeal.mutate({ id: a.id, disputeId: v === "unlinked" ? null : v })
@@ -527,7 +542,7 @@ function Dashboard() {
                           </SelectItem>
                         ))}
                       </SelectContent>
-                    </Select>
+                    </Select>}
                     {a.dispute_id && (
                       <Link
                         to="/cases/$caseId"

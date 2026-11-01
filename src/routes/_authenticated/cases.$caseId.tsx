@@ -33,6 +33,8 @@ import {
   type Priority,
   type Stage,
 } from "@/lib/hub";
+import { responsesQuery } from "@/lib/intake";
+import { caseTitle } from "@/lib/case-rules";
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
@@ -91,6 +93,8 @@ function CaseDetail() {
   });
 
   const { data: profiles = [] } = useQuery(profilesQuery);
+  const { data: allResponses = [] } = useQuery(responsesQuery);
+  const responses = allResponses.filter((response) => response.dispute_id === caseId);
   
 
   useEffect(() => {
@@ -146,7 +150,7 @@ function CaseDetail() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="rule-label">{dispute.case_number}</p>
-          <h1 className="mt-1 max-w-2xl text-3xl font-semibold">{dispute.title}</h1>
+          <h1 className="mt-1 max-w-2xl text-3xl font-semibold">{caseTitle(dispute.filed_by, dispute.respondent, dispute.title)}</h1>
           <div className="mt-3 flex flex-wrap gap-2">
             <Badge variant="outline" className={stageStyles[dispute.stage]}>
               {dispute.stage}
@@ -236,6 +240,21 @@ function CaseDetail() {
                   </div>
                 ))}
             </dl>
+          </section>
+
+          <section className="border-t border-border pt-6">
+            <h2 className="text-lg font-semibold">Hearing responses</h2>
+            {responses.length === 0 && <p className="mt-3 text-sm text-muted-foreground">No responses received for this case.</p>}
+            <ul className="mt-4 space-y-5">
+              {responses.map((response) => (
+                <li key={response.id} className="border-l-2 border-accent pl-4">
+                  <h3 className="font-medium">{response.responder_name}</h3>
+                  <p className="mt-1 text-xs text-muted-foreground">Respondent · {formatDate(response.submitted_on)} · {response.state ?? "—"}</p>
+                  <p className="mt-3 whitespace-pre-wrap text-sm">{response.summary}</p>
+                  {response.additional_comments && <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">{response.additional_comments}</p>}
+                </li>
+              ))}
+            </ul>
           </section>
 
           <CaseDocuments caseId={caseId} />

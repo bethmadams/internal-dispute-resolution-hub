@@ -49,8 +49,13 @@ export function buildHubMessage(opts: {
       .filter(Boolean)
       .join(" - "),
   ];
-  if (opts.investigatorName) {
-    lines.push("", `Assigned investigator: @${opts.investigatorName}`);
+  if (opts.mention) {
+    lines.push(
+      "",
+      `Assigned investigator: @${opts.mention.username} (${opts.mention.displayName})`,
+    );
+  } else if (opts.investigatorName) {
+    lines.push("", `Assigned investigator: ${opts.investigatorName}`);
   }
   if (opts.caseUrl) {
     lines.push("", opts.caseUrl);

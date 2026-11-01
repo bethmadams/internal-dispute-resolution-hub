@@ -1130,6 +1130,15 @@ export type Database = {
         }[]
       }
       claim_due_reminder: { Args: { _id: string }; Returns: boolean }
+      edit_submitted_form: {
+        Args: {
+          _expected_updated_at: string
+          _id: string
+          _kind: string
+          _values: Json
+        }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

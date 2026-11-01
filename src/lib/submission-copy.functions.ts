@@ -27,6 +27,14 @@ export const readSubmissionCopies = createServerFn({ method: "POST" })
     try { await flushCopies(key); } catch { warning = "Some external copies are pending. Original submissions remain available on the Case Board."; }
     const result = await externalClient(key).from(submissionTables[data.type]).select("id,submitted_by,state,submitted_on,summary,payload").order("created_at", { ascending: false }).limit(200);
     if (result.error) throw new Error("External submission tables are not ready. Original submissions remain available on the Case Board.");
+    const roleNames = (roles ?? []).map((r) => r.role as string);
+    let visible: Set<string> | null = null;
+    if (!roleNames.includes("admin") && !roleNames.includes("investigator")) {
+      // Non-staff only see submissions belonging to cases they were granted.
+      const source = data.type === "hearing_request" ? "disputes" : data.type === "hearing_response" ? "dispute_responses" : "dispute_appeals";
+      const own = await context.supabase.from(source).select("id");
+      visible = new Set((own.data ?? []).map((r) => r.id));
+    }
     const rows = (result.data ?? []) as { id: string; submitted_by: string | null; state: string | null; submitted_on: string | null; summary: string | null; payload: Record<string, unknown> | null }[];
-    return { rows: rows.map(({ payload, ...r }) => ({ ...r, submitted_as: submitterLabel(data.type, payload) })), warning };
+    return { rows: rows.filter((r) => !visible || visible.has(r.id)).map(({ payload, ...r }) => ({ ...r, submitted_as: submitterLabel(data.type, payload) })), warning };
   });

@@ -1,7 +1,15 @@
 import { describe, expect, test } from 'bun:test';
-import { caseTitle, hasStaffRole, scopeSubmissionIds } from './case-rules';
+import { caseTitle, hasStaffRole, scopeSubmissionIds, canDeleteCards } from './case-rules';
 
 describe('case privacy and naming', () => {
+  test('only admins can delete cards', () => {
+    expect(canDeleteCards(['admin'])).toBe(true);
+    expect(canDeleteCards(['viewer', 'admin'])).toBe(true);
+    for (const role of ['investigator', 'viewer', 'complainant', 'respondent', 'panel_member', 'panel_chair', 'broker', 'director']) {
+      expect(canDeleteCards([role])).toBe(false);
+    }
+    expect(canDeleteCards([])).toBe(false);
+  });
   test('case is named complainant last name v. respondent last name', () => {
     expect(caseTitle('Jane Marie Smith', 'John Jones', 'Complaint')).toBe('Smith v. Jones');
     expect(caseTitle(' Jane Smith  ', 'John van Jones', 'Complaint')).toBe('Smith v. Jones');

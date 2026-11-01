@@ -9,6 +9,10 @@ export function hasStaffRole(roles: string[]) {
   return roles.some((role) => role === "admin" || role === "investigator");
 }
 
+export function canDeleteCards(roles: string[]) {
+  return roles.includes("admin");
+}
+
 export function scopeSubmissionIds(roles: string[], visibleIds: string[]) {
   return hasStaffRole(roles) ? null : [...new Set(visibleIds)];
 }

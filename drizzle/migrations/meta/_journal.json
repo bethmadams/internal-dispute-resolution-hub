@@ -57,6 +57,13 @@
       "when": 1793497498525,
       "tag": "0007_fix_case_number_year",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793498328247,
+      "tag": "0008_personal_case_reminders",
+      "breakpoints": true
     }
   ]
 }

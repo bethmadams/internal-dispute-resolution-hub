@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Add a case stage timeline with current status and recorded transition dates; preserve staff history access and avoid inferred completion or dates.
 - [x] Add filing-date filters, monthly submission totals and dated submission records to Metrics & Reporting; verified signed-in record dates, inclusive filters, empty periods and validation tests with authorized access preserved.
 - [x] Add monthly submission trend charts and submission-type comparisons that follow the filing-date filters; verified populated charts, filter reset, mobile width and no runtime errors.
 - [x] Make the case board investigator-assigned by default; tested investigator scoping and admin oversight, verified admin assignment filters through the signed-in board; existing case permissions retained.

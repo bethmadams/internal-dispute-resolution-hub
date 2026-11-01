@@ -15,6 +15,10 @@ for (const stage of ['In Progress','Awaiting Response']) test(`${stage} sends to
 test('missing MB/DMB blocks sending rather than substituting another recipient', () => {
   expect(() => stageEmail({...matter, mb_dmb_email: null}, 'New Submission', null, 'https://portal.example.com', null)).toThrow();
 });
+test('In Progress requires MB/DMB and investigator contacts', () => {
+  expect(() => stageEmail({...matter, mb_dmb_email: null}, 'In Progress', 'investigator@example.com', 'https://portal.example.com', null)).toThrow();
+  expect(() => stageEmail(matter, 'In Progress', null, 'https://portal.example.com', null)).toThrow();
+});
 test('mail always uses approved Regulatory Relations sender', () => {
   const raw = rawStageEmail(stageEmail(matter, 'New Submission', null, 'https://portal.example.com', null));
   expect(Buffer.from(raw, 'base64url').toString('utf8')).toContain('From: Regulatory Relations <regulatoryrelations@exprealty.net>');

@@ -11,7 +11,7 @@
 
 - Keep Cloud as the authoritative intake store; database insert triggers queue external copies so copy outages cannot lose submissions.
 - Submission broker contact names and emails use shared intake validation and dedicated nullable columns on each submission type; queued external copies retain them in payload without external schema changes.
-- Stage emails use a database-owned once-per-case/stage queue and server-only Gmail transport; public delivery accepts only a stored initial receipt ID, staff workspace dispatch handles stage mail, and uncertain sends cannot be automatically replayed. Response deadlines anchor to confirmed Gmail acceptance or staff-confirmed prior invitation, never a stage change alone.
+- Stage emails use a database-owned once-per-case/stage queue and server-only Gmail transport; confirmed staff stage changes immediately dispatch the stored queue row and workspace polling provides fallback. Public delivery accepts only a stored initial receipt ID, and uncertain sends cannot be automatically replayed. Response deadlines anchor to confirmed Gmail acceptance or staff-confirmed prior invitation, never a stage change alone.
 - External copies use a server-only client; list reads verify roles and scope non-staff row IDs through authoritative Cloud RLS before querying external data. Public delivery accepts only a stored submission ID and exposes no records.
 - Case naming and staff-role helpers live in case-rules; database triggers own unique response matching and attachment linkage so every intake path obeys the same rules.
 - External table DDL is supplied for the owner to apply separately; managed migrations only target the portal's Cloud database.

@@ -1,5 +1,10 @@
 import { test, expect } from "bun:test";
-import { buildHubMessage, HUB_CONVERSATION_ID } from "./hub-notify";
+import { buildHubMessage, HUB_CONVERSATION_ID, hubPortalOrigin } from "./hub-notify";
+
+test("Hub links use a public origin instead of localhost", () => {
+  expect(hubPortalOrigin(new URL("https://localhost:8080"))).toBe("https://id-preview--a4df2ad6-9251-478e-bd1c-f847920075df.lovable.app");
+  expect(hubPortalOrigin(new URL("https://portal.example/cases/a"))).toBe("https://portal.example");
+});
 
 test("Hub messages preserve the IDR channel, investigator mention and matter link", () => {
   const mention = { userId: "anna-test", displayName: "Anna Luedke", username: "annaluedke" };

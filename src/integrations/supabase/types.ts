@@ -61,6 +61,323 @@ export type Database = {
           },
         ]
       }
+      case_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          after_data: Json | null
+          before_data: Json | null
+          created_at: string
+          dispute_id: string
+          id: string
+          record_type: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          dispute_id: string
+          id?: string
+          record_type: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          dispute_id?: string
+          id?: string
+          record_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_audit_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_communications: {
+        Row: {
+          body: string
+          created_at: string
+          dispute_id: string
+          id: string
+          kind: string
+          recipients: string
+          recorded_by: string | null
+          sent_at: string | null
+          subject: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          dispute_id: string
+          id?: string
+          kind: string
+          recipients: string
+          recorded_by?: string | null
+          sent_at?: string | null
+          subject: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          dispute_id?: string
+          id?: string
+          kind?: string
+          recipients?: string
+          recorded_by?: string | null
+          sent_at?: string | null
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_communications_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_panelists: {
+        Row: {
+          approved: boolean
+          challenge: string
+          challenge_outcome: string
+          created_at: string
+          dispute_id: string
+          email: string
+          full_name: string
+          id: string
+          is_chair: boolean
+          licensed_states: string[]
+          status: string
+          team_licensed_states: string[]
+        }
+        Insert: {
+          approved?: boolean
+          challenge?: string
+          challenge_outcome?: string
+          created_at?: string
+          dispute_id: string
+          email?: string
+          full_name: string
+          id?: string
+          is_chair?: boolean
+          licensed_states?: string[]
+          status?: string
+          team_licensed_states?: string[]
+        }
+        Update: {
+          approved?: boolean
+          challenge?: string
+          challenge_outcome?: string
+          created_at?: string
+          dispute_id?: string
+          email?: string
+          full_name?: string
+          id?: string
+          is_chair?: boolean
+          licensed_states?: string[]
+          status?: string
+          team_licensed_states?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_panelists_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_tasks: {
+        Row: {
+          assignee_id: string | null
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          dispute_id: string
+          due_at: string | null
+          evidence_note: string
+          id: string
+          phase: string
+          template_key: string | null
+          title: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          dispute_id: string
+          due_at?: string | null
+          evidence_note?: string
+          id?: string
+          phase: string
+          template_key?: string | null
+          title: string
+        }
+        Update: {
+          assignee_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          dispute_id?: string
+          due_at?: string | null
+          evidence_note?: string
+          id?: string
+          phase?: string
+          template_key?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_tasks_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_workflow: {
+        Row: {
+          appeal_decided_at: string | null
+          appeal_due_at: string | null
+          appeal_new_information: string
+          appeal_outcome: string
+          appeal_unavailable_reason: string
+          binding_agreements_checked: boolean
+          broker_ack_at: string | null
+          ce_certificate_note: string
+          ce_completed_at: string | null
+          ce_due_at: string | null
+          complaint_notified_at: string | null
+          decision_at: string | null
+          decision_draft: string
+          director_ack_at: string | null
+          dispute_id: string
+          enterprise_recorded: boolean
+          followup_note: string
+          hearing_notice_at: string | null
+          hubspot_recorded: boolean
+          mediation_attempts: string
+          mediation_broker: string
+          mediation_complete: boolean
+          mediation_outcome: string
+          meeting_duration_minutes: number
+          meeting_location: string
+          paperwork_received_at: string | null
+          payout_at: string | null
+          regional_review_complete: boolean
+          released_at: string | null
+          released_decision: string
+          repayment_amount: number | null
+          repayment_due_at: string | null
+          repayment_received_at: string | null
+          updated_at: string
+          voluntary_confirmed: boolean
+        }
+        Insert: {
+          appeal_decided_at?: string | null
+          appeal_due_at?: string | null
+          appeal_new_information?: string
+          appeal_outcome?: string
+          appeal_unavailable_reason?: string
+          binding_agreements_checked?: boolean
+          broker_ack_at?: string | null
+          ce_certificate_note?: string
+          ce_completed_at?: string | null
+          ce_due_at?: string | null
+          complaint_notified_at?: string | null
+          decision_at?: string | null
+          decision_draft?: string
+          director_ack_at?: string | null
+          dispute_id: string
+          enterprise_recorded?: boolean
+          followup_note?: string
+          hearing_notice_at?: string | null
+          hubspot_recorded?: boolean
+          mediation_attempts?: string
+          mediation_broker?: string
+          mediation_complete?: boolean
+          mediation_outcome?: string
+          meeting_duration_minutes?: number
+          meeting_location?: string
+          paperwork_received_at?: string | null
+          payout_at?: string | null
+          regional_review_complete?: boolean
+          released_at?: string | null
+          released_decision?: string
+          repayment_amount?: number | null
+          repayment_due_at?: string | null
+          repayment_received_at?: string | null
+          updated_at?: string
+          voluntary_confirmed?: boolean
+        }
+        Update: {
+          appeal_decided_at?: string | null
+          appeal_due_at?: string | null
+          appeal_new_information?: string
+          appeal_outcome?: string
+          appeal_unavailable_reason?: string
+          binding_agreements_checked?: boolean
+          broker_ack_at?: string | null
+          ce_certificate_note?: string
+          ce_completed_at?: string | null
+          ce_due_at?: string | null
+          complaint_notified_at?: string | null
+          decision_at?: string | null
+          decision_draft?: string
+          director_ack_at?: string | null
+          dispute_id?: string
+          enterprise_recorded?: boolean
+          followup_note?: string
+          hearing_notice_at?: string | null
+          hubspot_recorded?: boolean
+          mediation_attempts?: string
+          mediation_broker?: string
+          mediation_complete?: boolean
+          mediation_outcome?: string
+          meeting_duration_minutes?: number
+          meeting_location?: string
+          paperwork_received_at?: string | null
+          payout_at?: string | null
+          regional_review_complete?: boolean
+          released_at?: string | null
+          released_decision?: string
+          repayment_amount?: number | null
+          repayment_due_at?: string | null
+          repayment_received_at?: string | null
+          updated_at?: string
+          voluntary_confirmed?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_workflow_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: true
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dispute_appeals: {
         Row: {
           appellant_email: string
@@ -119,8 +436,14 @@ export type Database = {
           file_name: string
           file_path: string
           id: string
+          in_hearing_packet: boolean
           kind: string
           response_id: string | null
+          review_note: string
+          review_status: string
+          submitted_as: string
+          submitted_by_name: string
+          visibility: string
         }
         Insert: {
           appeal_id?: string | null
@@ -129,8 +452,14 @@ export type Database = {
           file_name: string
           file_path: string
           id?: string
+          in_hearing_packet?: boolean
           kind?: string
           response_id?: string | null
+          review_note?: string
+          review_status?: string
+          submitted_as?: string
+          submitted_by_name?: string
+          visibility?: string
         }
         Update: {
           appeal_id?: string | null
@@ -139,8 +468,14 @@ export type Database = {
           file_name?: string
           file_path?: string
           id?: string
+          in_hearing_packet?: boolean
           kind?: string
           response_id?: string | null
+          review_note?: string
+          review_status?: string
+          submitted_as?: string
+          submitted_by_name?: string
+          visibility?: string
         }
         Relationships: [
           {
@@ -251,6 +586,7 @@ export type Database = {
       disputes: {
         Row: {
           additional_comments: string | null
+          archived_at: string | null
           assigned_to: string | null
           case_number: string
           closing_date: string | null
@@ -284,6 +620,7 @@ export type Database = {
         }
         Insert: {
           additional_comments?: string | null
+          archived_at?: string | null
           assigned_to?: string | null
           case_number: string
           closing_date?: string | null
@@ -317,6 +654,7 @@ export type Database = {
         }
         Update: {
           additional_comments?: string | null
+          archived_at?: string | null
           assigned_to?: string | null
           case_number?: string
           closing_date?: string | null
@@ -578,6 +916,13 @@ export type Database = {
       can_view_dispute: {
         Args: { _dispute_id: string; _user_id: string }
         Returns: boolean
+      }
+      case_released_decision: {
+        Args: { _dispute_id: string }
+        Returns: {
+          decision: string
+          released_at: string
+        }[]
       }
       has_role: {
         Args: {

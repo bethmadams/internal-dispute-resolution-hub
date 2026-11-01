@@ -53,6 +53,9 @@ export type DisputeResponseRow = {
   summary: string;
   additional_comments: string | null;
   created_at: string;
+  updated_at: string;
+  mb_dmb_name: string | null;
+  mb_dmb_email: string | null;
 };
 
 export type Attachment = {
@@ -239,6 +242,9 @@ export type AppealRow = {
   new_evidence: string;
   submitted_on: string;
   created_at: string;
+  updated_at: string;
+  mb_dmb_name: string | null;
+  mb_dmb_email: string | null;
 };
 
 export const appealsQuery = {

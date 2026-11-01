@@ -29,7 +29,8 @@ import {
   type Dispute,
   type DisputeNote,
 } from "@/lib/hub";
-import { responsesQuery } from "@/lib/intake";
+import { responsesQuery, appealsQuery } from "@/lib/intake";
+import { SubmissionEditor } from '@/components/SubmissionEditor';
 import { caseTitle } from "@/lib/case-rules";
 import { DeleteCard } from "@/components/DeleteCard";
 import { CaseTasks } from "@/components/CaseTasks";
@@ -107,6 +108,8 @@ function CaseDetail() {
   const { data: profiles = [] } = useQuery(profilesQuery);
   const { data: allResponses = [] } = useQuery(responsesQuery);
   const responses = allResponses.filter((response) => response.dispute_id === caseId);
+  const { data: allAppeals = [] } = useQuery(appealsQuery);
+  const appeals = allAppeals.filter(appeal => appeal.dispute_id === caseId);
   
 
   useEffect(() => {
@@ -221,6 +224,7 @@ function CaseDetail() {
 
           <TabsContent value="submission"><section className="py-6">
             <h2 className="text-lg font-semibold">Submission details</h2>
+            <SubmissionEditor kind="hearing_request" record={dispute} />
             {dispute.reasons?.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
                 {dispute.reasons.map((r) => (
@@ -269,12 +273,16 @@ function CaseDetail() {
               {responses.map((response) => (
                 <li key={response.id} className="border-l-2 border-accent pl-4">
                   <h3 className="font-medium">{response.responder_name}</h3>
+                  <SubmissionEditor kind="response" record={response} />
                   <p className="mt-1 text-xs text-muted-foreground">Respondent · {formatDate(response.submitted_on)} · {response.state ?? "—"}</p>
                   <p className="mt-3 whitespace-pre-wrap text-sm">{response.summary}</p>
                   {response.additional_comments && <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">{response.additional_comments}</p>}
                 </li>
               ))}
             </ul>
+            <h2 className="mt-6 text-lg font-semibold">Appeal requests</h2>
+            {appeals.length === 0 && <p className="mt-3 text-sm text-muted-foreground">No appeals received for this case.</p>}
+            <ul className="mt-4 space-y-5">{appeals.map(appeal => <li key={appeal.id} className="border-l-2 border-accent pl-4"><h3 className="font-medium">{appeal.appellant_name}</h3><p className="my-2 text-xs text-muted-foreground">{appeal.appellant_role} · {formatDate(appeal.submitted_on)}</p><SubmissionEditor kind="appeal" record={appeal} /><p className="mt-3 whitespace-pre-wrap text-sm">{appeal.new_evidence}</p></li>)}</ul>
           </section></TabsContent>
 
           <TabsContent value="documents"><CaseDocuments caseId={caseId} /></TabsContent>

@@ -44,6 +44,7 @@ import { DeleteCard } from "@/components/DeleteCard";
 import { tasksQuery } from "@/lib/sop-data";
 import { deadlineState } from "@/lib/sop-rules";
 import { Checkbox } from "@/components/ui/checkbox";
+import { SubmissionEditor } from '@/components/SubmissionEditor';
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -464,6 +465,7 @@ function Dashboard() {
                   <p className="mt-4 line-clamp-3 flex-1 text-sm text-muted-foreground whitespace-pre-wrap">
                     {r.summary}
                   </p>
+                  <div className="mt-3"><SubmissionEditor kind="response" record={r} /></div>
 
                   <div className="mt-5 flex flex-col gap-3 border-t border-border pt-4">
                     <Select
@@ -543,6 +545,7 @@ function Dashboard() {
                   <p className="mt-4 line-clamp-3 flex-1 text-sm text-muted-foreground whitespace-pre-wrap">
                     {a.new_evidence}
                   </p>
+                  <div className="mt-3"><SubmissionEditor kind="appeal" record={a} /></div>
 
                   <div className="mt-5 flex flex-col gap-3 border-t border-border pt-4">
                     {isStaff && <Select

@@ -1,11 +1,14 @@
 import { describe, expect, test } from 'bun:test';
-import { canReadSubmissionCopies, copyRow, submissionTables } from './submission-copy';
+import { canReadSubmissionCopies, copyRow, submitterLabel, submissionTables } from './submission-copy';
 describe('external submission requirements', () => {
-  test('only admins and investigators can read copies', () => {
-    expect(canReadSubmissionCopies(['admin'])).toBe(true);
-    expect(canReadSubmissionCopies(['investigator'])).toBe(true);
-    for (const role of ['viewer', 'complainant', 'respondent', 'panel_member', 'panel_chair', 'broker', 'director']) expect(canReadSubmissionCopies([role])).toBe(false);
+  test('every signed-in user with a role can read copies', () => {
+    for (const role of ['admin', 'investigator', 'viewer', 'complainant', 'respondent', 'panel_member', 'panel_chair', 'broker', 'director']) expect(canReadSubmissionCopies([role])).toBe(true);
     expect(canReadSubmissionCopies([])).toBe(false);
+  });
+  test('submitter is identified by form', () => {
+    expect(submitterLabel('hearing_request')).toBe('Complainant');
+    expect(submitterLabel('hearing_response')).toBe('Respondent');
+    expect(submitterLabel('appeal', { appellant_role: 'Respondent' })).toBe('Appellant (Respondent)');
   });
   test('each form uses a separate table', () => {
     expect(submissionTables.hearing_request).toBe('hearing_request_submissions');

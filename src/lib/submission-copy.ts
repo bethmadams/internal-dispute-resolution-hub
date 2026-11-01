@@ -5,7 +5,18 @@ export const submissionTables = {
 } as const;
 export type SubmissionType = keyof typeof submissionTables;
 export function canReadSubmissionCopies(roles: string[]) {
-  return roles.includes("admin") || roles.includes("investigator");
+  // Any signed-in portal user with an assigned role may read submissions.
+  return roles.length > 0;
+}
+export const SUBMITTER_LABELS: Record<SubmissionType, string> = {
+  hearing_request: "Complainant",
+  hearing_response: "Respondent",
+  appeal: "Appellant",
+};
+export function submitterLabel(type: SubmissionType, payload?: Record<string, unknown> | null) {
+  const role = payload?.['appellant_role'];
+  if (type === 'appeal' && typeof role === 'string' && role) return `Appellant (${role})`;
+  return SUBMITTER_LABELS[type];
 }
 export function copyRow(id: string, payload: Record<string, unknown>, createdAt: string) {
   return {

@@ -58,7 +58,7 @@ export function buildHubMessage(opts: {
     lines.push("", `Assigned investigator: ${opts.investigatorName}`);
   }
   if (opts.caseUrl) {
-    lines.push("", opts.caseUrl);
+    lines.push("", `View the matter: ${opts.caseUrl}`);
   }
   const message: HubMessage = {
     conversation_id: HUB_CONVERSATION_ID,

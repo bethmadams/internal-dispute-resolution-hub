@@ -40,7 +40,9 @@ function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }
   } });
   const save = async () => {
     if (!date || !body.trim() || !time || !assignee) return;
-    const due = new Date(date); const [h, m] = time.split(":").map(Number); due.setHours(h, m, 0, 0);
+    const due = new Date(date); const [h, m] = time.split(":").map(Number);
+    if (h === undefined || m === undefined || !Number.isFinite(h) || !Number.isFinite(m)) return;
+    due.setHours(h, m, 0, 0);
     setBusy(true);
     try {
       const id = await saveReminder(r ? "edit" : "create", { ...(r ? { id: r.id } : { dispute_id: editor.caseId }), body: body.trim(), due_at: due.toISOString(), lead_minutes: Number(lead), user_id: assignee });

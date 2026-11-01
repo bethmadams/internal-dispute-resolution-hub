@@ -14,8 +14,8 @@ export function PersonalReminderAlerts() {
   useEffect(() => {
     const refresh = () => { void client.invalidateQueries({ queryKey: ["personal_reminders"] }); };
     window.addEventListener("focus", refresh);
-    // Polling is authoritative; this same-origin event refreshes local mutations immediately.
-    return () => window.removeEventListener("focus", refresh);
+    const channel = supabase.channel(`personal-reminders-${crypto.randomUUID()}`).on("postgres_changes", { event: "*", schema: "public", table: "personal_reminders" }, refresh).subscribe();
+    return () => { window.removeEventListener("focus", refresh); void supabase.removeChannel(channel); };
   }, [client]);
   useEffect(() => {
     let stopped = false;

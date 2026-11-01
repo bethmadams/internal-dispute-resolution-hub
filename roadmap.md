@@ -1,4 +1,5 @@
 # Tasks
+- [x] Add a case progress dashboard with current stages, recorded deadlines and assignments; verified signed-in case navigation, search, mobile layout and 17 passing tests.
 - [x] Add the proposed case workflow to User Manual | SOP and verify a shareable PDF download containing no private case records.
 - [x] Add staff-only AI Gateway reminder extraction with suggested due dates and review before saving; verified a real request and saved draft.
 - [x] Make reminder case names clickable from My Reminders and verify direct matter navigation.

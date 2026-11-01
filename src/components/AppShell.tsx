@@ -12,6 +12,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 
 const nav = [
+  { to: "/case-dashboard", label: "Case Dashboard", icon: LayoutDashboard },
   { to: "/dashboard", label: "Case Board", icon: LayoutDashboard },
   { to: "/metrics", label: "Metrics | Reporting", icon: BarChart3 },
   { to: "/resources", label: "Resource Library", icon: Library },

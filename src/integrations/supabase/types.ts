@@ -1041,6 +1041,39 @@ export type Database = {
         }
         Relationships: []
       }
+      submission_corrections: {
+        Row: {
+          actor_id: string
+          after_data: Json
+          before_data: Json
+          created_at: string
+          dispute_id: string | null
+          form_type: string
+          id: string
+          submission_id: string
+        }
+        Insert: {
+          actor_id: string
+          after_data: Json
+          before_data: Json
+          created_at?: string
+          dispute_id?: string | null
+          form_type: string
+          id?: string
+          submission_id: string
+        }
+        Update: {
+          actor_id?: string
+          after_data?: Json
+          before_data?: Json
+          created_at?: string
+          dispute_id?: string | null
+          form_type?: string
+          id?: string
+          submission_id?: string
+        }
+        Relationships: []
+      }
       team_invites: {
         Row: {
           accepted_at: string | null

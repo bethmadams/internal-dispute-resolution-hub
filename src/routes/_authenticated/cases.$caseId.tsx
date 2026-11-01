@@ -43,6 +43,7 @@ import { CaseCommunications } from "@/components/CaseCommunications";
 import { CaseOperations } from "@/components/CaseOperations";
 import { PersonalReminders } from "@/components/PersonalReminders";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CaseStageChange } from "@/components/CaseStageChange";
 
 const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
 
@@ -352,24 +353,7 @@ function CaseDetail() {
           )}
           {isStaff && (
           <>
-          <div className="space-y-2">
-            <Label>Stage</Label>
-            <Select
-              value={dispute.stage}
-              onValueChange={(v) => patch.mutate({ stage: v as Stage })}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {STAGES.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <CaseStageChange dispute={dispute} />
           <div className="space-y-2">
             <Label>Priority</Label>
             <Select

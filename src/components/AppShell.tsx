@@ -7,6 +7,7 @@ import { useCurrentUser } from "@/hooks/use-session";
 import { rolesQuery, ROLE_LABELS } from "@/lib/hub";
 import { NotificationBell } from "@/components/NotificationBell";
 import { HubNoticeDispatcher } from "@/components/HubNoticeDispatcher";
+import { PersonalReminderAlerts } from "@/components/PersonalReminderAlerts";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
@@ -57,6 +58,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-1 sm:gap-3"><Button variant="ghost" size="sm" asChild><Link to="/dashboard"><Home className="size-4" /><span className="hidden sm:inline">Home</span></Link></Button>{myRole === "admin" && <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild><Link to="/team"><ShieldCheck className="size-4" />Admin</Link></Button>}<NotificationBell /><HubNoticeDispatcher /><Button variant="ghost" size="sm" onClick={signOut} aria-label="Sign out"><LogOut className="size-4" /><span className="hidden sm:inline">Sign out</span></Button></div>
           </div>
         </header>
+        <PersonalReminderAlerts />
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8 sm:py-10">{children}</main>
       </div>
     </div>

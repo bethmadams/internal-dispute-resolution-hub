@@ -41,6 +41,7 @@ import { CasePanel } from "@/components/CasePanel";
 import { CaseWorkflow, ReleasedDecision } from "@/components/CaseWorkflow";
 import { CaseCommunications } from "@/components/CaseCommunications";
 import { CaseOperations } from "@/components/CaseOperations";
+import { PersonalReminders } from "@/components/PersonalReminders";
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
@@ -265,6 +266,7 @@ function CaseDetail() {
           </section>
 
           <CaseDocuments caseId={caseId} />
+          <PersonalReminders caseId={caseId} />
 
           {isStaff && <><CaseTasks caseId={caseId}/><CaseWorkflow caseId={caseId}/><CasePanel caseId={caseId} state={dispute.state}/><CaseCommunications caseId={caseId}/><CaseOperations dispute={dispute}/></>}
           {!isStaff && <ReleasedDecision caseId={caseId}/>}

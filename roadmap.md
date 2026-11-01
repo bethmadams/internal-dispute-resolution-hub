@@ -1,5 +1,6 @@
 # Tasks
-- [ ] Match My Reminders to the uploaded REsolve layout and personal reminder rules, preserving SOP deadlines; awaiting confirmation of optional Google Calendar scope.
+- [ ] Match My Reminders to the uploaded REsolve layout and personal reminder rules, preserving SOP deadlines; verify the signed-in creation, snooze and completion flows.
+- [ ] Enable per-user Google Calendar reminder sync. Blocked: connection setup was declined; no Calendar client is configured.
 - [x] Match the portal workspace to the uploaded REsolve screenshot, preserving existing case access and notification delivery.
 - [x] Add user manual, metrics, training, notifications and reminder views using existing authorized records; verify signed-in navigation.
 - [x] Retry the master Drive folder after the permission update and use accessible checklists to refine SOP tasks; uploaded SOP governs conflicts.

@@ -14,12 +14,15 @@ import { useMyRole } from "@/hooks/use-role";
 import { formatDateTime, notificationsQuery, notificationReadsQuery } from "@/lib/hub";
 import { tasksQuery } from "@/lib/sop-data";
 import { deadlineState } from "@/lib/sop-rules";
+import { remindersQuery } from "@/lib/reminders";
 
 export function NotificationBell() {
   const { user } = useCurrentUser();
   const { isStaff } = useMyRole();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const { data: reminders = [] } = useQuery(remindersQuery);
+  const dueReminders = reminders.filter(r => r.user_id === user?.id && !r.done && Date.parse(r.remind_at) <= Date.now());
   const {data:tasks=[]}=useQuery({...tasksQuery(),enabled:isStaff,refetchInterval:60000});
   const urgentTasks=tasks.filter(t=>['Due soon','Overdue'].includes(deadlineState(t.due_at,t.completed_at)));
 
@@ -48,10 +51,11 @@ export function NotificationBell() {
     };
   }, [isStaff, queryClient]);
 
-  if (!isStaff) return null;
+  if (!user) return null;
 
   const readIds = new Set(reads.map((r) => r.notification_id));
   const unread = notifications.filter((n) => !readIds.has(n.id));
+  const count = unread.length + urgentTasks.length + dueReminders.length;
 
   const markAllRead = async () => {
     if (!user || unread.length === 0) return;
@@ -76,14 +80,14 @@ export function NotificationBell() {
           variant="ghost"
           size="icon"
           aria-label={
-            unread.length+urgentTasks.length > 0 ? `${unread.length+urgentTasks.length} new notifications` : "Notifications"
+            count > 0 ? `${count} new notifications` : "Notifications"
           }
           className="relative text-foreground hover:bg-muted"
         >
           <Bell className="size-4" />
-          {unread.length+urgentTasks.length > 0 && (
+          {count > 0 && (
             <span className="absolute -top-0.5 -right-0.5 flex min-w-[1.15rem] items-center justify-center rounded-full bg-destructive px-1 text-[0.625rem] leading-[1.15rem] font-semibold text-destructive-foreground">
-              {unread.length+urgentTasks.length > 99 ? "99+" : unread.length+urgentTasks.length}
+              {count > 99 ? "99+" : count}
             </span>
           )}
         </Button>
@@ -96,8 +100,9 @@ export function NotificationBell() {
           </p>
         </div>
         <ul className="max-h-96 divide-y overflow-y-auto">
+          {dueReminders.map(r => <li key={r.id}><Link to="/cases/$caseId" params={{ caseId: r.dispute_id }} onClick={() => setOpen(false)} className="block px-4 py-3 hover:bg-muted"><p className="text-sm font-medium text-destructive">Reminder: {r.body}</p><p className="mt-1 text-xs text-muted-foreground">Due {formatDateTime(r.due_at)}</p></Link></li>)}
           {urgentTasks.map(t=><li key={t.id}><Link to="/cases/$caseId" params={{caseId:t.dispute_id}} onClick={()=>setOpen(false)} className="block px-4 py-3 hover:bg-muted"><p className="text-sm font-medium text-destructive">{deadlineState(t.due_at,t.completed_at)}: {t.title}</p><p className="text-xs text-muted-foreground">{formatDateTime(t.due_at)}</p></Link></li>)}
-          {notifications.length === 0 && urgentTasks.length===0 && (
+          {notifications.length === 0 && urgentTasks.length===0 && dueReminders.length === 0 && (
             <li className="px-4 py-6 text-sm text-muted-foreground">No activity yet.</li>
           )}
           {notifications.map((n) => {

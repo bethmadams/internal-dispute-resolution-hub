@@ -1,5 +1,5 @@
 # Tasks
-- [ ] Refresh the overall workspace UI from the available REsolve reference; verify signed-in navigation, case tabs and compact board on desktop and mobile.
+- [x] Refresh the overall workspace UI from the available REsolve reference; verified signed-in board, case tab navigation, mobile menu and no horizontal overflow/runtime errors; six existing case-rule tests passed.
 - [x] Verify administrators can change Assigned to; tested unassignment and reassignment through case controls with stored assignment confirmed.
 - [x] Remove Priority from case controls and add checklist-aligned stages with section navigation; verified six added stages, unique preserved tasks, no inferred deadlines or extra stage emails, mobile layout, 22 tests, and updated manual/PDF.
 - [x] Verify immediate In Progress email sending after stage confirmation; Gmail accepted the Anna-only test, Communications recorded it, response deadline stayed unset, and the temporary case was removed. Existing Banana v. Orange needs MB/DMB email before delivery.

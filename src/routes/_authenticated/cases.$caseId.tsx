@@ -35,6 +35,7 @@ import {
 } from "@/lib/hub";
 import { responsesQuery } from "@/lib/intake";
 import { caseTitle } from "@/lib/case-rules";
+import { DeleteCard } from "@/components/DeleteCard";
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
@@ -160,6 +161,7 @@ function CaseDetail() {
             </Badge>
           </div>
         </div>
+        <DeleteCard table="disputes" id={caseId} label={`${dispute.case_number} — ${caseTitle(dispute.filed_by, dispute.respondent, dispute.title)}`} returnToBoard />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">

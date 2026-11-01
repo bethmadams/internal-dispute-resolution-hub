@@ -186,10 +186,10 @@ function CaseDetail() {
             {CASE_TABS.filter(item => isStaff || !['checklist','workflow','panel','communications','history','access'].includes(item)).map(item => <TabsTrigger key={item} value={item}>{({overview:'Overview',submission:'Submission',responses:'Responses',documents:'Documents',reminders:'Reminders',checklist:'Checklist',workflow:'Workflow',panel:'Panel',communications:'Communications',history:'History & exports',access:'Case access',resolution:'Resolution',notes:'Notes'})[item]}</TabsTrigger>)}
           </TabsList>
           <TabsContent value="overview"><section className="py-6">
-            <div className="flex items-center justify-between gap-3">
+            <div className="grid gap-3">
               <h2 className="text-lg font-semibold">Summary</h2>
               {dispute.source === "public_form" && (
-                <Badge variant="outline">Submitted via hearing request form</Badge>
+                <Badge variant="outline" className="justify-self-start">Submitted via hearing request form</Badge>
               )}
             </div>
             <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">

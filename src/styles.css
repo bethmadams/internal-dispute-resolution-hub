@@ -229,6 +229,7 @@
   margin: 0 -20px 20px;
   padding: 12px 16px;
 }
+.case-file [role="tabpanel"] > section > div:first-child > h2 { margin-bottom: 0; }
 .case-file .case-controls > h2 { margin-top: -20px; }
 .case-file .case-controls { border-radius: var(--radius); overflow: hidden; }
 .case-file [role="tabpanel"] > section { padding-top: 0; }

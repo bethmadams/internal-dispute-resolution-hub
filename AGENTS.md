@@ -15,7 +15,8 @@
 - External table DDL is supplied for the owner to apply separately; managed migrations only target the portal's Cloud database.
 - Card deletion uses the shared DeleteCard control and existing admin-only Cloud DELETE policies; confirmation describes retained files, external copies, and unlinked child submissions.
 - SOP operational records are staff-only; assigned participants read released decisions through a case-authorized RPC. Attachment visibility is enforced both on metadata and storage.
-- SOP tasks are explicit staff-initialized templates, with staff-confirmed deadline anchors and holidays; the bell polls pending due dates so alerts advance without requiring case edits.
+- SOP tasks initialize idempotently by stage through database triggers or explicit staff setup; anchors and holidays stay staff-confirmed. Nested automated task inserts retain audits without duplicate bell/Hub notices; the stage change supplies the notification.
+- Case section tabs use URL search state; stage transitions use an authenticated staff-checked RPC with an expected-stage guard and optional confirmed response-email anchor.
 - Case exports use the signed-in client and authorized storage links; private archives include staff data while hearing packets include selected documents only.
 - Hub delivery mirrors portal notifications to the eXp Hub channel via src/lib/hub-notify.* (constants / server calls / dispatch function) claimed one-row-per-notification in public.hub_deliveries; HubNoticeDispatcher polls from AppShell and the red bell stays independent.
 - Authenticated workspace navigation lives in AppShell; metrics derive from RLS-visible disputes. Personal reminders use a separate case-authorized table and guarded RPCs because creator/assignee ownership, snoozing and popup claims must not alter SOP tasks or generate workflow audit alerts.

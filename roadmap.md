@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Restyle case cards and opened case details using the supplied REsolve screenshots, preserving fields, permissions and actions.
 - [x] Connect Anna's Gmail and verify Regulatory Relations is an accepted send-as address; sending permission is granted and Gmail accepted live test stage messages.
 - [x] Add MB/DMB name and email address fields on all three submission forms; verify editable fields, validation tests and database columns. Live submission delivery remains untested to avoid generating test case notifications.
 - [x] Replace the long case file with section tabs, preserving staff and participant access; verified desktop/mobile tab selection.

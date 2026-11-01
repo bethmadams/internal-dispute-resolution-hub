@@ -1096,6 +1096,15 @@ export type Database = {
         Args: { _action: string; _data: Json }
         Returns: string
       }
+      transition_case_stage: {
+        Args: {
+          _case_id: string
+          _expected_stage: Database["public"]["Enums"]["dispute_stage"]
+          _response_sent_at?: string
+          _stage: Database["public"]["Enums"]["dispute_stage"]
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role:

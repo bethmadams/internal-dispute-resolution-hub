@@ -71,6 +71,13 @@
       "when": 1793498451938,
       "tag": "0009_personal_reminder_live_changes",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793500893612,
+      "tag": "0010_stage_checklist_automation",
+      "breakpoints": true
     }
   ]
 }

@@ -43,12 +43,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CaseStageChange } from "@/components/CaseStageChange";
 import { CaseStageEmails } from "@/components/CaseStageEmails";
 import { CASE_STAGE_GUIDE } from '@/lib/case-stages';
+import { CHECKLIST_STAGES, type CaseStage } from '@/lib/case-stages';
+import { StageChecklistForm } from '@/components/StageChecklistForm';
 
 const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminders', 'checklist', 'workflow', 'panel', 'communications', 'history', 'access', 'resolution', 'notes'] as const;
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
-  validateSearch: (search: Record<string, unknown>): { tab?: (typeof CASE_TABS)[number] } => { const tab = CASE_TABS.find(tab => tab === search['tab']); return tab ? { tab } : {}; },
+  validateSearch: (search: Record<string, unknown>): { tab?: (typeof CASE_TABS)[number]; checklist?: CaseStage } => { const tab = CASE_TABS.find(tab => tab === search['tab']); const checklist = CHECKLIST_STAGES.find(stage => stage === search['checklist']); return { ...(tab ? { tab } : {}), ...(checklist ? { checklist } : {}) }; },
   head: () => ({
     meta: [
       { title: "Case File | eXp Internal Dispute Resolution Portal" },
@@ -74,7 +76,7 @@ function CaseDetail() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
   const { isStaff } = useMyRole();
-  const { tab = 'overview' } = Route.useSearch();
+  const { tab = 'overview', checklist } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [note, setNote] = useState("");
   const [resolution, setResolution] = useState("");
@@ -288,7 +290,7 @@ function CaseDetail() {
           <TabsContent value="documents"><CaseDocuments caseId={caseId} /></TabsContent>
           <TabsContent value="reminders"><PersonalReminders caseId={caseId} /></TabsContent>
 
-          {isStaff && <><TabsContent value="checklist"><CaseTasks caseId={caseId}/></TabsContent><TabsContent value="workflow"><CaseWorkflow caseId={caseId}/></TabsContent><TabsContent value="panel"><CasePanel caseId={caseId} state={dispute.state}/></TabsContent><TabsContent value="communications"><CaseStageEmails dispute={dispute}/><CaseCommunications caseId={caseId}/></TabsContent><TabsContent value="history"><CaseOperations dispute={dispute}/></TabsContent></>}
+          {isStaff && <><TabsContent value="checklist"><StageChecklistForm key={checklist ?? dispute.stage} caseId={caseId} stage={checklist ?? dispute.stage} onStageChange={stage => navigate({ search: { tab:'checklist',checklist:stage }, replace:true })} onOpenRecords={() => { const target = CASE_STAGE_GUIDE[checklist ?? dispute.stage].tab; navigate({search:{tab:target==='checklist'?'workflow':target},replace:true}); }} /><details className="mt-6 border-t border-border pt-4"><summary className="cursor-pointer text-sm font-semibold">SOP task completion & confirmed deadlines</summary><CaseTasks caseId={caseId}/></details></TabsContent><TabsContent value="workflow"><CaseWorkflow caseId={caseId}/></TabsContent><TabsContent value="panel"><CasePanel caseId={caseId} state={dispute.state}/></TabsContent><TabsContent value="communications"><CaseStageEmails dispute={dispute}/><CaseCommunications caseId={caseId}/></TabsContent><TabsContent value="history"><CaseOperations dispute={dispute}/></TabsContent></>}
 
           {isStaff && <TabsContent value="access"><CaseAccess caseId={caseId} isClosed={dispute.stage === "Closed"} /></TabsContent>}
 
@@ -364,7 +366,7 @@ function CaseDetail() {
           <CaseStageChange dispute={dispute} />
           <div className="space-y-3 border-b border-border pb-4">
             <p className="text-sm leading-relaxed text-muted-foreground">{CASE_STAGE_GUIDE[dispute.stage].checkpoint}</p>
-            <Button variant="outline" size="sm" className="h-auto w-full whitespace-normal py-2" onClick={() => navigate({ search: { tab: CASE_STAGE_GUIDE[dispute.stage].tab }, replace: true })}>{CASE_STAGE_GUIDE[dispute.stage].action}</Button>
+            <Button variant="outline" size="sm" className="h-auto w-full whitespace-normal py-2" onClick={() => navigate({ search: { tab: 'checklist', checklist: dispute.stage }, replace: true })}>Open {dispute.stage} checklist</Button>
           </div>
           <div className="space-y-2">
             <Label>Assigned to</Label>

@@ -1,0 +1,123 @@
+import type { CaseStage } from './case-stages';
+export type ChecklistAnswer = { status: 'pending' | 'yes' | 'no' | 'na'; notes: string };
+export type ChecklistAnswers = Record<string, ChecklistAnswer>;
+export type ChecklistQuestion = { key: string; question: string; requirement?: string };
+const q = (key: string, question: string, requirement?: string): ChecklistQuestion => ({ key, question, requirement });
+export const CHECKLIST_QUESTIONS: Record<CaseStage, ChecklistQuestion[]> = {
+  'New Submission': [
+    q('intake_parties','Have the complainant, respondent and their contact details been confirmed?'),
+    q('intake_state','Has the state where the issue occurred been confirmed?'),
+    q('intake_scope','Have the dispute reasons, requested remedy and monetary information been reviewed?'),
+    q('intake_documents','Has the initial hearing request and signed binding agreement been received?'),
+    q('intake_assignment','Has the assigned investigator been confirmed?'),
+    q('intake_broker','Have the MB/DMB name and email been confirmed?'),
+  ],
+  'In Progress': [
+    q('review_request','Has Regulatory Relations reviewed the complaint and identified missing information?'),
+    q('status_email','Has the In Progress status email been sent to the respondent with the required copies?','This status email does not start the response deadline.'),
+    q('mediation_records','Have mediation notes and documents been recorded in Enterprise and Hubspot?'),
+    q('regional_review','Has the Regional Director been consulted and voluntary participation discussed?'),
+    q('party_folders','Have separate complainant and respondent document sets been organized?'),
+  ],
+  'Eligibility Review': [
+    q('mediation','Did the broker attempt state-level mediation within the SOP period?','7 business days from complaint notification; staff confirm the starting event and holidays.'),
+    q('mediation_unresolved','Was mediation completed without resolving the dispute?'),
+    q('active_check','Has Enterprise confirmed the respondent is active and not suspended?'),
+    q('regional_eligibility','Has the Regional Director consultation been completed?'),
+    q('voluntary','Have both parties confirmed voluntary participation?'),
+    q('eligibility_agreements','Have both parties’ signed binding agreements been verified?'),
+    q('eligibility_scope','Does the complaint meet the submission guidelines, with any concerns documented?'),
+  ],
+  'Awaiting Response': [
+    q('respondent_invite','Has the respondent invitation been sent from Regulatory Relations with the required copies?'),
+    q('response_anchor','Has confirmed Gmail acceptance or a staff-confirmed prior invitation been recorded?','Only a confirmed invitation starts the response clock; checklist answers do not start it.'),
+    q('response','Has the respondent’s defense paperwork been received?','10 calendar days after the confirmed invitation.'),
+    q('no_response','If paperwork is missing, has the situation been reviewed and the complainant and MB/DMB notified?'),
+    q('response_link','Has the response been linked to the correct case?'),
+    q('response_missing','Have missing response details or documents been identified for follow-up?'),
+  ],
+  'Evidence Review': [
+    q('agreements','Are both signed binding agreements and required evidence complete?'),
+    q('evidence_complainant','Has the complainant’s document set been reviewed and organized?'),
+    q('evidence_respondent','Has the respondent’s document set been reviewed and organized?'),
+    q('witness','Were witness statements sent directly to Regulatory Relations, copying the supported agent?','At least 5 days before the hearing; late-evidence decisions remain staff-reviewed.'),
+    q('evidence_late','Have late, disputed or excluded documents and the review decisions been recorded?'),
+    q('mb_documents','Has MB/DMB been notified that both parties’ documents were received?'),
+    q('evidence_packet','Have selected documents been included in the hearing packet with appropriate visibility?'),
+    q('paperwork_complete','Has the date all required paperwork was received been confirmed?'),
+  ],
+  'Panel Selection': [
+    q('panel','Are proposed panelists approved and free of state-license and team-license conflicts?','No more than 5 approved panelists; neither panelist nor team may be licensed in the dispute state.'),
+    q('panel_invite','Have proposed panelists been invited and their response expectations recorded?'),
+    q('panel_availability','Has panel availability and seating acceptance been confirmed?'),
+    q('nda','Have required panelist confidentiality agreements been verified?'),
+    q('challenge_notice','Have both parties received the panel list and Notice of Right to Challenge?'),
+    q('challenges_resolved','Have party challenges been reviewed and resolved before scheduling?'),
+    q('panel_chair','Has Regulatory Relations selected the chair?'),
+    q('hub_chat','Has the case Hub chat with panelists and MB/DMB been created?'),
+  ],
+  'Hearing Scheduled': [
+    q('schedule','Has the hearing date been confirmed with the parties and panel?','Within 2 weeks after all paperwork is received.'),
+    q('notice','Have participants received the confirmed hearing notice?','At least 2 days before the hearing.'),
+    q('calendar','Have calendar invitations with room and location details been sent?'),
+    q('chair','Has the chair been confirmed and the chairperson script prepared?'),
+    q('room','Are the eXp.world room, phone access and cameras ready?'),
+    q('no_recording','Has it been confirmed that the hearing will not be recorded?'),
+    q('facts','Have the Finding of Facts Worksheet and Factors for Consideration been reviewed?'),
+    q('presentations','Have parties’ presentations, clarifying questions and requested broker attendance been documented?'),
+    q('complainant_time','Was the complainant’s presentation time provided?','30 minutes.'),
+    q('respondent_time','Was the respondent’s presentation time provided?','30 minutes.'),
+    q('qa_time','Was the panel’s question period provided?','20 minutes.'),
+    q('closing','Did the chair read the closing statement?'),
+    q('award','Has the Hearing Award and Final Disposition been completed?'),
+  ],
+  'Decision Review': [
+    q('signatures','Have findings, rationale and recommendations been recorded and panel signatures obtained?'),
+    q('decision_to_reviewers','Was the decision sent to the Regional Director and DMB/MB before the parties?'),
+    q('review','Have the Director and DMB/MB reviewed and acknowledged the decision?','48 hours for review and acknowledgment; staff confirm the review-sent event.'),
+    q('release','Was the reviewed decision released to the parties, copying broker and Director?'),
+    q('agent_calls','Has MB/DMB discussed the decision separately with each agent?'),
+    q('filing','Has the decision email been filed in Enterprise and Hubspot?','Within 2 business days; staff confirm the email event and holidays.'),
+    q('icon','Has the ICON award team been notified for eligible panelists?'),
+  ],
+  'Appeal Window': [
+    q('appeal','Has the appeal deadline been confirmed from the panel decision?','15 calendar days; do not infer a date from the stage change.'),
+    q('appeal_instructions','Have the parties received the decision and appeal instructions?'),
+    q('appeal_monitor','Have any received appeals been reviewed for genuinely new information?'),
+    q('payout','Is award payout held until the appeal period expires or any filed appeal is decided?'),
+    q('chat_archive','Once the appeal period or appeal decision is complete, has the Hub chat record been archived?'),
+  ],
+  'Appeal Filed': [
+    q('appeal_notify','Have MB/DMB and the original chair been notified of appeal receipt?'),
+    q('new_evidence','Does the appeal identify genuinely new information and explain why it was unavailable at the original hearing?','New information must be brought to light within 15 calendar days of the panel decision; staff review eligibility.'),
+    q('original_panel','Has the appeal been referred to the original hearing panel?'),
+    q('appeal_response','Has the panel recorded whether the other party’s written response is requested?'),
+    q('appeal_parties','Have the appellant and, when requested by the panel, the non-appellant been notified with the new evidence?'),
+    q('appeal_hearing','If the panel requests an appeal hearing, are the date, script and procedures confirmed?'),
+    q('appellant_time','If an appeal hearing occurred, was the appellant’s presentation time provided?','20 minutes.'),
+    q('appeal_respondent_time','If an appeal hearing occurred, was the respondent’s presentation time provided?','20 minutes.'),
+    q('appeal_qa_time','If an appeal hearing occurred, was the panel’s question period provided?','15 minutes.'),
+    q('appeal_no_recording','If an appeal hearing occurred, was the no-recording requirement followed?'),
+    q('appeal_decision','Has the panel’s appeal decision been recorded and communicated?'),
+  ],
+  'Compliance Follow-up': [
+    q('repayment','If already-disbursed funds must be repaid, has repayment been received?','15 calendar days from the staff-confirmed repayment clock start.'),
+    q('compliance_payout','Has appeal expiry or resolution been confirmed before recording award payout?'),
+    q('ce','If live continuing education is required, was it completed and the certificate sent to the broker?','Within 90 days from the staff-confirmed education clock start.'),
+    q('certificate','Has the education certificate document reference been recorded?'),
+    q('followup','Has broker-supervised compliance and follow-up been recorded?'),
+    q('compliance_open','Have any outstanding obligations and follow-up actions been identified?'),
+  ],
+  'Closed': [
+    q('closure_disposition','Has the final disposition and outcome been recorded?'),
+    q('closure_obligations','Have outstanding repayment, payout and education obligations been resolved or documented?'),
+    q('closure_appeal','Has the appeal period expired or the filed appeal been decided?'),
+    q('closure_records','Have case documents, communications and the Hub chat record been retained?'),
+    q('closure_access','Has closure removed participant access as required?'),
+    q('closure_followup','Has the final broker follow-up been documented?'),
+  ],
+};
+export function checklistProgress(stage: CaseStage, answers: ChecklistAnswers) {
+  const questions = CHECKLIST_QUESTIONS[stage];
+  return { total: questions.length, answered: questions.filter(q => answers[q.key]?.status && answers[q.key]?.status !== 'pending').length };
+}

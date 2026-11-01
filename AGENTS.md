@@ -19,6 +19,7 @@
 - Card deletion uses the shared DeleteCard control and existing admin-only Cloud DELETE policies; confirmation describes retained files, external copies, and unlinked child submissions.
 - SOP operational records are staff-only; assigned participants read released decisions through a case-authorized RPC. Attachment visibility is enforced both on metadata and storage.
 - SOP tasks initialize idempotently by stage through database triggers or explicit staff setup; anchors and holidays stay staff-confirmed. Nested automated task inserts retain audits without duplicate bell/Hub notices; the stage change supplies the notification.
+- Stage checklist questions live in checklist-questions and staff-only, version-guarded case_checklist_forms; answers never automatically change stages, SOP task completion, deadline anchors, decision release or delivery.
 - Case section tabs use URL search state; stage transitions use an authenticated staff-checked RPC with an expected-stage guard and optional confirmed response-email anchor.
 - Case stages and section guidance are defined in case-stages; additive enum values preserve existing cases, while database stage initialization keeps stable task keys and never overwrites existing deadlines or completion. Stage changes do not infer operational dates or send new email types.
 - Case exports use the signed-in client and authorized storage links; private archives include staff data while hearing packets include selected documents only.

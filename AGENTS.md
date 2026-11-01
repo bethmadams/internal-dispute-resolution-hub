@@ -14,3 +14,6 @@
 - Case naming and staff-role helpers live in case-rules; database triggers own unique response matching and attachment linkage so every intake path obeys the same rules.
 - External table DDL is supplied for the owner to apply separately; managed migrations only target the portal's Cloud database.
 - Card deletion uses the shared DeleteCard control and existing admin-only Cloud DELETE policies; confirmation describes retained files, external copies, and unlinked child submissions.
+- SOP operational records are staff-only; assigned participants read released decisions through a case-authorized RPC. Attachment visibility is enforced both on metadata and storage.
+- SOP tasks are explicit staff-initialized templates, with staff-confirmed deadline anchors and holidays; the bell polls pending due dates so alerts advance without requiring case edits.
+- Case exports use the signed-in client and authorized storage links; private archives include staff data while hearing packets include selected documents only.

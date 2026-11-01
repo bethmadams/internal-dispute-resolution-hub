@@ -12,12 +12,16 @@ import {
 import { useCurrentUser } from "@/hooks/use-session";
 import { useMyRole } from "@/hooks/use-role";
 import { formatDateTime, notificationsQuery, notificationReadsQuery } from "@/lib/hub";
+import { tasksQuery } from "@/lib/sop-data";
+import { deadlineState } from "@/lib/sop-rules";
 
 export function NotificationBell() {
   const { user } = useCurrentUser();
   const { isStaff } = useMyRole();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const {data:tasks=[]}=useQuery({...tasksQuery(),enabled:isStaff,refetchInterval:60000});
+  const urgentTasks=tasks.filter(t=>['Due soon','Overdue'].includes(deadlineState(t.due_at,t.completed_at)));
 
   const { data: notifications = [] } = useQuery({
     ...notificationsQuery,
@@ -72,14 +76,14 @@ export function NotificationBell() {
           variant="ghost"
           size="icon"
           aria-label={
-            unread.length > 0 ? `${unread.length} new notifications` : "Notifications"
+            unread.length+urgentTasks.length > 0 ? `${unread.length+urgentTasks.length} new notifications` : "Notifications"
           }
           className="relative text-ink-foreground/70 hover:bg-sidebar-accent hover:text-ink-foreground"
         >
           <Bell className="size-4" />
-          {unread.length > 0 && (
+          {unread.length+urgentTasks.length > 0 && (
             <span className="absolute -top-0.5 -right-0.5 flex min-w-[1.15rem] items-center justify-center rounded-full bg-destructive px-1 text-[0.625rem] leading-[1.15rem] font-semibold text-destructive-foreground">
-              {unread.length > 99 ? "99+" : unread.length}
+              {unread.length+urgentTasks.length > 99 ? "99+" : unread.length+urgentTasks.length}
             </span>
           )}
         </Button>
@@ -92,7 +96,8 @@ export function NotificationBell() {
           </p>
         </div>
         <ul className="max-h-96 divide-y overflow-y-auto">
-          {notifications.length === 0 && (
+          {urgentTasks.map(t=><li key={t.id}><Link to="/cases/$caseId" params={{caseId:t.dispute_id}} onClick={()=>setOpen(false)} className="block px-4 py-3 hover:bg-muted"><p className="text-sm font-medium text-destructive">{deadlineState(t.due_at,t.completed_at)}: {t.title}</p><p className="text-xs text-muted-foreground">{formatDateTime(t.due_at)}</p></Link></li>)}
+          {notifications.length === 0 && urgentTasks.length===0 && (
             <li className="px-4 py-6 text-sm text-muted-foreground">No activity yet.</li>
           )}
           {notifications.map((n) => {

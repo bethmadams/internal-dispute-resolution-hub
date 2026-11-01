@@ -1,6 +1,6 @@
 # Tasks
-- [ ] Verify administrators can change Assigned to for case reassignments.
-- [ ] Remove Priority from case controls and add checklist-aligned stages with navigation to the relevant case sections.
+- [x] Verify administrators can change Assigned to; tested unassignment and reassignment through case controls with stored assignment confirmed.
+- [x] Remove Priority from case controls and add checklist-aligned stages with section navigation; verified six added stages, unique preserved tasks, no inferred deadlines or extra stage emails, mobile layout, 22 tests, and updated manual/PDF.
 - [x] Verify immediate In Progress email sending after stage confirmation; Gmail accepted the Anna-only test, Communications recorded it, response deadline stayed unset, and the temporary case was removed. Existing Banana v. Orange needs MB/DMB email before delivery.
 - [x] Limit Hub delivery to new form submissions and due reminders; verified signed-in case-update suppression with red-bell record retained, future reminder rejected as not due, and 15 passing tests.
 - [x] Restyle case cards and opened case details using supplied REsolve screenshots; verified card opening, case tabs and mobile layout without overflow or runtime errors. Existing fields, permissions and actions retained.

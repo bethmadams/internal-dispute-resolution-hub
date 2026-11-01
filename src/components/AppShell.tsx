@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-session";
 import { rolesQuery } from "@/lib/hub";
 import { NotificationBell } from "@/components/NotificationBell";
+import { HubNoticeDispatcher } from "@/components/HubNoticeDispatcher";
 import type { ReactNode } from "react";
 
 const nav = [
@@ -61,6 +62,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               )}
             </div>
             <NotificationBell />
+            <HubNoticeDispatcher />
             <Button
               variant="ghost"
               size="icon"

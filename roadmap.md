@@ -11,4 +11,5 @@
 - [x] Verify case assignment and response matching in the signed-in UI; confirm unassigned denial through the access function and scoped-list tests.
 - [x] Verify that all three external tables are reachable through the signed-in staff view without connection errors.
 - [ ] Confirm an actual submission copies and reads back. Awaiting the first submission; all three external tables and the copy queue are currently empty.
-- [x] Preserve existing case records, staff accounts, and private case access; queue external copies without changing the authoritative store.
+- [x] Preserve existing case records, staff accounts, and private case access; queue external copies without changing the authoritative store.- [x] Wire portal notifications to the eXp Hub "Internal Dispute Resolution Notification" channel (REsolve-documented API, x-api-key, territory investigator mention); red bell unchanged.
+- [x] Verify a live Hub delivery end-to-end (test notification posted to the channel; Hub returned 200, delivery recorded as sent).

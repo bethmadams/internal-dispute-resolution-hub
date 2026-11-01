@@ -688,6 +688,44 @@ export type Database = {
         }
         Relationships: []
       }
+      hub_deliveries: {
+        Row: {
+          created_at: string
+          error: string | null
+          hub_status: number | null
+          id: string
+          notification_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          hub_status?: number | null
+          id?: string
+          notification_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          hub_status?: number | null
+          id?: string
+          notification_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hub_deliveries_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: true
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_reads: {
         Row: {
           id: string

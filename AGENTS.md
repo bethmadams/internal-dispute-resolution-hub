@@ -17,3 +17,4 @@
 - SOP operational records are staff-only; assigned participants read released decisions through a case-authorized RPC. Attachment visibility is enforced both on metadata and storage.
 - SOP tasks are explicit staff-initialized templates, with staff-confirmed deadline anchors and holidays; the bell polls pending due dates so alerts advance without requiring case edits.
 - Case exports use the signed-in client and authorized storage links; private archives include staff data while hearing packets include selected documents only.
+- Hub delivery mirrors portal notifications to the eXp Hub channel via src/lib/hub-notify.* (constants / server calls / dispatch function) claimed one-row-per-notification in public.hub_deliveries; HubNoticeDispatcher polls from AppShell and the red bell stays independent.

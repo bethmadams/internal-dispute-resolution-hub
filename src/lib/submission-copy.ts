@@ -5,7 +5,7 @@ export const submissionTables = {
 } as const;
 export type SubmissionType = keyof typeof submissionTables;
 export function canReadSubmissionCopies(roles: string[]) {
-  // Any signed-in portal user with an assigned role may read submissions.
+  // Lists are available to role holders; the server scopes rows through Cloud RLS.
   return roles.length > 0;
 }
 export const SUBMITTER_LABELS: Record<SubmissionType, string> = {

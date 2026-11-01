@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { canReadSubmissionCopies, copyRow, submitterLabel, submissionTables } from './submission-copy';
 describe('external submission requirements', () => {
-  test('every signed-in user with a role can read copies', () => {
+  test('role holders can request a case-scoped list', () => {
     for (const role of ['admin', 'investigator', 'viewer', 'complainant', 'respondent', 'panel_member', 'panel_chair', 'broker', 'director']) expect(canReadSubmissionCopies([role])).toBe(true);
     expect(canReadSubmissionCopies([])).toBe(false);
   });

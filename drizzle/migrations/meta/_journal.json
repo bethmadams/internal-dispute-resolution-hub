@@ -29,6 +29,13 @@
       "when": 1793493100765,
       "tag": "0003_case_scoped_documents_and_unique_response_matching",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793493192038,
+      "tag": "0004_fix_response_and_appeal_copy_queue_trigger",
+      "breakpoints": true
     }
   ]
 }

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { rolesQuery, type AppRole } from "@/lib/hub";
 import { useCurrentUser } from "@/hooks/use-session";
-import { hasStaffRole } from "@/lib/case-rules";
+import { hasStaffRole, canDeleteCards } from "@/lib/case-rules";
 
 export function useMyRole() {
   const { user, loading } = useCurrentUser();
@@ -10,7 +10,7 @@ export function useMyRole() {
   const myRoles = roles.filter((r) => r.user_id === user?.id).map((r) => r.role);
   return {
     role,
-    isAdmin: myRoles.includes("admin"),
+    isAdmin: canDeleteCards(myRoles),
     isStaff: hasStaffRole(myRoles),
     isViewer: role === "viewer",
     loading: loading || isLoading,

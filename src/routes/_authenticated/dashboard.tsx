@@ -41,6 +41,7 @@ import {
 } from "@/lib/hub";
 import { appealsQuery, responsesQuery } from "@/lib/intake";
 import { caseTitle } from "@/lib/case-rules";
+import { DeleteCard } from "@/components/DeleteCard";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -346,11 +347,12 @@ function Dashboard() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((d) => (
+              <div key={d.id} className="group panel flex flex-col p-5 transition-shadow hover:shadow-lift">
               <Link
                 key={d.id}
                 to="/cases/$caseId"
                 params={{ caseId: d.id }}
-                className="group panel flex flex-col p-5 transition-shadow hover:shadow-lift"
+                className="flex flex-1 flex-col"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -399,6 +401,10 @@ function Dashboard() {
                   </div>
                 </div>
               </Link>
+              <div className="mt-2 flex justify-end">
+                <DeleteCard table="disputes" id={d.id} label={`${d.case_number} — ${caseTitle(d.filed_by, d.respondent, d.title)}`} />
+              </div>
+              </div>
             ))}
           </div>
         )}
@@ -428,9 +434,10 @@ function Dashboard() {
                         {r.responder_name}
                       </h3>
                     </div>
-                    <span className="shrink-0 text-xs text-muted-foreground">
-                      {formatDate(r.submitted_on)}
-                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="shrink-0 text-xs text-muted-foreground">{formatDate(r.submitted_on)}</span>
+                      <DeleteCard table="dispute_responses" id={r.id} label={`response from ${r.responder_name}`} />
+                    </div>
                   </div>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
@@ -507,9 +514,10 @@ function Dashboard() {
                         {a.appellant_name}
                       </h3>
                     </div>
-                    <span className="shrink-0 text-xs text-muted-foreground">
-                      {formatDate(a.submitted_on)}
-                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="shrink-0 text-xs text-muted-foreground">{formatDate(a.submitted_on)}</span>
+                      <DeleteCard table="dispute_appeals" id={a.id} label={`appeal from ${a.appellant_name}`} />
+                    </div>
                   </div>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

@@ -53,6 +53,8 @@ function ResponseForm() {
   const [form, setForm] = useState({
     submitted_by: "",
     email: "",
+    mb_dmb_email: "",
+    mb_dmb_name: "",
     submission_date: new Date().toISOString().slice(0, 10),
     state: "",
     responding_to: "",
@@ -87,6 +89,8 @@ function ResponseForm() {
         dispute_id: null,
         responder_name: v.submitted_by,
         responder_email: v.email || null,
+        mb_dmb_email: v.mb_dmb_email || null,
+        mb_dmb_name: v.mb_dmb_name || null,
         submitted_on: v.submission_date,
         state: v.state,
         responding_to_name: v.responding_to || null,
@@ -141,6 +145,12 @@ function ResponseForm() {
           </Field>
           <Field label="Your email address" error={errors['email']}>
             <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
+          </Field>
+          <Field label="MB/DMB email address" error={errors['mb_dmb_email']}>
+            <Input aria-label="MB/DMB email address" type="email" value={form.mb_dmb_email} onChange={(e) => set("mb_dmb_email", e.target.value)} />
+          </Field>
+          <Field label="MB/DMB name" error={errors['mb_dmb_name']}>
+            <Input aria-label="MB/DMB name" value={form.mb_dmb_name} onChange={(e) => set("mb_dmb_name", e.target.value)} />
           </Field>
           <Field label="Submission date" required error={errors['submission_date']}>
             <Input

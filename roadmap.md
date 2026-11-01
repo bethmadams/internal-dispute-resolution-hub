@@ -1,4 +1,6 @@
 # Tasks
+- [x] Review the Regulatory Relations Google Group link; settings require Google sign-in. Sending requires a verified domain or an authorized Google mailbox with the group as a verified send-as address; no Gmail connection exists yet.
+- [x] Add MB/DMB name and email address fields on all three submission forms; verify editable fields, validation tests and database columns. Live submission delivery remains untested to avoid generating test case notifications.
 - [x] Replace the long case file with section tabs, preserving staff and participant access; verified desktop/mobile tab selection.
 - [x] Add stage-triggered checklist setup and staff-confirmed response due dates; verified 20 pre-hearing tasks, ten-day deadline and repeat-transition preservation on a temporary case.
 - [x] Check email sending availability and suggest additional process stages without changing the governing SOP; sender domain is not configured.

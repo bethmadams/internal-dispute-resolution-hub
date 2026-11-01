@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Inspect the highlighted REsolve Notification Bot sender name in Hub and determine how it can be renamed for this portal.
 - [ ] Match My Reminders to the uploaded REsolve layout and personal reminder rules, preserving SOP deadlines; verify the signed-in creation, snooze and completion flows.
 - [ ] Enable per-user Google Calendar reminder sync. Blocked: connection setup was declined; no Calendar client is configured.
 - [x] Match the portal workspace to the uploaded REsolve screenshot, preserving existing case access and notification delivery.

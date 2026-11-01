@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedCaseDashboardRouteImport } from './routes/_authenticated/case-dashboard'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedManualRouteImport } from './routes/_authenticated/manual'
 import { Route as AuthenticatedMetricsRouteImport } from './routes/_authenticated/metrics'
@@ -39,6 +40,12 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCaseDashboardRoute =
+  AuthenticatedCaseDashboardRouteImport.update({
+    id: '/case-dashboard',
+    path: '/case-dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -105,6 +112,7 @@ const AuthenticatedCasesCaseIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/case-dashboard': typeof AuthenticatedCaseDashboardRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/manual': typeof AuthenticatedManualRoute
   '/metrics': typeof AuthenticatedMetricsRoute
@@ -121,6 +129,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/case-dashboard': typeof AuthenticatedCaseDashboardRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/manual': typeof AuthenticatedManualRoute
   '/metrics': typeof AuthenticatedMetricsRoute
@@ -139,6 +148,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/case-dashboard': typeof AuthenticatedCaseDashboardRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/manual': typeof AuthenticatedManualRoute
   '/_authenticated/metrics': typeof AuthenticatedMetricsRoute
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/case-dashboard'
     | '/dashboard'
     | '/manual'
     | '/metrics'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/case-dashboard'
     | '/dashboard'
     | '/manual'
     | '/metrics'
@@ -190,6 +202,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/case-dashboard'
     | '/_authenticated/dashboard'
     | '/_authenticated/manual'
     | '/_authenticated/metrics'
@@ -235,6 +248,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/case-dashboard': {
+      id: '/_authenticated/case-dashboard'
+      path: '/case-dashboard'
+      fullPath: '/case-dashboard'
+      preLoaderRoute: typeof AuthenticatedCaseDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -324,6 +344,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCaseDashboardRoute: typeof AuthenticatedCaseDashboardRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedManualRoute: typeof AuthenticatedManualRoute
   AuthenticatedMetricsRoute: typeof AuthenticatedMetricsRoute
@@ -336,6 +357,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCaseDashboardRoute: AuthenticatedCaseDashboardRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedManualRoute: AuthenticatedManualRoute,
   AuthenticatedMetricsRoute: AuthenticatedMetricsRoute,

@@ -21,3 +21,4 @@
 - Authenticated workspace navigation lives in AppShell; metrics derive from RLS-visible disputes. Personal reminders use a separate case-authorized table and guarded RPCs because creator/assignee ownership, snoozing and popup claims must not alter SOP tasks or generate workflow audit alerts.
 - Personal reminder Hub announcements use durable per-reminder delivery claims and server-only transport; shared staff-channel dispatch is staff-only to avoid exposing participant-created reminder text, and uncertain deliveries are never automatically replayed.
 - Shared training links and new-view head metadata live in portal-library so reference views stay consistent without importing route modules.
+- Reminder AI uses authenticated staff-only server functions and server-only Responses helpers; suggestions populate an editable draft and never save automatically or change SOP deadlines.

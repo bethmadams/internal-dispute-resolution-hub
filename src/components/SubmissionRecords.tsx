@@ -38,8 +38,8 @@ function RecordsTable({ type, userId }: { type: SubmissionType; userId: string }
     {data.warning && <p role="status" className="mt-3 text-sm text-muted-foreground">{data.warning}</p>}
     <div className="mt-4 overflow-x-auto">
       <table className="w-full text-left text-sm">
-        <thead><tr className="border-b border-border"><th className="p-3">Submitted by</th><th className="p-3">State</th><th className="p-3">Date</th><th className="p-3">Summary</th></tr></thead>
-        <tbody>{data.rows.map((row) => <tr key={row.id} className="border-b border-border"><td className="p-3 align-top">{row.submitted_by}</td><td className="p-3 align-top">{row.state ?? '—'}</td><td className="p-3 align-top">{row.submitted_on}</td><td className="max-w-80 whitespace-normal break-words p-3 align-top">{row.summary}</td></tr>)}</tbody>
+        <thead><tr className="border-b border-border"><th className="p-3">Submitted by</th><th className="p-3">Submitted as</th><th className="p-3">State</th><th className="p-3">Date</th><th className="p-3">Summary</th></tr></thead>
+        <tbody>{data.rows.map((row) => <tr key={row.id} className="border-b border-border"><td className="p-3 align-top">{row.submitted_by}</td><td className="p-3 align-top font-medium">{row.submitted_as}</td><td className="p-3 align-top">{row.state ?? '—'}</td><td className="p-3 align-top">{row.submitted_on}</td><td className="max-w-80 whitespace-normal break-words p-3 align-top">{row.summary}</td></tr>)}</tbody>
       </table>
       {!data.rows.length && <p className="py-6 text-sm text-muted-foreground">No submissions copied yet.</p>}
     </div>

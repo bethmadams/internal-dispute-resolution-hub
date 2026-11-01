@@ -1139,6 +1139,7 @@ export type Database = {
       dispute_stage:
         | "New Submission"
         | "In Progress"
+        | "Awaiting Response"
         | "Hearing Scheduled"
         | "Appeal Filed"
         | "Closed"
@@ -1284,6 +1285,7 @@ export const Constants = {
       dispute_stage: [
         "New Submission",
         "In Progress",
+        "Awaiting Response",
         "Hearing Scheduled",
         "Appeal Filed",
         "Closed",

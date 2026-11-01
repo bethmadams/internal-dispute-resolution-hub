@@ -17,11 +17,11 @@ const progressQuery = queryOptions({ queryKey: ['case-progress'], queryFn: () =>
 
 export const Route = createFileRoute('/_authenticated/case-dashboard')({
   validateSearch: (search: Record<string, unknown>) => ({
-    q: typeof search.q === 'string' ? search.q : '',
-    stage: STAGES.some(stage => stage === search.stage) ? String(search.stage) : 'all',
-    assigned: typeof search.assigned === 'string' ? search.assigned : 'all',
-    deadlines: search.deadlines === 'overdue' || search.deadlines === 'soon' ? search.deadlines : 'all',
-    archive: search.archive === true || search.archive === 'true',
+    q: typeof search['q'] === 'string' ? search['q'] : '',
+    stage: STAGES.some(stage => stage === search['stage']) ? String(search['stage']) : 'all',
+    assigned: typeof search['assigned'] === 'string' ? search['assigned'] : 'all',
+    deadlines: search['deadlines'] === 'overdue' || search['deadlines'] === 'soon' ? search['deadlines'] : 'all',
+    archive: search['archive'] === true || search['archive'] === 'true',
   }),
   head: () => portalHead('Case Dashboard', 'Current case stages, assigned investigators, checklist progress and recorded deadlines for authorized dispute matters.'),
   loader: ({ context }) => context.queryClient.ensureQueryData(progressQuery),

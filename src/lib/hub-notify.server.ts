@@ -6,14 +6,16 @@ type HubUserSearchResult = HubMention | null;
 function toMention(raw: unknown): HubUserSearchResult {
   if (!raw || typeof raw !== "object") return null;
   const r = raw as Record<string, unknown>;
-  const userId = (r.id ?? r.user_id ?? r.userId) as string | undefined;
+  const userId = (r["id"] ?? r["user_id"] ?? r["userId"]) as
+    | string
+    | undefined;
   if (!userId) return null;
-  const displayName = (r.display_name ??
-    r.full_name ??
-    r.name ??
-    r.email ??
+  const displayName = (r["display_name"] ??
+    r["full_name"] ??
+    r["name"] ??
+    r["email"] ??
     "Hub user") as string;
-  const username = (r.username ?? r.handle ?? displayName) as string;
+  const username = (r["username"] ?? r["handle"] ?? displayName) as string;
   return { userId, displayName, username };
 }
 
@@ -31,8 +33,8 @@ export async function searchHubUser(
   if (Array.isArray(body)) return toMention(body[0]);
   if (body && typeof body === "object") {
     const b = body as Record<string, unknown>;
-    if (Array.isArray(b.users)) return toMention(b.users[0]);
-    if (Array.isArray(b.data)) return toMention(b.data[0]);
+    if (Array.isArray(b["users"])) return toMention(b["users"][0]);
+    if (Array.isArray(b["data"])) return toMention(b["data"][0]);
     return toMention(b);
   }
   return null;

@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Build complete stage-linked checklist sections with real questions and saved answers using the governing SOP and accessible checklists.
 - [ ] Add administrator-only submitted-form editing for hearing requests, responses and appeals with recorded changes and verify saving/readback and access safeguards.
 - [x] Refresh the overall workspace UI from the available REsolve reference; verified signed-in board, case tab navigation, mobile menu and no horizontal overflow/runtime errors; six existing case-rule tests passed.
 - [x] Verify administrators can change Assigned to; tested unassignment and reassignment through case controls with stored assignment confirmed.

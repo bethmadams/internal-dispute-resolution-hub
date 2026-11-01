@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Limit Hub delivery to new form submissions and due reminders; retain other alerts in the red bell.
 - [x] Restyle case cards and opened case details using supplied REsolve screenshots; verified card opening, case tabs and mobile layout without overflow or runtime errors. Existing fields, permissions and actions retained.
 - [x] Connect Anna's Gmail and verify Regulatory Relations is an accepted send-as address; sending permission is granted and Gmail accepted live test stage messages.
 - [x] Add MB/DMB name and email address fields on all three submission forms; verify editable fields, validation tests and database columns. Live submission delivery remains untested to avoid generating test case notifications.

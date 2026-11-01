@@ -47,7 +47,7 @@ function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }
     setBusy(true);
     try {
       const id = await saveReminder(r ? "edit" : "create", { ...(r ? { id: r.id } : { dispute_id: editor.caseId }), body: body.trim(), due_at: due.toISOString(), lead_minutes: Number(lead), user_id: assignee });
-      await queryClient.invalidateQueries({ queryKey: ["personal_reminders"] });
+      void queryClient.invalidateQueries({ queryKey: ["personal_reminders"] });
       close(); toast.success(r ? "Reminder updated" : "Reminder created");
       if (!r && id) {
         try { const result = await dispatch({ data: { id } }); if (!["sent", "already_claimed", "staff_only"].includes(result.status)) toast.warning("Reminder saved; Hub announcement is pending or unavailable."); }
@@ -76,7 +76,7 @@ export function PersonalReminders({ caseId }: { caseId?: string }) {
   const base = reminders.filter(r => (!caseId || r.dispute_id === caseId) && (caseId && showAll || ownsReminder(r, user?.id ?? "", scope)));
   const filtered = base.filter(r => reminderStatus(r, status) && `${r.body} ${cases.find(c => c.id === r.dispute_id)?.title ?? ""} ${r.user_email} ${r.created_by_email}`.toLowerCase().includes(search.toLowerCase()));
   const act = async (action: string, r: Reminder, extra: Record<string, string | boolean | number> = {}) => {
-    setBusy(true); try { await saveReminder(action, { id: r.id, ...extra }); await queryClient.invalidateQueries({ queryKey: ["personal_reminders"] }); setSnooze(null); setDeleting(null); } catch { toast.error("Unable to update reminder"); } finally { setBusy(false); }
+    setBusy(true); try { await saveReminder(action, { id: r.id, ...extra }); void queryClient.invalidateQueries({ queryKey: ["personal_reminders"] }); setSnooze(null); setDeleting(null); } catch { toast.error("Unable to update reminder"); } finally { setBusy(false); }
   };
   return <section className={caseId ? "border-t border-border pt-6" : "space-y-5"}>
     {caseId && <div className="mb-4 flex flex-wrap items-center justify-between gap-3"><h2 className="text-lg font-semibold">Reminders</h2><Button size="sm" onClick={() => setEditor({ caseId })}><Plus className="size-4" />Add reminder</Button></div>}

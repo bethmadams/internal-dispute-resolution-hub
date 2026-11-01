@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/use-session";
 import { remindersQuery, saveReminder } from "@/lib/reminders";
 import { LEAD_OPTIONS, ownsReminder, reminderStatus, canManageReminder, type Reminder } from "@/lib/reminder-rules";
+import { suggestReminder } from "@/lib/reminder-ai.functions";
+import { useMyRole } from "@/hooks/use-role";
 import { dispatchReminderHub } from "@/lib/reminder-hub.functions";
 import { disputesQuery, formatDateTime } from "@/lib/hub";
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,25 @@ function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }
   const queryClient = useQueryClient();
   const dispatch = useServerFn(dispatchReminderHub);
   const r = editor.reminder;
+  const { isStaff } = useMyRole();
+  const suggest = useServerFn(suggestReminder);
+  const [notes, setNotes] = useState("");
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiMessage, setAiMessage] = useState("");
+  const extract = async () => {
+    setAiBusy(true); setAiMessage("");
+    try {
+      const result = await suggest({ data: { caseId: editor.caseId, notes, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone } });
+      if (result.error || !result.suggestion) { setAiMessage(result.error ?? "No suggestion returned"); return; }
+      const suggestion = result.suggestion; setBody(suggestion.body);
+      setLead(String(LEAD_OPTIONS.some(([n]) => n === suggestion.leadMinutes) ? suggestion.leadMinutes : 0));
+      if (suggestion.dueLocal && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(suggestion.dueLocal)) {
+        const suggestedDate = new Date(suggestion.dueLocal);
+        if (!Number.isNaN(suggestedDate.getTime())) { setDate(suggestedDate); setTime(suggestion.dueLocal.slice(11)); }
+      } else setDate(undefined);
+      setAiMessage([suggestion.explanation, suggestion.clarification].filter(Boolean).join(" "));
+    } catch { setAiMessage("Unable to obtain an AI suggestion. No reminder was saved."); } finally { setAiBusy(false); }
+  };
   const [body, setBody] = useState(r?.body ?? "");
   const [date, setDate] = useState<Date | undefined>(r ? new Date(r.due_at) : undefined);
   const [time, setTime] = useState(r ? format(new Date(r.due_at), "HH:mm") : "09:00");
@@ -57,11 +78,11 @@ function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }
     finally { setBusy(false); }
   };
   return <Dialog open onOpenChange={open => { if (!open && !busy) close(); }}><DialogContent className="max-h-[90vh] overflow-y-auto"><DialogHeader><DialogTitle>{r ? "Edit reminder" : "Add reminder"}</DialogTitle></DialogHeader>
-    <div className="space-y-4"><div className="space-y-2"><Label htmlFor="reminder-body">Reminder *</Label><Textarea id="reminder-body" value={body} onChange={e => setBody(e.target.value)} required /></div>
+    <div className="space-y-4">{isStaff && !r && <div className="space-y-2 border-b pb-4"><Label htmlFor="ai-reminder-notes">Case notes or deadline</Label><Textarea id="ai-reminder-notes" value={notes} onChange={e => setNotes(e.target.value)} maxLength={12000} /><Button variant="outline" disabled={aiBusy || notes.trim().length < 3} onClick={() => void extract()}>{aiBusy ? "Suggesting…" : "Suggest reminder with AI"}</Button>{aiMessage && <p role="status" className="text-sm text-muted-foreground">{aiMessage}</p>}</div>}<div className="space-y-2"><Label htmlFor="reminder-body">Reminder *</Label><Textarea id="reminder-body" value={body} onChange={e => setBody(e.target.value)} required /></div>
     <div className="grid grid-cols-2 gap-3"><div className="space-y-2"><Label>Due date *</Label><Popover><PopoverTrigger asChild><Button variant="outline" className="w-full justify-start"><CalendarIcon className="size-4" />{date ? format(date, "MMM d, yyyy") : "Pick a date"}</Button></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={date} onSelect={setDate} className="p-3 pointer-events-auto" /></PopoverContent></Popover></div><div className="space-y-2"><Label htmlFor="reminder-time">Due time *</Label><Input id="reminder-time" type="time" value={time} onChange={e => setTime(e.target.value)} required /></div></div>
     <div className="space-y-2"><Label>Advance notice</Label><Select value={lead} onValueChange={setLead}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{LEAD_OPTIONS.map(([n, label]) => <SelectItem key={n} value={String(n)}>{label}</SelectItem>)}</SelectContent></Select></div>
     <div className="space-y-2"><Label>Assigned to *</Label><Select value={assignee} onValueChange={setAssignee} disabled={Boolean(r) && !editor.allowReassign}><SelectTrigger><SelectValue placeholder="Select teammate" /></SelectTrigger><SelectContent><Input aria-label="Search eligible teammates" placeholder="Search teammates…" value={search} onChange={e => setSearch(e.target.value)} className="mb-2" />{people.filter(p => `${p.full_name} ${p.email}`.toLowerCase().includes(search.toLowerCase())).map(p => <SelectItem key={p.id} value={p.id}>{p.full_name || p.email}{p.id === user?.id ? " (me)" : ""}</SelectItem>)}</SelectContent></Select></div></div>
-    <DialogFooter><Button variant="outline" onClick={close} disabled={busy}>Cancel</Button><Button disabled={busy || !date || !body.trim() || !time || !assignee} onClick={() => void save()}>{busy ? "Saving…" : "Save reminder"}</Button></DialogFooter>
+    <DialogFooter><Button variant="outline" onClick={close} disabled={busy}>Cancel</Button><Button disabled={busy || aiBusy || !date || !body.trim() || !time || !assignee} onClick={() => void save()}>{busy ? "Saving…" : "Save reminder"}</Button></DialogFooter>
   </DialogContent></Dialog>;
 }
 
@@ -86,7 +107,7 @@ export function PersonalReminders({ caseId }: { caseId?: string }) {
     <div className="flex rounded-md border bg-card p-1" role="group" aria-label="Reminder status">{["open", "due", "done", "all"].map(s => <Button key={s} size="sm" variant={status === s ? "secondary" : "ghost"} onClick={() => setStatus(s)}>{s[0]?.toUpperCase()}{s.slice(1)}{(s === "open" || s === "due") && ` (${base.filter(r => reminderStatus(r, s)).length})`}</Button>)}</div></div>
     {error ? <p className="py-8 text-destructive">Unable to load reminders.</p> : isPending ? <p className="py-8 text-muted-foreground">Loading reminders…</p> : !filtered.length ? <div className="py-14 text-center text-muted-foreground"><AlarmClock className="mx-auto size-7" /><p className="mt-3 text-sm">No {status === "all" ? "matching" : status} reminders.</p></div> : <ul className="mt-4 divide-y border-y">{filtered.map(r => {
       const matter = cases.find(c => c.id === r.dispute_id); const canManage = canManageReminder(r, user?.id ?? "");
-      return <li key={r.id} className="flex flex-wrap justify-between gap-4 py-5"><div className="min-w-0 flex-1"><h3 className={`break-words text-sm font-semibold ${r.done ? "text-muted-foreground line-through" : ""}`}>{r.body}</h3><p className="mt-1 text-sm text-primary">{matter?.case_number} · {matter?.title}</p><p className="mt-2 text-xs text-muted-foreground">Due {formatDateTime(r.due_at)} · Notify {formatDateTime(r.remind_at)}</p><p className="mt-1 break-words text-xs text-muted-foreground">Assigned to {r.user_email} · Created by {r.created_by_email}</p></div><div className="flex flex-wrap items-start gap-1">{canManage && <><Button variant="ghost" size="icon" title={r.done ? "Reopen" : "Mark done"} aria-label={r.done ? "Reopen reminder" : "Mark reminder done"} onClick={() => void act("done", r, { done: !r.done })} disabled={busy}>{r.done ? <RotateCcw className="size-4" /> : <Check className="size-4" />}</Button><Button variant="ghost" size="icon" title="Edit reminder" aria-label="Edit reminder" onClick={() => setEditor({ reminder: r, caseId: r.dispute_id })}><Pencil className="size-4" /></Button><Button variant="ghost" size="icon" title="Snooze reminder" aria-label="Snooze reminder" onClick={() => setSnooze(r)} disabled={r.done}><AlarmClock className="size-4" /></Button><Button variant="ghost" size="icon" title="Delete reminder" aria-label="Delete reminder" onClick={() => setDeleting(r)}><Trash2 className="size-4" /></Button></>}<Button variant="outline" size="sm" asChild><Link to="/cases/$caseId" params={{ caseId: r.dispute_id }}>Open matter<ArrowUpRight className="size-4" /></Link></Button></div></li>;
+      return <li key={r.id} className="flex flex-wrap justify-between gap-4 py-5"><div className="min-w-0 flex-1"><h3 className={`break-words text-sm font-semibold ${r.done ? "text-muted-foreground line-through" : ""}`}>{r.body}</h3><p className="mt-1 text-sm text-primary"><Link className="underline-offset-4 hover:underline" to="/cases/$caseId" params={{ caseId: r.dispute_id }}>{matter?.case_number} · {matter?.title}</Link></p><p className="mt-2 text-xs text-muted-foreground">Due {formatDateTime(r.due_at)} · Notify {formatDateTime(r.remind_at)}</p><p className="mt-1 break-words text-xs text-muted-foreground">Assigned to {r.user_email} · Created by {r.created_by_email}</p></div><div className="flex flex-wrap items-start gap-1">{canManage && <><Button variant="ghost" size="icon" title={r.done ? "Reopen" : "Mark done"} aria-label={r.done ? "Reopen reminder" : "Mark reminder done"} onClick={() => void act("done", r, { done: !r.done })} disabled={busy}>{r.done ? <RotateCcw className="size-4" /> : <Check className="size-4" />}</Button><Button variant="ghost" size="icon" title="Edit reminder" aria-label="Edit reminder" onClick={() => setEditor({ reminder: r, caseId: r.dispute_id, allowReassign: Boolean(caseId) })}><Pencil className="size-4" /></Button><Button variant="ghost" size="icon" title="Snooze reminder" aria-label="Snooze reminder" onClick={() => setSnooze(r)} disabled={r.done}><AlarmClock className="size-4" /></Button><Button variant="ghost" size="icon" title="Delete reminder" aria-label="Delete reminder" onClick={() => setDeleting(r)}><Trash2 className="size-4" /></Button></>}<Button variant="outline" size="sm" asChild><Link to="/cases/$caseId" params={{ caseId: r.dispute_id }}>Open matter<ArrowUpRight className="size-4" /></Link></Button></div></li>;
     })}</ul>}
     {editor && <ReminderEditor key={editor.reminder?.id ?? "new"} editor={editor} close={() => setEditor(null)} />}
     <Dialog open={Boolean(snooze)} onOpenChange={v => { if (!v) setSnooze(null); }}><DialogContent><DialogHeader><DialogTitle>Snooze reminder</DialogTitle></DialogHeader><div className="flex gap-3"><Input aria-label="Snooze quantity" type="number" min="1" step="1" value={quantity} onChange={e => setQuantity(e.target.value)} /><Select value={unit} onValueChange={setUnit}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{["minutes", "hours", "days", "weeks", "months"].map(u => <SelectItem value={u} key={u}>{u}</SelectItem>)}</SelectContent></Select></div><DialogFooter><Button disabled={busy || !Number.isInteger(Number(quantity)) || Number(quantity) < 1} onClick={() => { if (snooze) void act("snooze", snooze, { quantity: Number(quantity), unit }); }}>Snooze</Button></DialogFooter></DialogContent></Dialog>

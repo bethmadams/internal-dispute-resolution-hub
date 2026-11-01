@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
@@ -34,6 +34,7 @@ function ReminderEditor({ editor, close }: { editor: Editor; close: () => void }
   const [assignee, setAssignee] = useState(r?.user_id ?? user?.id ?? "");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
+  useEffect(() => { if (!assignee && user?.id) setAssignee(user.id); }, [assignee, user?.id]);
   const { data: people = [] } = useQuery({ queryKey: ["reminder-eligible", editor.caseId], queryFn: async () => {
     const { data, error } = await supabase.rpc("reminder_eligible_users", { _dispute_id: editor.caseId });
     if (error) throw error; return data ?? [];

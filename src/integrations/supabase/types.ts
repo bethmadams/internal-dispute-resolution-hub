@@ -102,6 +102,44 @@ export type Database = {
           },
         ]
       }
+      case_checklist_forms: {
+        Row: {
+          answers: Json
+          dispute_id: string
+          id: string
+          stage: Database["public"]["Enums"]["dispute_stage"]
+          updated_at: string
+          updated_by: string | null
+          version: number
+        }
+        Insert: {
+          answers?: Json
+          dispute_id: string
+          id?: string
+          stage: Database["public"]["Enums"]["dispute_stage"]
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Update: {
+          answers?: Json
+          dispute_id?: string
+          id?: string
+          stage?: Database["public"]["Enums"]["dispute_stage"]
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_checklist_forms_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       case_communications: {
         Row: {
           body: string
@@ -1200,6 +1238,15 @@ export type Database = {
       save_personal_reminder: {
         Args: { _action: string; _data: Json }
         Returns: string
+      }
+      save_stage_checklist: {
+        Args: {
+          _answers: Json
+          _case_id: string
+          _stage: Database["public"]["Enums"]["dispute_stage"]
+          _version: number
+        }
+        Returns: number
       }
       transition_case_stage: {
         Args: {

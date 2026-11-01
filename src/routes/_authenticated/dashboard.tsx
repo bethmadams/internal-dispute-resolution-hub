@@ -30,7 +30,6 @@ import {
 import {
   disputesQuery,
   formatDate,
-  nextCaseNumber,
   PRIORITIES,
   priorityStyles,
   profilesQuery,

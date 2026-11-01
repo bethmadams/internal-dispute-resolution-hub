@@ -1,5 +1,5 @@
 # Tasks
-- [ ] Add admin-only confirmed deletion for case, response, and appeal cards; verify with a temporary case.
+- [x] Add admin-only confirmed deletion for case, response, and appeal cards; verify cancellation and deletion with a temporary case.
 - [x] Enforce assigned-case privacy across board, case files, and external submission lists.
 - [x] Name complaint cards by party last names and nest uniquely matching responses under the complaint.
 - [x] Verify case assignment and response matching in the signed-in UI; confirm unassigned denial through the access function and scoped-list tests.

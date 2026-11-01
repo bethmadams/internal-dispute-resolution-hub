@@ -1,0 +1,15 @@
+import { test, expect } from 'bun:test';
+import { SOP_TIMELINES, calculateDue, panelConflict, deadlineState } from './sop-rules';
+const rule = key => SOP_TIMELINES.find(r => r.key === key);
+test('mediation is seven business days', () => { expect(rule('mediation').days).toBe(7); expect(calculateDue('2026-11-02T12:00:00Z', rule('mediation'))).toBe('2026-11-11T12:00:00.000Z'); });
+test('respondent paperwork is ten calendar days', () => { expect(rule('response').days).toBe(10); expect(calculateDue('2026-11-02T12:00:00Z',rule('response'))).toBe('2026-11-12T12:00:00.000Z'); });
+test('witness statement deadline is five days before hearing', () => { expect(rule('witness').days).toBe(-5); expect(calculateDue('2026-11-20T12:00:00Z',rule('witness'))).toBe('2026-11-15T12:00:00.000Z'); });
+test('hearing confirmation within two weeks of paperwork', () => { expect(rule('schedule').days).toBe(14); });
+test('hearing notice has two day lead time', () => { expect(rule('notice').days).toBe(-2); });
+test('decision acknowledgment has forty-eight hours', () => { expect(rule('review').hours).toBe(48); expect(calculateDue('2026-11-02T12:00:00Z',rule('review'))).toBe('2026-11-04T12:00:00.000Z'); });
+test('Enterprise and Hubspot filing within two business days', () => { expect(rule('filing').days).toBe(2); expect(calculateDue('2026-11-06T12:00:00Z',rule('filing'))).toBe('2026-11-10T12:00:00.000Z'); });
+test('repayment within fifteen calendar days', () => { expect(rule('repayment').days).toBe(15); });
+test('appeal window is fifteen calendar days from decision', () => { expect(rule('appeal').days).toBe(15); });
+test('live continuing education due within ninety days', () => { expect(rule('ce').days).toBe(90); });
+test('exclude panelist or team licenses in dispute state', () => { expect(panelConflict('Arizona',['Arizona'],[])).toBe(true); expect(panelConflict('Arizona',[],['Arizona'])).toBe(true); expect(panelConflict('Arizona',['Alaska'],[])).toBe(false); });
+test('deadline status changes as time advances', () => { expect(deadlineState('2026-11-01T00:00:00Z',null,Date.parse('2026-11-02T00:00:00Z'))).toBe('Overdue'); expect(deadlineState(null,null)).toBe('No due date'); });

@@ -50,6 +50,13 @@
       "when": 1793494306149,
       "tag": "0006_sop_document_attribution",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793497498525,
+      "tag": "0007_fix_case_number_year",
+      "breakpoints": true
     }
   ]
 }

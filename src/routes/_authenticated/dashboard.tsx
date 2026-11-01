@@ -42,6 +42,9 @@ import {
 import { appealsQuery, responsesQuery } from "@/lib/intake";
 import { caseTitle } from "@/lib/case-rules";
 import { DeleteCard } from "@/components/DeleteCard";
+import { tasksQuery } from "@/lib/sop-data";
+import { deadlineState } from "@/lib/sop-rules";
+import { Checkbox } from "@/components/ui/checkbox";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -69,6 +72,8 @@ function Dashboard() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
   const { isStaff } = useMyRole();
+  const {data:tasks=[]}=useQuery({...tasksQuery(),enabled:isStaff,refetchInterval:60000});
+  const [showArchived,setShowArchived]=useState(false);
   const { data: disputes = [], isLoading } = useQuery(disputesQuery);
   const { data: profiles = [] } = useQuery(profilesQuery);
   const { data: responses = [] } = useQuery(responsesQuery);
@@ -130,6 +135,7 @@ function Dashboard() {
     const q = search.trim().toLowerCase();
     return disputes.filter((d) => {
       const matchesStage = stageFilter === "all" || d.stage === stageFilter;
+      if(Boolean(d.archived_at)!==showArchived)return false;
       const matchesQuery =
         !q ||
         [d.case_number, d.title, d.filed_by, d.respondent, d.department]
@@ -137,7 +143,7 @@ function Dashboard() {
           .some((v) => v?.toLowerCase().includes(q));
       return matchesStage && matchesQuery;
     });
-  }, [disputes, search, stageFilter]);
+  }, [disputes, search, stageFilter, showArchived]);
 
   const createCase = useMutation({
     mutationFn: async () => {
@@ -313,6 +319,7 @@ function Dashboard() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
+        {isStaff && <Label className="flex items-center gap-2"><Checkbox checked={showArchived} onCheckedChange={v=>setShowArchived(v===true)}/>Archived cases</Label>}
         <div className="relative flex-1 min-w-56">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -362,6 +369,7 @@ function Dashboard() {
                     <h3 className="mt-1 line-clamp-2 text-base font-semibold leading-snug">
                       {caseTitle(d.filed_by, d.respondent, d.title)}
                     </h3>
+                    {isStaff && tasks.filter(t=>t.dispute_id===d.id&&!t.completed_at).sort((a,b)=>(a.due_at??'9999').localeCompare(b.due_at??'9999')).slice(0,1).map(t=><p key={t.id} className="mt-2 text-xs text-muted-foreground">Next: {t.title} · <span className={deadlineState(t.due_at,t.completed_at)==='Overdue'?'text-destructive':''}>{deadlineState(t.due_at,t.completed_at)}{t.due_at?` · ${formatDate(t.due_at)}`:''}</span></p>)}
                   </div>
                   <Badge variant="outline" className={priorityStyles[d.priority]}>
                     {d.priority}

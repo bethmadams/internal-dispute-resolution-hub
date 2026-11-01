@@ -44,6 +44,7 @@ export type Dispute = {
   monetary_amount: number | null;
   additional_comments: string | null;
   source: string;
+  archived_at: string | null;
 };
 
 export type DisputeNote = {

@@ -36,6 +36,11 @@ import {
 import { responsesQuery } from "@/lib/intake";
 import { caseTitle } from "@/lib/case-rules";
 import { DeleteCard } from "@/components/DeleteCard";
+import { CaseTasks } from "@/components/CaseTasks";
+import { CasePanel } from "@/components/CasePanel";
+import { CaseWorkflow, ReleasedDecision } from "@/components/CaseWorkflow";
+import { CaseCommunications } from "@/components/CaseCommunications";
+import { CaseOperations } from "@/components/CaseOperations";
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
@@ -261,6 +266,9 @@ function CaseDetail() {
 
           <CaseDocuments caseId={caseId} />
 
+          {isStaff && <><CaseTasks caseId={caseId}/><CaseWorkflow caseId={caseId}/><CasePanel caseId={caseId} state={dispute.state}/><CaseCommunications caseId={caseId}/><CaseOperations dispute={dispute}/></>}
+          {!isStaff && <ReleasedDecision caseId={caseId}/>}
+
           {isStaff && <CaseAccess caseId={caseId} isClosed={dispute.stage === "Closed"} />}
 
 
@@ -400,6 +408,7 @@ function CaseDetail() {
               }
             />
           </div>
+          <Button variant="outline" onClick={()=>patch.mutate({archived_at:dispute.archived_at?null:new Date().toISOString()})}>{dispute.archived_at?'Restore from archive':'Archive case'}</Button>
           </>
           )}
         </aside>

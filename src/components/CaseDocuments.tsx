@@ -5,6 +5,10 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useMyRole } from "@/hooks/use-role";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -31,12 +35,18 @@ import {
 } from "@/lib/intake";
 
 export function CaseDocuments({ caseId }: { caseId: string }) {
+  const { isStaff } = useMyRole();
   const queryClient = useQueryClient();
   const fileInput = useRef<HTMLInputElement>(null);
   const [kind, setKind] = useState<string>("case_document");
   const [viewing, setViewing] = useState<{ file: Attachment; url: string } | null>(null);
 
   const { data: documents = [], isLoading } = useQuery(attachmentsQuery(caseId));
+  const review = useMutation({
+    mutationFn: async ({id,values}:{id:string;values:Partial<Attachment>}) => { const r=await supabase.from('dispute_attachments').update(values).eq('id',id);if(r.error)throw r.error; },
+    onSuccess:()=>queryClient.invalidateQueries({queryKey:['dispute_attachments',caseId]}),
+    onError:(e:Error)=>toast.error(e.message),
+  });
 
   const upload = useMutation({
     mutationFn: async (files: File[]) => addCaseDocuments(caseId, kind, files),
@@ -76,7 +86,7 @@ export function CaseDocuments({ caseId }: { caseId: string }) {
             evidence and staff uploads. Open any file to review it in the hub.
           </p>
         </div>
-        <div className="flex items-end gap-2">
+        {isStaff && <div className="flex flex-wrap items-end gap-2">
           <div className="space-y-1.5">
             <Label className="rule-label">Upload as</Label>
             <Select value={kind} onValueChange={setKind}>
@@ -111,7 +121,7 @@ export function CaseDocuments({ caseId }: { caseId: string }) {
               e.target.value = "";
             }}
           />
-        </div>
+        </div>}
       </div>
 
       <ul className="mt-6 divide-y divide-border rounded-md border border-border">
@@ -144,6 +154,14 @@ export function CaseDocuments({ caseId }: { caseId: string }) {
               <Button size="sm" variant="ghost" onClick={() => openInTab(doc)}>
                 <Download className="size-3.5" /> Download
               </Button>
+              {isStaff && <div className="grid w-full gap-3 border-t border-border pt-3 sm:grid-cols-2">
+                <Input aria-label={`Submitter for ${doc.file_name}`} placeholder="Submitter name" defaultValue={doc.submitted_by_name} onBlur={e=>{if(e.target.value!==doc.submitted_by_name)review.mutate({id:doc.id,values:{submitted_by_name:e.target.value}});}}/>
+                <Select value={doc.submitted_as||'unspecified'} onValueChange={v=>review.mutate({id:doc.id,values:{submitted_as:v==='unspecified'?'':v}})}><SelectTrigger><SelectValue/></SelectTrigger><SelectContent>{['unspecified','Complainant','Respondent','Appellant','Staff','Witness'].map(v=><SelectItem key={v} value={v}>{v==='unspecified'?'Submitted as…':v}</SelectItem>)}</SelectContent></Select>
+                <Select value={doc.review_status} onValueChange={v=>review.mutate({id:doc.id,values:{review_status:v}})}><SelectTrigger><SelectValue/></SelectTrigger><SelectContent>{['Pending','Reviewed','Approved for hearing','Late — panel review','Not accepted'].map(v=><SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select>
+                <Select value={doc.visibility} onValueChange={v=>review.mutate({id:doc.id,values:{visibility:v}})}><SelectTrigger><SelectValue/></SelectTrigger><SelectContent><SelectItem value="case">Assigned case participants</SelectItem><SelectItem value="staff">Private — staff only</SelectItem></SelectContent></Select>
+                <Input aria-label={`Review note for ${doc.file_name}`} placeholder="Review / exception reason" defaultValue={doc.review_note} onBlur={e=>{if(e.target.value!==doc.review_note)review.mutate({id:doc.id,values:{review_note:e.target.value}});}}/>
+                <Label className="flex items-center gap-2"><Checkbox checked={doc.in_hearing_packet} onCheckedChange={v=>review.mutate({id:doc.id,values:{in_hearing_packet:v===true}})}/>Include in hearing packet</Label>
+              </div>}
             </li>
           );
         })}

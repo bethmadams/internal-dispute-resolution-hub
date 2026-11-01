@@ -67,6 +67,7 @@ function HearingRequest() {
     submitted_by: "",
     email: "",
     mb_dmb_email: "",
+    mb_dmb_name: "",
     state: "",
     other_agent: "",
     other_agent_email: "",
@@ -133,6 +134,7 @@ function HearingRequest() {
         filed_by: v.submitted_by,
         complainant_email: v.email,
         mb_dmb_email: v.mb_dmb_email || null,
+        mb_dmb_name: v.mb_dmb_name || null,
         respondent: v.other_agent,
         respondent_email: v.other_agent_email,
         respondent_phone: v.other_agent_phone || null,
@@ -213,6 +215,9 @@ function HearingRequest() {
           </Field>
           <Field label="MB/DMB email address" error={errors['mb_dmb_email']}>
             <Input aria-label="MB/DMB email address" type="email" value={form.mb_dmb_email} onChange={(e) => set("mb_dmb_email", e.target.value)} />
+          </Field>
+          <Field label="MB/DMB name" error={errors['mb_dmb_name']}>
+            <Input aria-label="MB/DMB name" value={form.mb_dmb_name} onChange={(e) => set("mb_dmb_name", e.target.value)} />
           </Field>
         </div>
 

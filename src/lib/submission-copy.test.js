@@ -22,8 +22,9 @@ describe('external submission requirements', () => {
   });
   test('MB/DMB email is retained in copies for every submission form', () => {
     for (const field of ['filed_by', 'responder_name', 'appellant_name']) {
-      const row = copyRow('original-id', { [field]: 'Test Agent', mb_dmb_email: 'broker@example.com' }, '2026-11-01');
+      const row = copyRow('original-id', { [field]: 'Test Agent', mb_dmb_name: 'Morgan Broker', mb_dmb_email: 'broker@example.com' }, '2026-11-01');
       expect(row.payload.mb_dmb_email).toBe('broker@example.com');
+      expect(row.payload.mb_dmb_name).toBe('Morgan Broker');
     }
   });
 });

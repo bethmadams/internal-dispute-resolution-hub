@@ -181,6 +181,7 @@ export async function uploadIntakeFiles(
 export const mbDmbEmailSchema = z.string().trim().email("Enter a valid MB/DMB email address").max(255).optional().or(z.literal(""));
 
 export const hearingRequestSchema = z.object({
+  mb_dmb_name: z.string().trim().max(120).optional(),
   mb_dmb_email: mbDmbEmailSchema,
   submitted_by: z.string().trim().min(2, "Enter your full name").max(120),
   email: z.string().trim().email("Enter a valid email address").max(255),
@@ -207,6 +208,7 @@ export const hearingRequestSchema = z.object({
 });
 
 export const responseFormSchema = z.object({
+  mb_dmb_name: z.string().trim().max(120).optional(),
   mb_dmb_email: mbDmbEmailSchema,
   submitted_by: z.string().trim().min(2, "Enter your full name").max(120),
   email: z.string().trim().email("Enter a valid email address").max(255).optional().or(z.literal("")),
@@ -252,6 +254,7 @@ export const appealsQuery = {
 };
 
 export const appealRequestSchema = z.object({
+  mb_dmb_name: z.string().trim().max(120).optional(),
   mb_dmb_email: mbDmbEmailSchema,
   submitted_by: z.string().trim().min(2, "Enter your full name").max(120),
   submission_date: z.string().min(1, "Submission date is required"),

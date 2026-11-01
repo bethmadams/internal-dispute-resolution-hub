@@ -10,5 +10,8 @@ describe('MB/DMB contact on submission forms', () => {
       expect(contact.safeParse({ mb_dmb_email: 'not-an-email' }).success).toBe(false);
       expect(contact.safeParse({ mb_dmb_email: '' }).success).toBe(true);
     });
+    test(`${name} retains the MB/DMB name`, () => {
+      expect(schema.pick({ mb_dmb_name: true }).parse({ mb_dmb_name: ' Morgan Broker ' }).mb_dmb_name).toBe('Morgan Broker');
+    });
   }
 });

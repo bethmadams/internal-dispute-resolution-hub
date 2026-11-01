@@ -45,6 +45,7 @@ import { tasksQuery } from "@/lib/sop-data";
 import { deadlineState } from "@/lib/sop-rules";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SubmissionEditor } from '@/components/SubmissionEditor';
+import { investigatorBoardCases } from '@/lib/investigator-board';
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -71,13 +72,17 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function Dashboard() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
-  const { isStaff } = useMyRole();
+  const { isStaff, isAdmin } = useMyRole();
   const {data:tasks=[]}=useQuery({...tasksQuery(),enabled:isStaff,refetchInterval:60000});
   const [showArchived,setShowArchived]=useState(false);
-  const { data: disputes = [], isLoading } = useQuery(disputesQuery);
+  const { data: allDisputes = [], isLoading } = useQuery(disputesQuery);
+  const [assignmentFilter, setAssignmentFilter] = useState('all');
+  const disputes = useMemo(() => investigatorBoardCases(allDisputes,user?.id,isAdmin,isStaff,assignmentFilter),[allDisputes,user?.id,isAdmin,isStaff,assignmentFilter]);
   const { data: profiles = [] } = useQuery(profilesQuery);
-  const { data: responses = [] } = useQuery(responsesQuery);
-  const { data: appeals = [] } = useQuery(appealsQuery);
+  const { data: allResponses = [] } = useQuery(responsesQuery);
+  const { data: allAppeals = [] } = useQuery(appealsQuery);
+  const responses = allResponses.filter(r => isAdmin || !isStaff || disputes.some(d => d.id === r.dispute_id));
+  const appeals = allAppeals.filter(a => isAdmin || !isStaff || disputes.some(d => d.id === a.dispute_id));
   const linkResponse = useMutation({
     mutationFn: async ({ id, disputeId }: { id: string; disputeId: string | null }) => {
       const { error } = await supabase
@@ -160,6 +165,7 @@ function Dashboard() {
         priority: form.priority,
         filed_at: form.filed_at,
         created_by: user.id,
+        assigned_to: isStaff && !isAdmin ? user.id : null,
       });
       if (error) throw error;
     },
@@ -182,7 +188,7 @@ function Dashboard() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="rule-label">Case board</p>
-          <h1 className="mt-1 text-3xl font-semibold">Active disputes</h1>
+          <h1 className="mt-1 text-3xl font-semibold">{isStaff && !isAdmin ? 'My assigned cases' : 'Active disputes'}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {disputes.length} case{disputes.length === 1 ? "" : "s"} on record
           </p>
@@ -322,6 +328,7 @@ function Dashboard() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
+        {isAdmin && <Select value={assignmentFilter} onValueChange={setAssignmentFilter}><SelectTrigger aria-label="Investigator assignments" className="w-56"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All investigators</SelectItem><SelectItem value="unassigned">Unassigned cases</SelectItem>{profiles.filter(p => allDisputes.some(d => d.assigned_to === p.id)).map(p => <SelectItem key={p.id} value={p.id}>{p.full_name || p.email || 'Investigator'}</SelectItem>)}</SelectContent></Select>}
         {isStaff && <Label className="flex items-center gap-2"><Checkbox checked={showArchived} onCheckedChange={v=>setShowArchived(v===true)}/>Archived cases</Label>}
         <div className="relative flex-1 min-w-56">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />

@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Check access to the newly supplied master Drive folder and use accessible checklists to refine SOP tasks.
 - [ ] Implement SOP deadlines, case checklists, and mediation/readiness review.
 - [ ] Implement panel eligibility and challenges, evidence review and hearing packets.
 - [ ] Implement controlled decision release, appeals and compliance follow-up.

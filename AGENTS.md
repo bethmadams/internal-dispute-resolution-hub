@@ -18,3 +18,5 @@
 - SOP tasks are explicit staff-initialized templates, with staff-confirmed deadline anchors and holidays; the bell polls pending due dates so alerts advance without requiring case edits.
 - Case exports use the signed-in client and authorized storage links; private archives include staff data while hearing packets include selected documents only.
 - Hub delivery mirrors portal notifications to the eXp Hub channel via src/lib/hub-notify.* (constants / server calls / dispatch function) claimed one-row-per-notification in public.hub_deliveries; HubNoticeDispatcher polls from AppShell and the red bell stays independent.
+- Authenticated workspace navigation lives in AppShell; metrics derive from RLS-visible disputes and reminders reuse case_tasks without separate clocks or notifications, preserving case authorization and SOP deadlines.
+- Shared training links and new-view head metadata live in portal-library so reference views stay consistent without importing route modules.

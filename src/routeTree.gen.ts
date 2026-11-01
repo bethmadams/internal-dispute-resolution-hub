@@ -13,8 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedManualRouteImport } from './routes/_authenticated/manual'
+import { Route as AuthenticatedMetricsRouteImport } from './routes/_authenticated/metrics'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
 import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
+import { Route as AuthenticatedTrainingRouteImport } from './routes/_authenticated/training'
 import { Route as SubmitAppealRouteImport } from './routes/submit.appeal'
 import { Route as SubmitHearingRequestRouteImport } from './routes/submit.hearing-request'
 import { Route as SubmitResponseRouteImport } from './routes/submit.response'
@@ -39,6 +44,27 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedManualRoute = AuthenticatedManualRouteImport.update({
+  id: '/manual',
+  path: '/manual',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMetricsRoute = AuthenticatedMetricsRouteImport.update({
+  id: '/metrics',
+  path: '/metrics',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRemindersRoute = AuthenticatedRemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedResourcesRoute = AuthenticatedResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
@@ -47,6 +73,11 @@ const AuthenticatedResourcesRoute = AuthenticatedResourcesRouteImport.update({
 const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTrainingRoute = AuthenticatedTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const SubmitAppealRoute = SubmitAppealRouteImport.update({
@@ -75,8 +106,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/manual': typeof AuthenticatedManualRoute
+  '/metrics': typeof AuthenticatedMetricsRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/reminders': typeof AuthenticatedRemindersRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/training': typeof AuthenticatedTrainingRoute
   '/submit/appeal': typeof SubmitAppealRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/submit/response': typeof SubmitResponseRoute
@@ -86,8 +122,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/manual': typeof AuthenticatedManualRoute
+  '/metrics': typeof AuthenticatedMetricsRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/reminders': typeof AuthenticatedRemindersRoute
   '/resources': typeof AuthenticatedResourcesRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/training': typeof AuthenticatedTrainingRoute
   '/submit/appeal': typeof SubmitAppealRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/submit/response': typeof SubmitResponseRoute
@@ -99,8 +140,13 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/manual': typeof AuthenticatedManualRoute
+  '/_authenticated/metrics': typeof AuthenticatedMetricsRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
   '/_authenticated/resources': typeof AuthenticatedResourcesRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
+  '/_authenticated/training': typeof AuthenticatedTrainingRoute
   '/submit/appeal': typeof SubmitAppealRoute
   '/submit/hearing-request': typeof SubmitHearingRequestRoute
   '/submit/response': typeof SubmitResponseRoute
@@ -112,8 +158,13 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/manual'
+    | '/metrics'
+    | '/notifications'
+    | '/reminders'
     | '/resources'
     | '/team'
+    | '/training'
     | '/submit/appeal'
     | '/submit/hearing-request'
     | '/submit/response'
@@ -123,8 +174,13 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/manual'
+    | '/metrics'
+    | '/notifications'
+    | '/reminders'
     | '/resources'
     | '/team'
+    | '/training'
     | '/submit/appeal'
     | '/submit/hearing-request'
     | '/submit/response'
@@ -135,8 +191,13 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/manual'
+    | '/_authenticated/metrics'
+    | '/_authenticated/notifications'
+    | '/_authenticated/reminders'
     | '/_authenticated/resources'
     | '/_authenticated/team'
+    | '/_authenticated/training'
     | '/submit/appeal'
     | '/submit/hearing-request'
     | '/submit/response'
@@ -182,6 +243,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/manual': {
+      id: '/_authenticated/manual'
+      path: '/manual'
+      fullPath: '/manual'
+      preLoaderRoute: typeof AuthenticatedManualRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/metrics': {
+      id: '/_authenticated/metrics'
+      path: '/metrics'
+      fullPath: '/metrics'
+      preLoaderRoute: typeof AuthenticatedMetricsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/reminders': {
+      id: '/_authenticated/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof AuthenticatedRemindersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/resources': {
       id: '/_authenticated/resources'
       path: '/resources'
@@ -194,6 +283,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof AuthenticatedTeamRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/training': {
+      id: '/_authenticated/training'
+      path: '/training'
+      fullPath: '/training'
+      preLoaderRoute: typeof AuthenticatedTrainingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/submit/appeal': {
@@ -229,15 +325,25 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedManualRoute: typeof AuthenticatedManualRoute
+  AuthenticatedMetricsRoute: typeof AuthenticatedMetricsRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
   AuthenticatedResourcesRoute: typeof AuthenticatedResourcesRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
+  AuthenticatedTrainingRoute: typeof AuthenticatedTrainingRoute
   AuthenticatedCasesCaseIdRoute: typeof AuthenticatedCasesCaseIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedManualRoute: AuthenticatedManualRoute,
+  AuthenticatedMetricsRoute: AuthenticatedMetricsRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedRemindersRoute: AuthenticatedRemindersRoute,
   AuthenticatedResourcesRoute: AuthenticatedResourcesRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
+  AuthenticatedTrainingRoute: AuthenticatedTrainingRoute,
   AuthenticatedCasesCaseIdRoute: AuthenticatedCasesCaseIdRoute,
 }
 

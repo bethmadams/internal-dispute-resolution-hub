@@ -78,7 +78,7 @@ export function NotificationBell() {
           aria-label={
             unread.length+urgentTasks.length > 0 ? `${unread.length+urgentTasks.length} new notifications` : "Notifications"
           }
-          className="relative text-ink-foreground/70 hover:bg-sidebar-accent hover:text-ink-foreground"
+          className="relative text-foreground hover:bg-muted"
         >
           <Bell className="size-4" />
           {unread.length+urgentTasks.length > 0 && (
@@ -88,7 +88,7 @@ export function NotificationBell() {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-96 p-0">
+      <PopoverContent align="end" className="w-96 max-w-[calc(100vw-2rem)] p-0">
         <div className="flex items-center justify-between border-b px-4 py-3">
           <p className="text-sm font-semibold">Activity</p>
           <p className="text-xs text-muted-foreground">

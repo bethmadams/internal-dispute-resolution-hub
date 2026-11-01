@@ -1,5 +1,11 @@
 import { test, expect } from "bun:test";
-import { buildHubMessage, HUB_CONVERSATION_ID, hubPortalOrigin, isHubSubmission, isHubReminderDue } from "./hub-notify";
+import { buildHubMessage, HUB_CONVERSATION_ID, hubPortalOrigin, isHubSubmission, isHubReminderDue, isHubHearingSource } from "./hub-notify";
+
+test("Manually created case cards are not new form submissions", () => {
+  expect(isHubHearingSource("public_form")).toBe(true);
+  expect(isHubHearingSource("staff")).toBe(false);
+  expect(isHubHearingSource(null)).toBe(false);
+});
 
 test("Hub permits only the three new form submission kinds", () => {
   for (const kind of ["hearing_request", "response", "appeal"]) expect(isHubSubmission(kind)).toBe(true);

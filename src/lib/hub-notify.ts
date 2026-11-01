@@ -11,6 +11,10 @@ export function isHubSubmission(kind: string): boolean {
   return ["hearing_request", "response", "appeal"].includes(kind);
 }
 
+export function isHubHearingSource(source: string | null | undefined): boolean {
+  return source === "public_form";
+}
+
 export function isHubReminderDue(reminder: { done: boolean; remind_at: string }, now = Date.now()): boolean {
   return !reminder.done && Date.parse(reminder.remind_at) <= now;
 }

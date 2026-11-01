@@ -25,7 +25,7 @@ export const dispatchReminderHub = createServerFn({ method: "POST" })
     const request = getRequest();
     const requestUrl = new URL(request.url);
     const origin = hubPortalOrigin(requestUrl);
-    const content = ["Internal Dispute Resolution Notification", "New reminder", `${matter.case_number} · ${matter.title}`, `Assigned to: ${mention ? `@${mention.username}` : r.user_email}`, `Created by: ${r.created_by_email}`, `Due: ${due} (America/Chicago)`, r.body, `View the matter: ${origin}/cases/${r.dispute_id}`].join("\n");
+    const content = ["Internal Dispute Resolution Notification", "New reminder", `Case: ${matter.title}`, `Assigned to: ${mention ? `@${mention.username}` : r.user_email}`, `Created by: ${r.created_by_email}`, `Due: ${due} (America/Chicago)`, r.body, `View the matter: ${origin}/cases/${r.dispute_id}`].join("\n\n");
     const result = await sendHubMessage(key, { conversation_id: HUB_CONVERSATION_ID, content, ...(mention ? { mentions: [mention] } : {}) });
     const status = result.ok ? "sent" : result.status === 0 ? "uncertain" : result.status === 429 ? "pending" : "failed";
     await supabaseAdmin.from("reminder_hub_deliveries").update({ status, sent_at: result.ok ? new Date().toISOString() : null, error: result.error ?? null }).eq("reminder_id", r.id);

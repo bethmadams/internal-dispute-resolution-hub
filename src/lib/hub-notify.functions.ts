@@ -59,17 +59,19 @@ export const dispatchHubNotification = createServerFn({ method: "POST" })
       return { delivered: status === "sent", status, error };
     };
 
-    // Resolve the case for territory routing and the link.
+    // Resolve the case for territory routing, its name and the link.
     let caseUrl: string | null = null;
+    let caseName: string | null = null;
     let state = notice.state as string | null;
     if (notice.dispute_id) {
       const { data: dispute } = await context.supabase
         .from("disputes")
-        .select("id, state")
+        .select("id, state, title")
         .eq("id", notice.dispute_id)
         .single();
       if (dispute) {
         state = state ?? (dispute.state as string | null);
+        caseName = (dispute.title as string | null) ?? null;
         const origin = hubPortalOrigin(getRequestUrl());
         caseUrl = `${origin}/cases/${dispute.id}`;
       }
@@ -95,7 +97,7 @@ export const dispatchHubNotification = createServerFn({ method: "POST" })
       kind: notice.kind as string,
       title: notice.title as string,
       state,
-      caseNumber: (notice.case_number as string | null) ?? null,
+      caseName,
       caseUrl,
       investigatorName,
       mention,

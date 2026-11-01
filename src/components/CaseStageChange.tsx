@@ -23,7 +23,7 @@ export function CaseStageChange({ dispute }: { dispute: Dispute }) {
       if (!pending) throw new Error('Choose a stage');
       const result = await supabase.rpc('transition_case_stage', {
         _case_id: dispute.id, _expected_stage: dispute.stage, _stage: pending,
-        _response_sent_at: startPrehearing && sent ? new Date(sentAt).toISOString() : undefined,
+        ...(startPrehearing && sent ? { _response_sent_at: new Date(sentAt).toISOString() } : {}),
       });
       if (result.error) throw result.error;
     },

@@ -49,7 +49,7 @@ const CASE_TABS = ['overview', 'submission', 'responses', 'documents', 'reminder
 
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
-  validateSearch: (search: Record<string, unknown>) => ({ tab: CASE_TABS.find(tab => tab === search['tab']) ?? 'overview' }),
+  validateSearch: (search: Record<string, unknown>): { tab?: (typeof CASE_TABS)[number] } => { const tab = CASE_TABS.find(tab => tab === search['tab']); return tab ? { tab } : {}; },
   head: () => ({
     meta: [
       { title: "Case File | eXp Internal Dispute Resolution Portal" },
@@ -75,7 +75,7 @@ function CaseDetail() {
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
   const { isStaff } = useMyRole();
-  const { tab } = Route.useSearch();
+  const { tab = 'overview' } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [note, setNote] = useState("");
   const [resolution, setResolution] = useState("");

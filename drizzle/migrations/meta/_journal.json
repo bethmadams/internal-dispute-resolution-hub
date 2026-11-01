@@ -64,6 +64,13 @@
       "when": 1793498328247,
       "tag": "0008_personal_case_reminders",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793498451938,
+      "tag": "0009_personal_reminder_live_changes",
+      "breakpoints": true
     }
   ]
 }

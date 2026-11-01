@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { filterSubmissionDates, monthlySubmissions, type SubmissionRecord } from '@/lib/submission-metrics';
+import { SubmissionCharts } from '@/components/SubmissionCharts';
 
 function displayDate(date: string, monthly = false) {
   if (!date) return 'Not recorded';
@@ -28,6 +29,7 @@ export function SubmissionDatesReport({ rows }: { rows: SubmissionRecord[] }) {
       </div>
     </div>
     {invalid && <p role="alert" className="text-sm text-destructive">The end date must be on or after the start date.</p>}
+    <SubmissionCharts rows={filtered} />
     <Table><TableHeader><TableRow><TableHead>Filing month</TableHead><TableHead className="text-right">Requests</TableHead><TableHead className="text-right">Responses</TableHead><TableHead className="text-right">Appeals</TableHead><TableHead className="text-right">Total</TableHead></TableRow></TableHeader>
       <TableBody>{months.map(row => <TableRow key={row.month}><TableCell className="font-medium">{displayDate(row.month, true)}</TableCell><TableCell className="text-right tabular-nums">{row.hearing_request}</TableCell><TableCell className="text-right tabular-nums">{row.response}</TableCell><TableCell className="text-right tabular-nums">{row.appeal}</TableCell><TableCell className="text-right font-semibold tabular-nums">{row.total}</TableCell></TableRow>)}{months.length === 0 && <TableRow><TableCell colSpan={5} className="py-8 text-center text-muted-foreground">No dated submissions in this period.</TableCell></TableRow>}</TableBody>
     </Table>

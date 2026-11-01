@@ -2,7 +2,7 @@ import type { CaseStage } from './case-stages';
 export type ChecklistAnswer = { status: 'pending' | 'yes' | 'no' | 'na'; notes: string };
 export type ChecklistAnswers = Record<string, ChecklistAnswer>;
 export type ChecklistQuestion = { key: string; question: string; requirement?: string };
-const q = (key: string, question: string, requirement?: string): ChecklistQuestion => ({ key, question, requirement });
+const q = (key: string, question: string, requirement?: string): ChecklistQuestion => ({ key, question, ...(requirement ? { requirement } : {}) });
 export const CHECKLIST_QUESTIONS: Record<CaseStage, ChecklistQuestion[]> = {
   'New Submission': [
     q('intake_parties','Have the complainant, respondent and their contact details been confirmed?'),
